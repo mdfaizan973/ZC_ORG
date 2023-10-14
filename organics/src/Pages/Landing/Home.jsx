@@ -2,12 +2,27 @@
 
 export default function Home() {
   const data = [
-    { img: "", name: "" },
-    { img: "", name: "" },
-    { img: "", name: "" },
-    { img: "", name: "" },
-    { img: "", name: "" },
-    { img: "", name: "" },
+    {
+      img: "https://i.pinimg.com/564x/da/e5/47/dae547aaa95ae79a52965be26c4e3b11.jpg",
+      name: "Fruites",
+    },
+    {
+      img: "https://i.pinimg.com/564x/33/fb/93/33fb9337693df22e0d7935d57f0e524e.jpg",
+      name: "Vegetables",
+    },
+    {
+      img: "https://www.organictattva.com/wp-content/uploads/2019/08/Falafel-with-Hummus.jpg",
+      name: "Falafel with Hummus",
+    },
+    {
+      img: "https://i.pinimg.com/564x/c4/9a/3d/c49a3d32534a9f52e76b94171a3407a0.jpg",
+      name: "grains",
+    },
+    { img: "", name: "Dairy" },
+    {
+      img: "https://www.organictattva.com/wp-content/uploads/2019/08/Quinoa-Tofu-Salad.jpg",
+      name: "Quinoa and Tofu Salad",
+    },
   ];
 
   return (
@@ -39,7 +54,7 @@ export default function Home() {
                     <div className="mt-3 flex items-end justify-between">
                       <p>
                         <span className="text-lg font-bold text-green-500">
-                          Products Name
+                          {ele.name}
                         </span>
                       </p>
                     </div>
@@ -96,6 +111,10 @@ export default function Home() {
           by man-made fertilizers and these fertilizers are adulterated which is
           harmful for our health and also to our future generations.
         </p>
+      </div>
+
+      <div>
+        <img src="https://res.cloudinary.com/farmersfreshzone/image/upload/v1690462847/banner/eyrk9ls3hidu00miboq6.jpg" />
       </div>
     </div>
   );
