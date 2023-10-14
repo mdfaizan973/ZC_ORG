@@ -17,7 +17,7 @@ export default function Navbar() {
               /> */}
             </a>
             <ul className="hidden items-center gap-6 lg:flex">
-              <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
+              <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold ">
                 <a className="flex items-center" href="#">
                   Home
                 </a>
