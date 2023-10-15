@@ -21,9 +21,11 @@ export default function Footer() {
           <div className="">
             <div className="mt-4 mb-2 font-medium xl:mb-4">Address</div>
             <div className="text-gray-500">
-              35 Remida Heights, <br />
-              45 Street, <br />
-              South Caroline, US
+              35 Sydney Terrace,
+              <br />
+              Melbourne, Victoria,
+              <br />
+              Australia
             </div>
           </div>
           <div className="">
@@ -55,7 +57,7 @@ export default function Footer() {
           </div>
           <div className="">
             <div className="mt-4 mb-2 font-medium xl:mb-4">
-              Subscribe to our Newsletter
+              Subscribe to our Company
             </div>
             <div className="flex flex-col">
               <div className="mb-4">
@@ -64,7 +66,7 @@ export default function Footer() {
                   className="focus:outline mb-2 block h-14 w-full rounded-xl bg-gray-200 px-4 sm:w-80 focus:outline-none focus:ring-1 focus:ring-blue-600"
                   placeholder="Enter your email"
                 />
-                <button className="block rounded-xl bg-blue-600 px-6 py-3 font-medium text-white">
+                <button className="block rounded-xl bg-green-500 px-6 py-3 font-medium text-white">
                   Subscribe
                 </button>
               </div>
