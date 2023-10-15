@@ -22,14 +22,18 @@ export default function Navbar() {
 
             <ul className="hidden items-center gap-6 lg:flex">
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold ">
-                <a className="flex items-center" href="#">
-                  Home
-                </a>
+                <RouterLink to="/">
+                  <a className="flex items-center" href="#">
+                    Home
+                  </a>
+                </RouterLink>
               </li>
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
-                <a className="flex items-center" href="#">
-                  ORG Products
-                </a>
+                <RouterLink to="/organicsproducts">
+                  <a className="flex items-center" href="#">
+                    ORG Products
+                  </a>
+                </RouterLink>
               </li>
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
                 <a className="flex items-center" href="#">
