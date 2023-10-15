@@ -6,6 +6,7 @@ export default function OrganicPro() {
   const [orgData, setOrgData] = useState([]);
   const [page, setPage] = useState(1);
   const curdatalength = orgData.length;
+  const [cart, setCart] = useState({});
   const getData = (page) => {
     axios
       .get(`http://localhost:3030/orgproducts?_limit=9&_page=${page}`)
@@ -29,6 +30,31 @@ export default function OrganicPro() {
   useEffect(() => {
     getData(page);
   }, [page]);
+
+  // Adding to cart
+
+  const addToCart = (id) => {
+    // get for cart
+    axios
+      .get(`http://localhost:3030/orgproducts/${id}`)
+      .then((res) => {
+        // console.warn(res.data);
+        setCart(res.data);
+        // add to cart
+        axios
+          .post(`http://localhost:3030/cartdata`, cart)
+          .then((res) => {
+            console.warn(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div>
       <div className="mt-1 flex justify-center items-center cursor-pointer shadow-lg shadow-grey-800">
@@ -75,6 +101,8 @@ export default function OrganicPro() {
             title={ele.title}
             image={ele.image}
             price={ele.price_inr}
+            id={ele.id}
+            addtocart={addToCart}
           />
         ))}
       </div>
