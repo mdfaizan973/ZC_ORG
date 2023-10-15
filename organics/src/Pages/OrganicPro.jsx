@@ -35,26 +35,30 @@ export default function OrganicPro() {
 
   const addToCart = (id) => {
     // get for cart
+    console.log(`Adding ${id}`);
     axios
       .get(`http://localhost:3030/orgproducts/${id}`)
       .then((res) => {
         // console.warn(res.data);
         setCart(res.data);
-        // add to cart
-        axios
-          .post(`http://localhost:3030/cartdata`, cart)
-          .then((res) => {
-            console.warn(res.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        console.warn(res.data);
+        getdataaa();
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
+  const getdataaa = () => {
+    // add to cart
+    axios
+      .post(`http://localhost:3030/cartdata`, cart)
+      .then((res) => {
+        console.warn(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div>
       <div className="mt-1 flex justify-center items-center cursor-pointer shadow-lg shadow-grey-800">
