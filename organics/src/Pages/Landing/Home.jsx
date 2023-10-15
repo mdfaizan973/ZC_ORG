@@ -3,25 +3,28 @@ import { Link as RouterLink } from "react-router-dom";
 export default function Home() {
   const data = [
     {
-      img: "https://i.pinimg.com/564x/da/e5/47/dae547aaa95ae79a52965be26c4e3b11.jpg",
+      img: "https://challenge22.b-cdn.net/wp-content/uploads/Quinoa-and-Tofu-Salad-edited.jpg",
+      name: "Latest Product",
+    },
+    {
+      img: "https://i.pinimg.com/564x/9e/78/9f/9e789faa701819cfbb69a304dcf5b27f.jpg",
       name: "Fruites",
     },
     {
-      img: "https://i.pinimg.com/564x/33/fb/93/33fb9337693df22e0d7935d57f0e524e.jpg",
+      img: "https://i.pinimg.com/564x/b5/44/f9/b544f96788c1f7466a9b11cad40a8ef0.jpg",
       name: "Vegetables",
     },
     {
-      img: "https://www.organictattva.com/wp-content/uploads/2019/08/Falafel-with-Hummus.jpg",
-      name: "Falafel with Hummus",
+      img: "https://naturelandorganics.com/cdn/shop/articles/Benefits_of_Organic_Dry_Fruits.jpg?v=1667380354",
+      name: "Organic Dry fruits",
     },
     {
-      img: "https://i.pinimg.com/564x/c4/9a/3d/c49a3d32534a9f52e76b94171a3407a0.jpg",
+      img: "https://i.pinimg.com/564x/dd/03/b3/dd03b3ec7e42e9d145821b6721b29c17.jpg",
       name: "grains",
     },
-    { img: "", name: "Dairy" },
     {
-      img: "https://www.organictattva.com/wp-content/uploads/2019/08/Quinoa-Tofu-Salad.jpg",
-      name: "Quinoa and Tofu Salad",
+      img: "https://i.pinimg.com/564x/4a/b0/e7/4ab0e7ccc090864f5430da7ed563d51d.jpg",
+      name: "Dairy",
     },
   ];
 
@@ -43,10 +46,11 @@ export default function Home() {
                 className="rounded-xl bg-white p-3 shadow-lg hover:shadow-xl"
               >
                 <a href="#">
-                  <div className="relative flex items-end overflow-hidden rounded-xl">
+                  <div className="relative flex items-center overflow-hidden rounded-xl">
                     <RouterLink to="/organicsproducts">
                       <img
-                        src="https://www.organictattva.com/wp-content/uploads/2019/08/Amaranth-cutlet.jpg"
+                        src={ele.img}
+                        // src="https://www.organictattva.com/wp-content/uploads/2019/08/Amaranth-cutlet.jpg"
                         alt=" Photo"
                       />
                     </RouterLink>
