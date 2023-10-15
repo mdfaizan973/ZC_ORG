@@ -1,7 +1,7 @@
 // import React from "react";
 import PropTypes from "prop-types";
 export default function OrgPro(props) {
-  const { title } = props;
+  const { image, price, title } = props;
   // image , price ,title
   return (
     <div>
@@ -9,8 +9,8 @@ export default function OrgPro(props) {
       <div className="bg-white w-72 shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
         <a href="#">
           <img
-            // src={image}
-            src="https://i.pinimg.com/564x/6d/1c/fa/6d1cfa4e1a5e58d31cc935fad125e046.jpg"
+            src={image}
+            // src="https://i.pinimg.com/564x/6d/1c/fa/6d1cfa4e1a5e58d31cc935fad125e046.jpg"
             alt=""
             className="h-60 w-72 object-cover rounded-t-xl"
           />
@@ -21,13 +21,13 @@ export default function OrgPro(props) {
             <div className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-green-500 py-1 px-2 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
               <div className="mt-px">View</div>
             </div>
-            <span className="text-red-400 mr-3 text-xs">{title}</span>
+            {/* <span className="text-red-400 mr-3 text-xs">{title}</span> */}
             <p className="text-lg font-bold text-black truncate block capitalize">
-              Title
+              {title}
             </p>
             <div className="flex items-center">
               <p className="text-lg font-semibold text-black cursor-auto my-3">
-                50 ₹
+                {price} ₹
               </p>
               <del> </del>
               <div className="ml-auto">

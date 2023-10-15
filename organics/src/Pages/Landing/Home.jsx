@@ -1,5 +1,5 @@
 // import React from "react";
-
+import { Link as RouterLink } from "react-router-dom";
 export default function Home() {
   const data = [
     {
@@ -44,10 +44,12 @@ export default function Home() {
               >
                 <a href="#">
                   <div className="relative flex items-end overflow-hidden rounded-xl">
-                    <img
-                      src="https://www.organictattva.com/wp-content/uploads/2019/08/Amaranth-cutlet.jpg"
-                      alt=" Photo"
-                    />
+                    <RouterLink to="/organicsproducts">
+                      <img
+                        src="https://www.organictattva.com/wp-content/uploads/2019/08/Amaranth-cutlet.jpg"
+                        alt=" Photo"
+                      />
+                    </RouterLink>
                   </div>
 
                   <div className="mt-1 p-2">
