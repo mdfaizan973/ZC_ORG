@@ -675,9 +675,6 @@
   ],
   "cartdata": [
     {
-      "id": 1
-    },
-    {
       "id": 8,
       "category": "fruits",
       "title": "Peaches",
@@ -690,6 +687,34 @@
       "discount_price_inr": 48,
       "discount_percentage": 20,
       "ETA": "2-4 business days"
+    },
+    {
+      "id": 1,
+      "category": "fruits",
+      "title": "Apples",
+      "description": "Crisp and refreshing apples, available in various varieties. A versatile fruit for snacking, salads, or desserts.",
+      "image": "https://i.pinimg.com/564x/6d/0c/4c/6d0c4c4e9f81f60f6aa336acc6cb4187.jpg",
+      "health_benefits_rich_in_vitamins_and_antioxidants": true,
+      "health_benefits_improves_immunity": true,
+      "health_benefits_enhances_skin_health": true,
+      "price_inr": 49,
+      "discount_price_inr": 39.2,
+      "discount_percentage": 20,
+      "ETA": "2-4 business days"
+    }
+  ],
+  "users": [
+    {
+      "id": "4916@$#%",
+      "name": "virat",
+      "email": "virat@gmail.com",
+      "pass": "1234"
+    },
+    {
+      "id": "7894@$#%",
+      "name": "faizan",
+      "email": "faizan@gmail.com",
+      "pass": "1245"
     }
   ]
 }

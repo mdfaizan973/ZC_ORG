@@ -7,7 +7,7 @@ export default function Cart() {
     axios
       .get(`http://localhost:3030/cartdata`)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setCartData(res.data);
       })
       .catch((err) => {
