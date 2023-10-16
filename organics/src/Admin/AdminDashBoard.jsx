@@ -3,9 +3,9 @@ import axios from "axios";
 export default function AdminDashBoard() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
-  const admingetdata = () => {
+  const admingetdata = (page) => {
     axios
-      .get(`http://localhost:3030/orgproducts`)
+      .get(`http://localhost:3030/orgproducts?_limit=5&_page=${page}`)
       .then((res) => {
         // console.log(res.data);
         setData(res.data);
@@ -15,8 +15,8 @@ export default function AdminDashBoard() {
       });
   };
   useEffect(() => {
-    admingetdata();
-  }, []);
+    admingetdata(page);
+  }, [page]);
 
   const handlepre = () => {
     setPage(page - 1);

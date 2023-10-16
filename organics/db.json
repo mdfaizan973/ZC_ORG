@@ -675,20 +675,6 @@
   ],
   "cartdata": [
     {
-      "id": 2,
-      "category": "fruits",
-      "title": "Bananas",
-      "description": "Sweet and creamy bananas, a great source of energy. Perfect for smoothies, snacks, or desserts.",
-      "image": "https://i.pinimg.com/564x/5f/23/52/5f2352717a7be25e2e0ec4d309edacaa.jpg",
-      "health_benefits_rich_in_vitamins_and_antioxidants": true,
-      "health_benefits_improves_immunity": true,
-      "health_benefits_enhances_skin_health": false,
-      "price_inr": 35,
-      "discount_price_inr": 28,
-      "discount_percentage": 20,
-      "ETA": "3-5 business days"
-    },
-    {
       "id": 25,
       "category": "grains",
       "title": "Wheat Bread",
@@ -703,32 +689,32 @@
       "health_benefits_enhances_skin_health": false
     },
     {
-      "id": 1,
+      "id": 3,
       "category": "fruits",
-      "title": "Apples",
-      "description": "Crisp and refreshing apples, available in various varieties. A versatile fruit for snacking, salads, or desserts.",
-      "image": "https://i.pinimg.com/564x/6d/0c/4c/6d0c4c4e9f81f60f6aa336acc6cb4187.jpg",
+      "title": "Strawberries",
+      "description": "Sweet and succulent strawberries, bursting with flavor. Enjoy them fresh, in desserts, or as a topping.",
+      "image": "https://i.pinimg.com/564x/62/57/c2/6257c298033ed1ee2c66bd652db459dc.jpg",
       "health_benefits_rich_in_vitamins_and_antioxidants": true,
       "health_benefits_improves_immunity": true,
       "health_benefits_enhances_skin_health": true,
-      "price_inr": 49,
-      "discount_price_inr": 39.2,
+      "price_inr": 65,
+      "discount_price_inr": 52,
       "discount_percentage": 20,
       "ETA": "2-4 business days"
     },
     {
-      "id": 6,
+      "id": 2,
       "category": "fruits",
-      "title": "Grapes",
-      "description": "Juicy and sweet grapes, available in red, green, and black varieties. Perfect for snacking or making wine.",
-      "image": "https://i.pinimg.com/564x/a4/f2/87/a4f287fb5031e5384ed7aad4efc1452d.jpg",
+      "title": "Bananas",
+      "description": "Sweet and creamy bananas, a great source of energy. Perfect for smoothies, snacks, or desserts.",
+      "image": "https://i.pinimg.com/564x/5f/23/52/5f2352717a7be25e2e0ec4d309edacaa.jpg",
       "health_benefits_rich_in_vitamins_and_antioxidants": true,
       "health_benefits_improves_immunity": true,
-      "health_benefits_enhances_skin_health": true,
-      "price_inr": 55,
-      "discount_price_inr": 44,
+      "health_benefits_enhances_skin_health": false,
+      "price_inr": 35,
+      "discount_price_inr": 28,
       "discount_percentage": 20,
-      "ETA": "2-4 business days"
+      "ETA": "3-5 business days"
     }
   ],
   "users": [

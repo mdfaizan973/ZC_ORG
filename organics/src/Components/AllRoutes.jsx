@@ -8,6 +8,7 @@ import Cart from "../Pages/Cart";
 import OrganicPro from "../Pages/OrganicPro";
 import SingleProducts from "../Pages/SingleProducts";
 import AdminDashBoard from "../Admin/AdminDashBoard";
+import ProtectedRoute from "./ProtectedRoute";
 export default function AllRoutes() {
   return (
     <div>
@@ -16,11 +17,18 @@ export default function AllRoutes() {
         <Route path="/blogs" element={<Blog />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/register" element={<SignupPage />}></Route>
-        <Route path="/cartpage" element={<Cart />}></Route>
-        <Route path="/organicsproducts" element={<OrganicPro />}></Route>
+        <Route
+          path="/cartpage"
+          element={<ProtectedRoute component={Cart} />}
+        ></Route>
+        <Route
+          path="/organicsproducts"
+          element={<OrganicPro />}
+          // element={<ProtectedRoute component={OrganicPro} />}
+        ></Route>
         <Route
           path="/productdiscription/:id"
-          element={<SingleProducts />}
+          element={<ProtectedRoute component={SingleProducts} />}
         ></Route>
 
         <Route path="/admindashboard" element={<AdminDashBoard />}></Route>
