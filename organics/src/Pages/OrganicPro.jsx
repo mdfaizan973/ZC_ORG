@@ -6,6 +6,7 @@ export default function OrganicPro() {
   const [orgData, setOrgData] = useState([]);
   const [page, setPage] = useState(1);
   const [load, setLoad] = useState(false);
+  const [sort, setSort] = useState("");
   const curdatalength = orgData.length;
   const getData = (page) => {
     setLoad(true);
@@ -36,7 +37,6 @@ export default function OrganicPro() {
 
   const addToCart = (id) => {
     // get for cart
-
     axios
       .get(`http://localhost:3030/orgproducts/${id}`)
       .then((res) => {
@@ -54,6 +54,17 @@ export default function OrganicPro() {
         console.log(err);
       });
   };
+
+  // Sorting
+  if (sort === "hightolow") {
+    orgData.sort((a, b) => {
+      return a.discount_price_inr - b.discount_price_inr;
+    });
+  } else if (sort === "lowtohigh") {
+    orgData.sort((a, b) => {
+      return b.discount_price_inr - a.discount_price_inr;
+    });
+  }
 
   return (
     <div>
@@ -80,15 +91,18 @@ export default function OrganicPro() {
             <option value="grains">Grains</option>
           </select>
           <select
+            onChange={(e) => setSort(e.target.value)}
             id="countries"
             className="bg-white-50 border border-white-300 text-black-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option selected>Sort ₹</option>
-            <option value="">
-              <button>High to Low</button>
+            <option value="hightolow">
+              {/* <button onClick={handlehTol}>High to Low</button> */}
+              High to Low
             </option>
-            <option value="">
-              <button>Low to High</button>
+            <option value="lowtohigh">
+              {/* <button onClick={handlelToh}>Low to High</button> */}
+              Low to High
             </option>
           </select>
         </div>

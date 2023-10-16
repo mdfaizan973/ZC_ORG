@@ -7,6 +7,7 @@ import SignupPage from "../Pages/SignupPage";
 import Cart from "../Pages/Cart";
 import OrganicPro from "../Pages/OrganicPro";
 import SingleProducts from "../Pages/SingleProducts";
+import AdminDashBoard from "../Admin/AdminDashBoard";
 export default function AllRoutes() {
   return (
     <div>
@@ -21,6 +22,8 @@ export default function AllRoutes() {
           path="/productdiscription/:id"
           element={<SingleProducts />}
         ></Route>
+
+        <Route path="/admindashboard" element={<AdminDashBoard />}></Route>
       </Routes>
     </div>
   );
