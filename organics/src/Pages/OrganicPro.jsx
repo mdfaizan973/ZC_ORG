@@ -7,7 +7,6 @@ export default function OrganicPro() {
   const [page, setPage] = useState(1);
   const [load, setLoad] = useState(false);
   const curdatalength = orgData.length;
-  const [cart, setCart] = useState({});
   const getData = (page) => {
     setLoad(true);
     axios
@@ -37,30 +36,25 @@ export default function OrganicPro() {
 
   const addToCart = (id) => {
     // get for cart
-    console.log(`Adding ${id}`);
+
     axios
       .get(`http://localhost:3030/orgproducts/${id}`)
       .then((res) => {
         // console.warn(res.data);
-        setCart(res.data);
-        console.warn(res.data);
-        getdataaa();
+        axios
+          .post(`http://localhost:3030/cartdata`, res.data)
+          .then((res) => {
+            console.warn(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  const getdataaa = () => {
-    // add to cart
-    axios
-      .post(`http://localhost:3030/cartdata`, cart)
-      .then((res) => {
-        console.warn(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+
   return (
     <div>
       <div className="mt-1 flex justify-center items-center cursor-pointer shadow-lg shadow-grey-800">
@@ -111,7 +105,7 @@ export default function OrganicPro() {
               key={i}
               title={ele.title}
               image={ele.image}
-              price={ele.price_inr}
+              price={ele.discount_price_inr}
               id={ele.id}
               addtocart={addToCart}
             />

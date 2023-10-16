@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Loading from "./LoadingUI/CartLoading";
+import { Link as RouterLink } from "react-router-dom";
 export default function Cart() {
   const [cartdata, setCartData] = useState([]);
   const [load, setLoad] = useState(false);
+
   useEffect(() => {
     setLoad(true);
     axios
@@ -28,6 +30,13 @@ export default function Cart() {
         console.log(err);
       });
   };
+
+  const totalPrice = cartdata.reduce((acc, item) => {
+    return acc + item.discount_price_inr;
+  }, 0);
+
+  console.log(totalPrice);
+
   return (
     <div>
       {load ? (
@@ -44,12 +53,14 @@ export default function Cart() {
                   key={i}
                   className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start"
                 >
-                  <img
-                    // src="https://www.organictattva.com/wp-content/uploads/2019/08/Amaranth-cutlet.jpg"
-                    src={ele.image}
-                    alt="product-image"
-                    className="cartimage w-32 h-32 lg:w-20 lg:h-20 xl:w-24 xl:h-24 rounded-xl object-cover"
-                  />
+                  <RouterLink to={`/productdiscription/${ele.id}`}>
+                    <img
+                      // src="https://www.organictattva.com/wp-content/uploads/2019/08/Amaranth-cutlet.jpg"
+                      src={ele.image}
+                      alt="product-image"
+                      className="cartimage w-32 h-32 lg:w-20 lg:h-20 xl:w-24 xl:h-24 rounded-xl object-cover"
+                    />
+                  </RouterLink>
 
                   <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                     <div className="mt-5 sm:mt-0">
@@ -81,7 +92,7 @@ export default function Cart() {
                         </span>
                       </div>
                       <div className="flex items-center space-x-4">
-                        <p className="text-sm"> ₹ {ele.price_inr} </p>
+                        <p className="text-sm"> ₹ {ele.discount_price_inr} </p>
                         <button onClick={() => delefromcart(ele.id)}>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -107,17 +118,17 @@ export default function Cart() {
             <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
               <div className="mb-2 flex justify-between">
                 <p className="text-gray-700">Price</p>
-                <p className="text-gray-700">12₹</p>
+                <p className="text-gray-700">₹ {totalPrice} </p>
               </div>
               <div className="flex justify-between">
                 <p className="text-gray-700">Total Price with Quantity</p>
-                <p className="text-gray-700">12121 ₹</p>
+                <p className="text-gray-700">₹ {totalPrice} </p>
               </div>
               <hr className="my-4" />
               <div className="flex justify-between">
                 <p className="text-lg font-bold">Total</p>
                 <div className="">
-                  <p className="mb-1 text-lg font-bold">2121 ₹</p>
+                  <p className="mb-1 text-lg font-bold">₹ {totalPrice}</p>
                 </div>
               </div>
               <button className="mt-6 w-full rounded-md bg-emerald-600 hover:bg-emerald-800 py-1.5  transition duration-150 ease-in-out hover:translate-y-1 font-medium text-blue-50">
