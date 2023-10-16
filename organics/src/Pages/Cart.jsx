@@ -120,7 +120,7 @@ export default function Cart() {
                   <p className="mb-1 text-lg font-bold">2121 ₹</p>
                 </div>
               </div>
-              <button className="mt-6 w-full rounded-md bg-green-500 py-1.5 font-medium text-blue-50 hover:bg-green-600">
+              <button className="mt-6 w-full rounded-md bg-emerald-600 hover:bg-emerald-800 py-1.5  transition duration-150 ease-in-out hover:translate-y-1 font-medium text-blue-50">
                 <a> Check out </a>
               </button>
             </div>

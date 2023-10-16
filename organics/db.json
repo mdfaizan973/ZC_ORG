@@ -689,48 +689,6 @@
       "ETA": "2-4 business days"
     },
     {
-      "id": 6,
-      "category": "fruits",
-      "title": "Grapes",
-      "description": "Juicy and sweet grapes, available in red, green, and black varieties. Perfect for snacking or making wine.",
-      "image": "https://i.pinimg.com/564x/a4/f2/87/a4f287fb5031e5384ed7aad4efc1452d.jpg",
-      "health_benefits_rich_in_vitamins_and_antioxidants": true,
-      "health_benefits_improves_immunity": true,
-      "health_benefits_enhances_skin_health": true,
-      "price_inr": 55,
-      "discount_price_inr": 44,
-      "discount_percentage": 20,
-      "ETA": "2-4 business days"
-    },
-    {
-      "id": 4,
-      "category": "fruits",
-      "title": "Blueberries",
-      "description": "Juicy and sweet blueberries, packed with antioxidants. Perfect for snacking, smoothies, or baking.",
-      "image": "https://i.pinimg.com/564x/24/be/95/24be956b474689f2028b8bb9b9d622d7.jpg",
-      "health_benefits_rich_in_vitamins_and_antioxidants": true,
-      "health_benefits_improves_immunity": true,
-      "health_benefits_enhances_skin_health": true,
-      "price_inr": 70,
-      "discount_price_inr": 56,
-      "discount_percentage": 20,
-      "ETA": "2-4 business days"
-    },
-    {
-      "id": 5,
-      "category": "fruits",
-      "title": "Oranges",
-      "description": "Tangy and sweet oranges, a great source of vitamin C. Enjoy them fresh or as freshly squeezed juice.",
-      "image": "https://i.pinimg.com/564x/7a/aa/a5/7aaaa545e00e8a434850e80b8910dd94.jpg",
-      "health_benefits_rich_in_vitamins_and_antioxidants": true,
-      "health_benefits_improves_immunity": true,
-      "health_benefits_enhances_skin_health": true,
-      "price_inr": 45,
-      "discount_price_inr": 36,
-      "discount_percentage": 20,
-      "ETA": "2-4 business days"
-    },
-    {
       "id": 35,
       "category": "grains",
       "title": "Couscous Salad",
