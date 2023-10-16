@@ -1,11 +1,29 @@
-// import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
 export default function AdminDashBoard() {
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  // const openModal = () => {
-  //   setIsModalOpen(true);
-  //   console.log(isModalOpen);
-  // };
+  const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const admingetdata = () => {
+    axios
+      .get(`http://localhost:3030/orgproducts`)
+      .then((res) => {
+        // console.log(res.data);
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    admingetdata();
+  }, []);
+
+  const handlepre = () => {
+    setPage(page - 1);
+  };
+  const handlenext = () => {
+    setPage(page + 1);
+  };
 
   return (
     <div>
@@ -20,7 +38,6 @@ export default function AdminDashBoard() {
                 <div className="text-4xl">Admin Dashboard</div>
 
                 <button
-                  // onClick={openModal}
                   onClick={() =>
                     document.getElementById("my_modal_1").showModal()
                   }
@@ -33,20 +50,20 @@ export default function AdminDashBoard() {
             </header>
 
             {/* Main Content Area */}
-            <main className="bg-white p-4 w-[80%] mx-auto rounded shadow-md">
+            <main className=" p-4 w-[80%] mx-auto rounded ">
               {/* Table */}
 
-              <section className="items-center lg:flex bg-white  lg:h-screen font-poppins dark:bg-gray-800 ">
+              <section className="items-center bg-white font-poppins ">
                 <div className="justify-center flex-1 max-w-6xl px-4 py-4 mx-auto lg:py-8 md:px-6">
-                  <div className="pt-4 rounded shadow bg-stone-100 dark:bg-gray-900">
-                    <div className="flex flex-wrap items-center justify-between px-6 pb-4 border-b dark:border-gray-700">
+                  <div className="pt-4 rounded shadow bg-white ">
+                    <div className="flex flex-wrap  items-center justify-between px-6 pb-4 border-b dark:border-gray-700">
                       <h2 className="mb-4 text-xl font-bold md:mb-0 dark:text-gray-400">
                         List of Products
                       </h2>
                       <div className="flex px-6 py-2 mb-4 border border-gray-600 rounded-md md:mb-0 dark:border-gray-400">
                         <input
                           type="text"
-                          className="w-full pr-4 text-sm text-gray-700 bg-stone-100 dark:text-gray-400 dark:bg-gray-900 placeholder-text-100 "
+                          className="w-full pr-4 text-sm text-gray-700 bg-white dark:text-gray-400  placeholder-text-100 "
                           placeholder="search..."
                         />
                         <button className="flex items-center text-gray-700 dark:text-gray-400 dark:hover:text-blue-300 hover:text-blue-600">
@@ -72,111 +89,111 @@ export default function AdminDashBoard() {
                         <thead>
                           <tr className="text-sm text-left text-gray-500 dark:text-gray-400">
                             <th className="flex items-center px-6 pb-3 font-medium dark:text-gray-400">
-                              <input
-                                className="mr-4"
-                                type="checkbox"
-                                name=""
-                                id=""
-                              />
+                              <span className="mr-4">Id</span>
                               <span>Name</span>
                             </th>
-                            <th className="px-6 pb-3 font-medium ">Owner </th>
-                            <th className="px-6 pb-3 font-medium">Created </th>
-                            <th className="px-6 pb-3 font-medium">Activity </th>
+                            <th className="px-6 pb-3 font-medium ">
+                              Category{" "}
+                            </th>
+                            <th className="px-6 pb-3 font-medium">Price </th>
+                            <th className="px-6 pb-3 font-medium">ETA </th>
+                            <th className="px-6 pb-3 font-medium">View </th>
                             <th className="px-6 pb-3 font-medium"> Action</th>
                           </tr>
                         </thead>
                         <tbody>
                           {/* Show data */}
-
-                          <tr className="text-sm bg-white dark:text-gray-400 dark:bg-gray-800">
-                            <td className="flex items-center px-6 py-5 font-medium">
-                              <input
-                                className="mr-4"
-                                type="checkbox"
-                                name=""
-                                id=""
-                              />
-                              <p className="">General Purpose Report</p>
-                            </td>
-                            <td className="px-6 py-5 font-medium ">
-                              Branklin Ferdnaz
-                            </td>
-                            <td className="px-6 py-5 font-medium ">
-                              13 jan 2022
-                            </td>
-                            <td className="px-6 py-5 font-medium">
-                              <span className="text-blue-400 dark:text-blue-300">
-                                General
-                              </span>
-                            </td>
-                            <td className="flex items-center px-6 py-5 ">
-                              <a
-                                href="#"
-                                className="font-medium text-blue-600 hover:text-blue-500 dark:hover:text-gray-300 dark:text-blue-300"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  fill="currentColor"
-                                  className="w-4 h-4 mr-3 bi bi-pencil-square"
-                                  viewBox="0 0 16 16"
+                          {data.map((ele, i) => (
+                            <tr
+                              key={i}
+                              className="text-sm bg-white dark:text-gray-400 "
+                            >
+                              <td className="flex items-center px-6 py-5 font-medium">
+                                <span className="mr-4">{ele.id}</span>
+                                <p className="">{ele.title}</p>
+                              </td>
+                              <td className="px-6 py-5 font-medium ">
+                                {ele.category}
+                              </td>
+                              <td className="px-6 py-5 font-medium ">
+                                ₹ {ele.price_inr}
+                              </td>{" "}
+                              <td className="px-6 py-5 font-medium ">
+                                {ele.ETA}
+                              </td>
+                              <td className="px-6 py-5 font-medium">
+                                <span className="inline-block px-2 py-1 text-center text-green-600 bg-green-100 rounded-full dark:text-green-700 dark:bg-green-200">
+                                  View
+                                </span>
+                              </td>
+                              <td className="flex items-center px-6 py-5 ">
+                                <a
+                                  href="#"
+                                  className="font-medium text-blue-600 hover:text-blue-500 dark:hover:text-gray-300 "
                                 >
-                                  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
-                                  />
-                                </svg>
-                              </a>
-                              <a
-                                href="#"
-                                className="font-medium text-red-600 hover:text-red-500 dark:hover:text-red-300 dark:text-red-400"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  fill="currentColor"
-                                  className="w-4 h-4 bi bi-trash-fill"
-                                  viewBox="0 0 16 16"
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    className="w-4 h-4 mr-3 bi bi-pencil-square"
+                                    viewBox="0 0 16 16"
+                                  >
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+                                    />
+                                  </svg>
+                                </a>
+                                <a
+                                  href="#"
+                                  className="font-medium text-red-600 hover:text-red-500 dark:hover:text-red-300 dark:text-red-400"
                                 >
-                                  <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                                </svg>
-                              </a>
-                            </td>
-                          </tr>
-
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    className="w-4 h-4 bi bi-trash-fill"
+                                    viewBox="0 0 16 16"
+                                  >
+                                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                  </svg>
+                                </a>
+                              </td>
+                            </tr>
+                          ))}
                           {/* ---- */}
                         </tbody>
                       </table>
                       <div className="flex justify-end pt-4 mt-4 border-t dark:border-gray-700">
                         <nav aria-label="page-navigation">
                           <ul className="flex list-style-none">
-                            <li className="page-item ">
-                              <a
-                                href="#"
+                            <li className="page-item " onClick={handlepre}>
+                              <button
+                                disabled={page == 1}
+                                href=""
                                 className="relative block px-3 py-1.5 text-base text-gray-700 transition-all duration-300 dark:text-gray-400 dark:hover:bg-gray-700 hover:bg-blue-100 rounded-md "
                               >
                                 Previous
-                              </a>
+                              </button>
                             </li>
                             <li className="page-item ">
                               <a
                                 href="#"
                                 className="relative block px-3 py-1.5 text-base text-gray-700 transition-all duration-300 dark:text-gray-400 dark:hover:bg-gray-700 hover:bg-blue-100 rounded-md mr-3 "
                               >
-                                3
+                                {page}
                               </a>
                             </li>
-                            <li className="page-item ">
-                              <a
+                            <li className="page-item " onClick={handlenext}>
+                              <button
                                 href="#"
                                 className="relative block px-3 py-1.5 text-base text-gray-700 transition-all duration-300 dark:text-gray-400 dark:hover:bg-gray-700 hover:bg-blue-100 rounded-md "
                               >
                                 Next
-                              </a>
+                              </button>
                             </li>
                           </ul>
                         </nav>
