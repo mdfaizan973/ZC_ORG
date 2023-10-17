@@ -13,7 +13,6 @@ export default function OrganicPro() {
   let limit = 9;
   const getData = (page, filter) => {
     setLoad(true);
-
     const categoryParam = filter ? `category=${filter}` : "";
     const url = `http://localhost:3030/orgproducts?${categoryParam}&_limit=${limit}&_page=${page}`;
 
@@ -92,7 +91,10 @@ export default function OrganicPro() {
       <div className="w-[65%] mt-5 mx-auto  flex ">
         <div className="flex w-full sm:w-[30%]">
           <select
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={(e) => {
+              setFilter(e.target.value);
+              setPage(1);
+            }}
             id="countries"
             className="bg-white-50 border border-white-300 text-black-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
