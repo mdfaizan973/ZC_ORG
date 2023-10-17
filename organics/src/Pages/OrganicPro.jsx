@@ -8,11 +8,17 @@ export default function OrganicPro() {
   const [page, setPage] = useState(1);
   const [load, setLoad] = useState(false);
   const [sort, setSort] = useState("");
+  const [fileter, setFilter] = useState("");
   const curdatalength = orgData.length;
-  const getData = (page) => {
+  let limit = 9;
+  const getData = (page, filter) => {
     setLoad(true);
+
+    const categoryParam = filter ? `category=${filter}` : "";
+    const url = `http://localhost:3030/orgproducts?${categoryParam}&_limit=${limit}&_page=${page}`;
+
     axios
-      .get(`http://localhost:3030/orgproducts?_limit=9&_page=${page}`)
+      .get(url)
       .then((res) => {
         setLoad(false);
         setOrgData(res.data);
@@ -31,8 +37,8 @@ export default function OrganicPro() {
   };
 
   useEffect(() => {
-    getData(page);
-  }, [page]);
+    getData(page, fileter);
+  }, [page, fileter]);
 
   // Adding to cart
 
@@ -67,10 +73,11 @@ export default function OrganicPro() {
     });
   }
 
+  console.log(fileter);
+
   return (
     <div>
-
-<Navbar />
+      <Navbar />
 
       <div className="mt-1 flex justify-center items-center cursor-pointer shadow-lg shadow-grey-800">
         <img
@@ -85,11 +92,12 @@ export default function OrganicPro() {
       <div className="w-[65%] mt-5 mx-auto  flex ">
         <div className="flex w-full sm:w-[30%]">
           <select
+            onChange={(e) => setFilter(e.target.value)}
             id="countries"
             className="bg-white-50 border border-white-300 text-black-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
-            <option selected>Filter</option>
-            <option value="fruites">Fruites</option>
+            <option value="">Filter</option>
+            <option value="fruits">Fruites</option>
             <option value="vegetables">Vegetables</option>
             <option value="dairy">Dairy</option>
             <option value="grains">Grains</option>

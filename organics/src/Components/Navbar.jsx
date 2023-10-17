@@ -36,19 +36,25 @@ export default function Navbar() {
                 </RouterLink>
               </li>
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
-                <a className="flex items-center" href="#">
-                  Fruites
-                </a>
+                <RouterLink to="/organicsproducts">
+                  <a className="flex items-center" href="#">
+                    Fruites
+                  </a>
+                </RouterLink>
               </li>
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
-                <a className="flex items-center" href="#">
-                  Vegetables
-                </a>
+                <RouterLink to="/organicsproducts">
+                  <a className="flex items-center" href="#">
+                    Vegetables
+                  </a>
+                </RouterLink>
               </li>{" "}
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
-                <a className="flex items-center" href="#">
-                  Dairy
-                </a>
+                <RouterLink to="/organicsproducts">
+                  <a className="flex items-center" href="#">
+                    Dairy
+                  </a>
+                </RouterLink>
               </li>
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
                 <a className="flex items-center" href="#">

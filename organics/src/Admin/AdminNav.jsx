@@ -24,6 +24,11 @@ export default function AdminNav() {
             </a>
             <ul className="hidden items-center gap-6 lg:flex">
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
+                <RouterLink to="/">
+                  <a className="flex items-center">Got to the Website</a>
+                </RouterLink>
+              </li>
+              <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
                 <RouterLink to="/admindashboard">
                   <a className="flex items-center">Products</a>
                 </RouterLink>
@@ -32,6 +37,11 @@ export default function AdminNav() {
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
                 <RouterLink to="/adminusers">
                   <a className="flex items-center">Users</a>
+                </RouterLink>
+              </li>
+              <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
+                <RouterLink to="/adminusers">
+                  <a className="flex items-center">UpComing Products</a>
                 </RouterLink>
               </li>
             </ul>

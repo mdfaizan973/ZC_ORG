@@ -43,7 +43,7 @@ export default function AdminDashBoard() {
             <div className="flex-1 p-4">
               {/* Header */}
               <header className="mb-4">
-                <div className=" flex justify-between align-center font-bold text-gray-500">
+                <div className=" flex flex-wrap justify-between align-center font-bold text-gray-500">
                   <div className="text-4xl">Admin Dashboard</div>
 
                   <button

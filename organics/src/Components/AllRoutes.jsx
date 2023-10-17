@@ -10,6 +10,7 @@ import SingleProducts from "../Pages/SingleProducts";
 import AdminDashBoard from "../Admin/AdminDashBoard";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminUsers from "../Admin/AdminUsers";
+import ChakOutPage from "../Pages/ChakOutPage";
 export default function AllRoutes() {
   return (
     <div>
@@ -18,6 +19,10 @@ export default function AllRoutes() {
         <Route path="/blogs" element={<Blog />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/register" element={<SignupPage />}></Route>
+        <Route
+          path="/checkout"
+          element={<ProtectedRoute component={ChakOutPage} />}
+        ></Route>
         <Route
           path="/cartpage"
           element={<ProtectedRoute component={Cart} />}
