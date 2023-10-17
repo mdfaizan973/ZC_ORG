@@ -207,7 +207,7 @@ export default function ChakOutPage() {
         id="my_modal_1"
         className="modal bg-transparent w-fit p-3 rounded-xl"
       >
-        <section className="antialiased bg-gray-100 text-gray-600 min-h-[screen] p-4">
+        <section className="antialiased  text-gray-600 min-h-[screen] ">
           <div className="h-full">
             <div>
               <div className="relative px-4 sm:px-6 lg:px-8 max-w-lg mx-auto">
@@ -245,18 +245,33 @@ export default function ChakOutPage() {
                   </div>
                   <div>
                     <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-1">
-                          Name
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          id="card-nr"
-                          className="text-sm text-gray-800 bg-white border rounded leading-5 py-2 px-3 border-gray-200 hover:border-gray-300 focus:border-indigo-300 shadow-sm placeholder-gray-400 focus:ring-0 w-full"
-                          type="text"
-                          placeholder="John Doe"
-                          required
-                        />
+                      <div className="flex space-x-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-1">
+                            Name
+                            <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            id="card-nr"
+                            className="text-sm text-gray-800 bg-white border rounded leading-5 py-2 px-3 border-gray-200 hover:border-gray-300 focus:border-indigo-300 shadow-sm placeholder-gray-400 focus:ring-0 w-full"
+                            type="text"
+                            placeholder="John Doe"
+                            required
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium mb-1">
+                            Phone <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            id="card-phone"
+                            className="text-sm text-gray-800 bg-white border rounded leading-5 py-2 px-3 border-gray-200 hover:border-gray-300 focus:border-indigo-300 shadow-sm placeholder-gray-400 focus:ring-0 w-full"
+                            type="number"
+                            placeholder="1234567890"
+                            required
+                          />
+                        </div>
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-1">
@@ -270,18 +285,7 @@ export default function ChakOutPage() {
                           required
                         />
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-1">
-                          Phone <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          id="card-phone"
-                          className="text-sm text-gray-800 bg-white border rounded leading-5 py-2 px-3 border-gray-200 hover:border-gray-300 focus:border-indigo-300 shadow-sm placeholder-gray-400 focus:ring-0 w-full"
-                          type="number"
-                          placeholder="1234567890"
-                          required
-                        />
-                      </div>{" "}
+
                       <div>
                         <label className="block text-sm font-medium mb-1">
                           Address <span className="text-red-500">*</span>
@@ -295,6 +299,7 @@ export default function ChakOutPage() {
                         />
                       </div>
                     </div>
+
                     <div className="mt-6">
                       <div className="mb-4">
                         <button className="font-medium text-sm inline-flex items-center justify-center px-3 py-2 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out w-full bg-indigo-500 hover:bg-indigo-600 text-white focus:outline-none focus-visible:ring-2">
@@ -304,6 +309,11 @@ export default function ChakOutPage() {
                       <div className="text-xs text-gray-500 italic text-center">
                         Make Successful payment
                       </div>
+                      <form method="dialog">
+                        <button className="btn btn-sm text-red-500 btn-circle btn-ghost ">
+                          ✕
+                        </button>
+                      </form>
                     </div>
                   </div>
                 </div>
