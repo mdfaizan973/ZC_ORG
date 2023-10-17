@@ -7,8 +7,13 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const randomid = Math.floor(Math.random() * 10000) + "@$#%";
+
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleString();
+
   let obj = {
     id: randomid,
+    date: formattedDate,
     name,
     email,
     pass,
