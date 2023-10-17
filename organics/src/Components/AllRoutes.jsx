@@ -11,6 +11,7 @@ import AdminDashBoard from "../Admin/AdminDashBoard";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminUsers from "../Admin/AdminUsers";
 import ChakOutPage from "../Pages/ChakOutPage";
+import ShpoingDone from "../Pages/ShpoingDone";
 export default function AllRoutes() {
   return (
     <div>
@@ -19,6 +20,7 @@ export default function AllRoutes() {
         <Route path="/blogs" element={<Blog />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/register" element={<SignupPage />}></Route>
+        <Route path="/delivery" element={<ShpoingDone />}></Route>
         <Route
           path="/checkout"
           element={<ProtectedRoute component={ChakOutPage} />}
