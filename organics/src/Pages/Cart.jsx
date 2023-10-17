@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Loading from "./LoadingUI/CartLoading";
 import { Link as RouterLink } from "react-router-dom";
+import Navbar from "../Components/Navbar";
 export default function Cart() {
   const [cartdata, setCartData] = useState([]);
   const [load, setLoad] = useState(false);
@@ -39,6 +40,8 @@ export default function Cart() {
 
   return (
     <div>
+      <Navbar />
+
       {load ? (
         <Loading />
       ) : (

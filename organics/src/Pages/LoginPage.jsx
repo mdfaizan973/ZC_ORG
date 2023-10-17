@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { BiExit } from "react-icons/bi";
+import Navbar from "../Components/Navbar";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -45,6 +46,8 @@ export default function LoginPage() {
 
   return (
     <>
+      <Navbar />
+
       {islogin ? (
         <button
           onClick={handleLogOut}

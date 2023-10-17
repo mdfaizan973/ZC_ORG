@@ -9,6 +9,7 @@ import OrganicPro from "../Pages/OrganicPro";
 import SingleProducts from "../Pages/SingleProducts";
 import AdminDashBoard from "../Admin/AdminDashBoard";
 import ProtectedRoute from "./ProtectedRoute";
+import AdminUsers from "../Admin/AdminUsers";
 export default function AllRoutes() {
   return (
     <div>
@@ -32,6 +33,7 @@ export default function AllRoutes() {
         ></Route>
 
         <Route path="/admindashboard" element={<AdminDashBoard />}></Route>
+        <Route path="/adminusers" element={<AdminUsers />}></Route>
       </Routes>
     </div>
   );

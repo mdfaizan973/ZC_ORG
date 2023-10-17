@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import ProductsCarload from "./LoadingUI/ProductsCarload";
 import OrgPro from "./Cards/OrgPro";
 import axios from "axios";
+import Navbar from "../Components/Navbar";
 export default function OrganicPro() {
   const [orgData, setOrgData] = useState([]);
   const [page, setPage] = useState(1);
@@ -68,6 +69,9 @@ export default function OrganicPro() {
 
   return (
     <div>
+
+<Navbar />
+
       <div className="mt-1 flex justify-center items-center cursor-pointer shadow-lg shadow-grey-800">
         <img
           src="https://www.omfoods.com/cdn/shop/files/OMFOODS_ORGANIC_INGREDIENTS.jpg?v=1681412891"

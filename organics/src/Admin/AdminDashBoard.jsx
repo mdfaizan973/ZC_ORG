@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import AdminNav from "./AdminNav";
 export default function AdminDashBoard() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -27,8 +28,8 @@ export default function AdminDashBoard() {
 
   return (
     <div>
-      {" "}
-      <div className="min-h-screen bg-gray-100">
+      <AdminNav />
+      <div className="min-h-screen bg-gray-50">
         <div className="flex">
           {/* Main Content */}
           <div className="flex-1 p-4">
@@ -92,9 +93,7 @@ export default function AdminDashBoard() {
                               <span className="mr-4">Id</span>
                               <span>Name</span>
                             </th>
-                            <th className="px-6 pb-3 font-medium ">
-                              Category{" "}
-                            </th>
+                            <th className="px-6 pb-3 font-medium ">Category</th>
                             <th className="px-6 pb-3 font-medium">Price </th>
                             <th className="px-6 pb-3 font-medium">ETA </th>
                             <th className="px-6 pb-3 font-medium">View </th>
@@ -117,7 +116,7 @@ export default function AdminDashBoard() {
                               </td>
                               <td className="px-6 py-5 font-medium ">
                                 ₹ {ele.price_inr}
-                              </td>{" "}
+                              </td>
                               <td className="px-6 py-5 font-medium ">
                                 {ele.ETA}
                               </td>
@@ -189,6 +188,7 @@ export default function AdminDashBoard() {
                             </li>
                             <li className="page-item " onClick={handlenext}>
                               <button
+                                disabled={data.length <= 4}
                                 href="#"
                                 className="relative block px-3 py-1.5 text-base text-gray-700 transition-all duration-300 dark:text-gray-400 dark:hover:bg-gray-700 hover:bg-blue-100 rounded-md "
                               >

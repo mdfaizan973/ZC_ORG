@@ -1,5 +1,6 @@
 // import React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import Navbar from "../../Components/Navbar";
 export default function Home() {
   const data = [
     {
@@ -30,6 +31,8 @@ export default function Home() {
 
   return (
     <div>
+      <Navbar />
+
       <div className="banner mt-1 cursor-pointer">
         <img src="https://www.omfoods.com/cdn/shop/files/Banner_NEW.jpg?v=1681412890" />
       </div>

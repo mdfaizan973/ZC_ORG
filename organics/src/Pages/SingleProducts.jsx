@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import DiscriptionLoad from "./LoadingUI/DiscriptionLoad";
+import Navbar from "../Components/Navbar";
 export default function SingleProducts() {
   let { id } = useParams();
   const [data, setData] = useState({});
@@ -45,6 +46,7 @@ export default function SingleProducts() {
 
   return (
     <div>
+      <Navbar />
       {load ? (
         <DiscriptionLoad />
       ) : (
