@@ -20,7 +20,10 @@ export default function AllRoutes() {
         <Route path="/blogs" element={<Blog />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/register" element={<SignupPage />}></Route>
-        <Route path="/delivery" element={<ShpoingDone />}></Route>
+        <Route
+          path="/delivery"
+          element={<ProtectedRoute component={ShpoingDone} />}
+        ></Route>
         <Route
           path="/checkout"
           element={<ProtectedRoute component={ChakOutPage} />}
