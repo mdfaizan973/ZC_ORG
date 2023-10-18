@@ -11,6 +11,44 @@ export default function ChakOutPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  // cashondelivery ---states
+
+  const [cName, setCName] = useState("");
+  const [cPhone, setCPhone] = useState("");
+  const [cEmail, setCEmail] = useState("");
+  const [CAddress, setCAddress] = useState("");
+  const cObj = {
+    cEmail,
+    cName,
+    cPhone,
+    CAddress,
+  };
+
+  const handleCashOnD = () => {
+    if (cName == "" || cPhone == "" || CAddress == "" || cEmail == "") {
+      toast.error("Fill all the information!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      return;
+    } else {
+      redirect();
+
+      axios
+        .post(`http://localhost:3030/codorders`, cObj)
+        .then((res) => {
+          console.log(res);
+          toast.success("Order Done!", {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        })
+        .cathch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  // -----------------------
+
   const navigate = useNavigate();
   const obj = {
     cardNumber,
@@ -40,7 +78,7 @@ export default function ChakOutPage() {
         .post(`http://localhost:3030/pporders`, obj)
         .then((res) => {
           console.log(res);
-          toast.success("Item Removed!", {
+          toast.success("Payment Done!", {
             position: toast.POSITION.TOP_CENTER,
           });
         })
@@ -211,6 +249,8 @@ export default function ChakOutPage() {
           </div>
         </div>
       </section>
+
+      {/* alert form */}
       <dialog
         id="my_modal_1"
         className="modal bg-transparent w-fit p-3 rounded-xl"
@@ -265,6 +305,7 @@ export default function ChakOutPage() {
                             type="text"
                             placeholder="John Doe"
                             required
+                            onChange={(e) => setCName(e.target.value)}
                           />
                         </div>
 
@@ -278,6 +319,7 @@ export default function ChakOutPage() {
                             type="number"
                             placeholder="1234567890"
                             required
+                            onChange={(e) => setCPhone(e.target.value)}
                           />
                         </div>
                       </div>
@@ -291,6 +333,7 @@ export default function ChakOutPage() {
                           type="email"
                           placeholder="john@company.com"
                           required
+                          onChange={(e) => setCEmail(e.target.value)}
                         />
                       </div>
 
@@ -304,13 +347,17 @@ export default function ChakOutPage() {
                           type="text"
                           placeholder="India.."
                           required
+                          onChange={(e) => setCAddress(e.target.value)}
                         />
                       </div>
                     </div>
 
                     <div className="mt-6">
                       <div className="mb-4">
-                        <button className="font-medium text-sm inline-flex items-center justify-center px-3 py-2 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out w-full bg-indigo-500 hover:bg-indigo-600 text-white focus:outline-none focus-visible:ring-2">
+                        <button
+                          onClick={handleCashOnD}
+                          className="font-medium text-sm inline-flex items-center justify-center px-3 py-2 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out w-full bg-indigo-500 hover:bg-indigo-600 text-white focus:outline-none focus-visible:ring-2"
+                        >
                           Pay $253.00
                         </button>
                       </div>

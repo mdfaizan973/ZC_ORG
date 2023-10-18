@@ -752,6 +752,13 @@
       "name": "faizans",
       "email": "f@gmail.com",
       "pass": "1233"
+    },
+    {
+      "id": "504@$#%",
+      "date": "10/18/2023, 5:20:21 PM",
+      "name": "aman",
+      "email": "aman@gmai.com",
+      "pass": "4311"
     }
   ],
   "upcomingroducts": [],
@@ -926,8 +933,25 @@
       "email": "fafa@gmail.com",
       "phone": "06201855200",
       "id": 19
+    },
+    {
+      "cardNumber": "34",
+      "exD": "34",
+      "cvv": "345",
+      "name": "jhon",
+      "email": "fafa@gmail.com",
+      "phone": "06201855200",
+      "id": 20
     }
   ],
-  "codorders": [],
+  "codorders": [
+    {
+      "cEmail": "fafa@gmail.com",
+      "cName": "md faizan",
+      "cPhone": "06201855200",
+      "CAddress": "06201855200",
+      "id": 1
+    }
+  ],
   "additional": []
 }
