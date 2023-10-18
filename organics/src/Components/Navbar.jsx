@@ -57,9 +57,11 @@ export default function Navbar() {
                 </RouterLink>
               </li>
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
-                <a className="flex items-center" href="#">
-                  Upcoming Products
-                </a>
+                <RouterLink to="/upcoming">
+                  <a className="flex items-center" href="#">
+                    Upcoming Products
+                  </a>
+                </RouterLink>
               </li>
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
                 <a className="flex items-center" href="#">

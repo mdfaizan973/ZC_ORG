@@ -12,6 +12,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import AdminUsers from "../Admin/AdminUsers";
 import ChakOutPage from "../Pages/ChakOutPage";
 import ShpoingDone from "../Pages/ShpoingDone";
+import UpCaoming from "../Pages/UpCaoming";
 export default function AllRoutes() {
   return (
     <div>
@@ -20,6 +21,7 @@ export default function AllRoutes() {
         <Route path="/blogs" element={<Blog />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/register" element={<SignupPage />}></Route>
+        <Route path="/upcoming" element={<UpCaoming />}></Route>
         <Route
           path="/delivery"
           element={<ProtectedRoute component={ShpoingDone} />}
