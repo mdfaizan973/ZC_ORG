@@ -1,11 +1,14 @@
 // import React from "react";
 import PropTypes from "prop-types";
 import { Link as RouterLink } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function OrgPro(props) {
   const { image, price, title, addtocart, id } = props;
   // image , price ,title
   return (
     <div>
+      <ToastContainer />
       {/* <div className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5"> */}
       <div className="bg-white w-72 shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
         <RouterLink to={`/productdiscription/${id}`}>
@@ -46,7 +49,12 @@ export default function OrgPro(props) {
 
               <div className="ml-auto">
                 <button
-                  onClick={() => addtocart(id)}
+                  onClick={() => {
+                    addtocart(id);
+                    toast.success("Item Added To Cart", {
+                      position: toast.POSITION.TOP_CENTER,
+                    });
+                  }}
                   className="mr-2 mb-4 flex cursor-pointer items-center justify-center rounded-md bg-emerald-600 hover:bg-emerald-800 py-2 px-8 text-center text-white transition duration-150 ease-in-out hover:translate-y-1 "
                 >
                   <svg

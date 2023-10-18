@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import DiscriptionLoad from "./LoadingUI/DiscriptionLoad";
 import Navbar from "../Components/Navbar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function SingleProducts() {
   let { id } = useParams();
   const [data, setData] = useState({});
@@ -26,6 +28,9 @@ export default function SingleProducts() {
 
   const addToCart = () => {
     // get for cart
+    toast.success("Item Added To Cart", {
+      position: toast.POSITION.TOP_CENTER,
+    });
     axios
       .get(`http://localhost:3030/orgproducts/${id}`)
       .then((res) => {
@@ -47,6 +52,7 @@ export default function SingleProducts() {
   return (
     <div>
       <Navbar />
+      <ToastContainer />
       {load ? (
         <DiscriptionLoad />
       ) : (

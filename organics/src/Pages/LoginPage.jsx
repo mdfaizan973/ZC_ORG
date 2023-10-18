@@ -3,6 +3,8 @@ import axios from "axios";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { BiExit } from "react-icons/bi";
 import Navbar from "../Components/Navbar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -10,23 +12,34 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const handleLogin = () => {
     if (email === "" || pass === "") {
-      alert("Please enter both email and password");
+      toast.error("Please enter both email and password", {
+        position: toast.POSITION.TOP_CENTER,
+      });
       return;
     } else {
       axios
         .get(`http://localhost:3030/users?email=${email}&pass=${pass}`)
         .then((res) => {
           if (res.data.length > 0) {
-            alert("Login successful");
+            toast.success("LogIn SuccessFul!", {
+              position: toast.POSITION.TOP_CENTER,
+            });
             sessionStorage.setItem("user_loged_in", "true");
-            navigate("/");
+            setTimeout(() => {
+              navigate("/");
+            }, 1200);
           } else {
-            alert("Login failed. Please check your email and password.");
+            alert("");
+            toast.error("Login failed. Please check your email and password.", {
+              position: toast.POSITION.TOP_CENTER,
+            });
           }
         })
         .catch((err) => {
           console.log(err);
-          alert("An error occurred while logging in. Please try again.");
+          toast.error("An error occurred while logging in. Please try again.", {
+            position: toast.POSITION.TOP_CENTER,
+          });
         });
     }
   };
@@ -42,12 +55,15 @@ export default function LoginPage() {
   const handleLogOut = () => {
     sessionStorage.removeItem("user_loged_in");
     setIslogin(false);
+    toast.error("Logout Successful", {
+      position: toast.POSITION.TOP_CENTER,
+    });
   };
 
   return (
     <>
       <Navbar />
-
+      <ToastContainer />
       {islogin ? (
         <button
           onClick={handleLogOut}

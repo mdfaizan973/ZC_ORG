@@ -2,6 +2,8 @@ import { useState } from "react";
 import Navbar from "../Components/Navbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function ChakOutPage() {
   const [cardNumber, setCardNumber] = useState("");
   const [exD, setExD] = useState("");
@@ -27,15 +29,20 @@ export default function ChakOutPage() {
       name == "" ||
       email == ""
     ) {
-      alert("Fill all the information");
+      toast.error("Fill all the information!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
       return;
     } else {
       redirect();
+
       axios
         .post(`http://localhost:3030/pporders`, obj)
         .then((res) => {
           console.log(res);
-          alert("Payment Successful!");
+          toast.success("Item Removed!", {
+            position: toast.POSITION.TOP_CENTER,
+          });
         })
         .cathch((err) => {
           console.log(err);
@@ -50,6 +57,7 @@ export default function ChakOutPage() {
   };
   return (
     <>
+      <ToastContainer />
       <Navbar />
       <section className="antialiased bg-gray-100 text-gray-600 min-h-screen p-4">
         <div className="h-full">

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../Components/Navbar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,13 +23,18 @@ export default function SignupPage() {
 
   const handleSignUp = () => {
     if (obj.name === "" || obj.email === "" || obj.pass === "") {
-      alert("Please enter"); //Here will be modal
+      toast.error("Please Fill All The Fields", {
+        position: toast.POSITION.TOP_CENTER,
+      });
       return;
     } else {
       axios
         .post(`http://localhost:3030/users`, obj)
         .then((res) => {
           console.log(res);
+          toast.success("User Created Successfully", {
+            position: toast.POSITION.TOP_CENTER,
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -37,7 +44,7 @@ export default function SignupPage() {
   return (
     <>
       <Navbar />
-
+      <ToastContainer />
       <div className=" w-full h-screen flex items-center justify-center">
         <div className="relative flex w-96 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
           <div className="relative mx-4 -mt-6 mb-4 grid h-28 place-items-center overflow-hidden rounded-xl bg-gradient-to-tr from-green-600 to-green-400 bg-clip-border text-white shadow-lg shadow-green-500/40">

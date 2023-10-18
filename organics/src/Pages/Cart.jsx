@@ -3,6 +3,8 @@ import axios from "axios";
 import Loading from "./LoadingUI/CartLoading";
 import { Link as RouterLink } from "react-router-dom";
 import Navbar from "../Components/Navbar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function Cart() {
   const [cartdata, setCartData] = useState([]);
   const [load, setLoad] = useState(false);
@@ -40,6 +42,7 @@ export default function Cart() {
 
   return (
     <div>
+      <ToastContainer />
       <Navbar />
 
       {load ? (
@@ -96,7 +99,14 @@ export default function Cart() {
                       </div>
                       <div className="flex items-center space-x-4">
                         <p className="text-sm"> ₹ {ele.discount_price_inr} </p>
-                        <button onClick={() => delefromcart(ele.id)}>
+                        <button
+                          onClick={() => {
+                            delefromcart(ele.id);
+                            toast.success("Item Removed!", {
+                              position: toast.POSITION.TOP_CENTER,
+                            });
+                          }}
+                        >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"

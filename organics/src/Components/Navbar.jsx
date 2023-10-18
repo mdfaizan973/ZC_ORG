@@ -58,7 +58,7 @@ export default function Navbar() {
               </li>
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
                 <a className="flex items-center" href="#">
-                  About
+                  Upcoming Products
                 </a>
               </li>
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">

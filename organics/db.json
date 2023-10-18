@@ -675,27 +675,27 @@
   ],
   "cartdata": [
     {
-      "id": 2,
+      "id": 3,
       "category": "fruits",
-      "title": "Bananas",
-      "description": "Sweet and creamy bananas, a great source of energy. Perfect for smoothies, snacks, or desserts.",
-      "image": "https://i.pinimg.com/564x/5f/23/52/5f2352717a7be25e2e0ec4d309edacaa.jpg",
+      "title": "Strawberries",
+      "description": "Sweet and succulent strawberries, bursting with flavor. Enjoy them fresh, in desserts, or as a topping.",
+      "image": "https://i.pinimg.com/564x/62/57/c2/6257c298033ed1ee2c66bd652db459dc.jpg",
       "health_benefits_rich_in_vitamins_and_antioxidants": true,
       "health_benefits_improves_immunity": true,
-      "health_benefits_enhances_skin_health": false,
-      "price_inr": 35,
-      "discount_price_inr": 28,
+      "health_benefits_enhances_skin_health": true,
+      "price_inr": 65,
+      "discount_price_inr": 52,
       "discount_percentage": 20,
-      "ETA": "3-5 business days"
+      "ETA": "2-4 business days"
     },
     {
-      "id": 47,
-      "category": "dairy",
-      "title": "Condensed Milk",
-      "description": "Sweet and thick condensed milk, perfect for making desserts and sweet treats like fudge and flan.",
-      "image": "https://i.pinimg.com/564x/6e/2b/be/6e2bbef86525f09ec3be0fdeec323b23.jpg",
-      "price_inr": 4,
-      "discount_price_inr": 3.2,
+      "id": 34,
+      "category": "grains",
+      "title": "Rye Crackers",
+      "description": "Crisp and hearty rye crackers, perfect for snacking with your favorite dips and spreads.",
+      "image": "https://i.pinimg.com/564x/2f/d3/c2/2fd3c25d9286b9257c10119168fef080.jpg",
+      "price_inr": 3.8,
+      "discount_price_inr": 3.04,
       "discount_percentage": 20,
       "ETA": "1-3 business days",
       "health_benefits_rich_in_vitamins_and_antioxidants": false,
@@ -745,6 +745,13 @@
       "name": "abdullah",
       "email": "abd@gmail.com",
       "pass": "8906"
+    },
+    {
+      "id": "7782@$#%",
+      "date": "10/18/2023, 5:11:33 PM",
+      "name": "faizans",
+      "email": "f@gmail.com",
+      "pass": "1233"
     }
   ],
   "upcomingroducts": [],
@@ -892,6 +899,33 @@
       "email": "fafa@gmail.com",
       "phone": "06201855200",
       "id": 16
+    },
+    {
+      "cardNumber": "435",
+      "exD": "45",
+      "cvv": "543",
+      "name": "fg",
+      "email": "fafa@gmail.com",
+      "phone": "06201855200",
+      "id": 17
+    },
+    {
+      "cardNumber": "123456789011",
+      "exD": "12324",
+      "cvv": "3434",
+      "name": "jhon",
+      "email": "fafa@gmail.com",
+      "phone": "06201855200",
+      "id": 18
+    },
+    {
+      "cardNumber": "45",
+      "exD": "435",
+      "cvv": "543",
+      "name": "jhon",
+      "email": "fafa@gmail.com",
+      "phone": "06201855200",
+      "id": 19
     }
   ],
   "codorders": [],
