@@ -675,34 +675,6 @@
   ],
   "cartdata": [
     {
-      "id": 25,
-      "category": "grains",
-      "title": "Wheat Bread",
-      "description": "Freshly baked whole wheat bread, a staple for sandwiches and toasts. High in fiber and nutrients.",
-      "image": "https://i.pinimg.com/564x/ad/32/38/ad3238682e3a35e6f273013e0bd85c38.jpg",
-      "price_inr": 4,
-      "discount_price_inr": 3.2,
-      "discount_percentage": 20,
-      "ETA": "1-3 business days",
-      "health_benefits_rich_in_vitamins_and_antioxidants": false,
-      "health_benefits_improves_immunity": true,
-      "health_benefits_enhances_skin_health": false
-    },
-    {
-      "id": 3,
-      "category": "fruits",
-      "title": "Strawberries",
-      "description": "Sweet and succulent strawberries, bursting with flavor. Enjoy them fresh, in desserts, or as a topping.",
-      "image": "https://i.pinimg.com/564x/62/57/c2/6257c298033ed1ee2c66bd652db459dc.jpg",
-      "health_benefits_rich_in_vitamins_and_antioxidants": true,
-      "health_benefits_improves_immunity": true,
-      "health_benefits_enhances_skin_health": true,
-      "price_inr": 65,
-      "discount_price_inr": 52,
-      "discount_percentage": 20,
-      "ETA": "2-4 business days"
-    },
-    {
       "id": 2,
       "category": "fruits",
       "title": "Bananas",
@@ -715,6 +687,20 @@
       "discount_price_inr": 28,
       "discount_percentage": 20,
       "ETA": "3-5 business days"
+    },
+    {
+      "id": 47,
+      "category": "dairy",
+      "title": "Condensed Milk",
+      "description": "Sweet and thick condensed milk, perfect for making desserts and sweet treats like fudge and flan.",
+      "image": "https://i.pinimg.com/564x/6e/2b/be/6e2bbef86525f09ec3be0fdeec323b23.jpg",
+      "price_inr": 4,
+      "discount_price_inr": 3.2,
+      "discount_percentage": 20,
+      "ETA": "1-3 business days",
+      "health_benefits_rich_in_vitamins_and_antioxidants": false,
+      "health_benefits_improves_immunity": false,
+      "health_benefits_enhances_skin_health": false
     }
   ],
   "users": [

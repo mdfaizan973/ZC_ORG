@@ -74,7 +74,7 @@ export default function Cart() {
                         {ele.category}
                       </span>
                       <p className="mt-1 text-xs text-gray-700">
-                        {ele.description}....
+                        {ele.description}.....
                       </p>
                     </div>
                     <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
@@ -86,10 +86,10 @@ export default function Cart() {
                           <div className="flex w-12 flex-col gap-6">
                             <select size="md" label="select Version">
                               <option> 1</option>
-                              <option> 2</option>
+                              {/* <option> 2</option>
                               <option> 3</option>
                               <option> 4</option>
-                              <option> 5</option>
+                              <option> 5</option> */}
                             </select>
                           </div>
                         </span>
