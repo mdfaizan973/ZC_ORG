@@ -1,9 +1,17 @@
 // import React from 'react'
+import { useState } from "react";
 import { AiOutlineShopping, AiOutlineUser } from "react-icons/ai";
 import { Link as RouterLink } from "react-router-dom";
+import Sidebar from "./Sidebar";
 export default function Navbar() {
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  const toggleSidebar = () => {
+    setShowSidebar(!showSidebar);
+  };
+
   return (
-    <div className="mb-[0px] md:mb-20">
+    <div className="mb-[60px] md:mb-20">
       <nav className="fixed  inset-0 z-10 block h-max w-full max-w-full rounded-none border border-white/80 bg-white bg-opacity-80 py-2 px-4 text-white shadow-md backdrop-blur-2xl backdrop-saturate-200 lg:px-8 lg:py-4">
         <div>
           <div className="container mx-auto flex items-center justify-between text-gray-900">
@@ -92,6 +100,7 @@ export default function Navbar() {
             </div>
 
             <button
+              onClick={toggleSidebar}
               className="middle none relative ml-auto h-6 max-h-[40px] w-6 max-w-[40px] rounded-lg text-center font-sans text-xs font-medium uppercase text-blue-gray-500 transition-all hover:bg-transparent focus:bg-transparent active:bg-transparent disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:hidden"
               data-collapse-target="navbar"
             >
@@ -112,7 +121,7 @@ export default function Navbar() {
               </span>
             </button>
           </div>
-
+          {showSidebar && <Sidebar />}
           {/* here will be the Mobile navbar */}
         </div>
       </nav>
