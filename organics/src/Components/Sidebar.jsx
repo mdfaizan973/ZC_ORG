@@ -82,9 +82,11 @@ export default function Sidebar() {
             </RouterLink>
           </li>
           <li className="menu-item mb-5">
-            <a href="#" className="menu-link">
-              Blogs
-            </a>
+            <RouterLink to="/blogs">
+              <a href="#" className="menu-link">
+                Blogs
+              </a>
+            </RouterLink>
           </li>
         </ul>
       </div>

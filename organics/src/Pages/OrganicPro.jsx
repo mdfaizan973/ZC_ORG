@@ -112,11 +112,11 @@ export default function OrganicPro() {
             <option selected>Sort ₹</option>
             <option value="hightolow">
               {/* <button onClick={handlehTol}>High to Low</button> */}
-              High to Low
+              Low to High
             </option>
             <option value="lowtohigh">
               {/* <button onClick={handlelToh}>Low to High</button> */}
-              Low to High
+              High to Low
             </option>
           </select>
         </div>

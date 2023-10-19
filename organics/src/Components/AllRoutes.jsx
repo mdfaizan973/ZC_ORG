@@ -22,6 +22,7 @@ export default function AllRoutes() {
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/register" element={<SignupPage />}></Route>
         <Route path="/upcoming" element={<UpCaoming />}></Route>
+
         <Route
           path="/delivery"
           element={<ProtectedRoute component={ShpoingDone} />}
