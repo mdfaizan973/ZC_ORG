@@ -37,12 +37,17 @@ export default function Cart() {
   const totalPrice = cartdata.reduce((acc, item) => {
     return acc + item.discount_price_inr;
   }, 0);
+
   const totalPriceoff = cartdata.reduce((acc, item) => {
     return acc + item.price_inr;
   }, 0);
 
   // console.log(totalPrice);
+  const handlesaveprice = () => {
+    const totalPriceString = totalPrice.toString();
 
+    localStorage.setItem("totalPriceorg", totalPriceString);
+  };
   return (
     <div>
       <ToastContainer />
@@ -151,6 +156,7 @@ export default function Cart() {
               </div>
               <RouterLink to="/checkout">
                 <button
+                  onClick={handlesaveprice}
                   disabled={cartdata.length <= 0}
                   className="mt-6 w-full rounded-md bg-emerald-600 hover:bg-emerald-800 py-1.5  transition duration-150 ease-in-out hover:translate-y-1 font-medium text-blue-50"
                 >
