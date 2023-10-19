@@ -13,7 +13,7 @@ export default function SingleProducts() {
   const getSingleData = (id) => {
     setLoad(true);
     axios
-      .get(`http://localhost:3030/orgproducts/${id}`)
+      .get(`https://orgaincspro.onrender.com/orgproducts/${id}`)
       .then((res) => {
         setLoad(false);
         setData(res.data);
@@ -32,11 +32,11 @@ export default function SingleProducts() {
       position: toast.POSITION.TOP_CENTER,
     });
     axios
-      .get(`http://localhost:3030/orgproducts/${id}`)
+      .get(`https://orgaincspro.onrender.com/orgproducts/${id}`)
       .then((res) => {
         console.warn(res.data);
         axios
-          .post(`http://localhost:3030/cartdata`, res.data)
+          .post(`https://orgaincspro.onrender.com/cartdata`, res.data)
           .then((res) => {
             console.warn(res.data);
           })

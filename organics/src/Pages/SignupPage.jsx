@@ -29,7 +29,7 @@ export default function SignupPage() {
       return;
     } else {
       axios
-        .post(`http://localhost:3030/users`, obj)
+        .post(`https://orgaincspro.onrender.com/users`, obj)
         .then((res) => {
           console.log(res);
           toast.success("User Created Successfully", {

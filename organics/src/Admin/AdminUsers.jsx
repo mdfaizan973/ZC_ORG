@@ -11,7 +11,7 @@ export default function AdminUsers() {
   const admingetdata = (page) => {
     setLoad(true);
     axios
-      .get(`http://localhost:3030/users?_limit=5&_page=${page}`)
+      .get(`https://orgaincspro.onrender.comusers?_limit=5&_page=${page}`)
       .then((res) => {
         // console.log(res.data);
         setLoad(false);

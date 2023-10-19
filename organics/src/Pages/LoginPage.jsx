@@ -18,7 +18,9 @@ export default function LoginPage() {
       return;
     } else {
       axios
-        .get(`http://localhost:3030/users?email=${email}&pass=${pass}`)
+        .get(
+          `https://orgaincspro.onrender.com/users?email=${email}&pass=${pass}`
+        )
         .then((res) => {
           if (res.data.length > 0) {
             toast.success("LogIn SuccessFul!", {
@@ -29,7 +31,6 @@ export default function LoginPage() {
               navigate("/");
             }, 1200);
           } else {
-            alert("");
             toast.error("Login failed. Please check your email and password.", {
               position: toast.POSITION.TOP_CENTER,
             });

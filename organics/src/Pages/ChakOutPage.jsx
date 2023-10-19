@@ -34,7 +34,7 @@ export default function ChakOutPage() {
       redirect();
 
       axios
-        .post(`http://localhost:3030/codorders`, cObj)
+        .post(`https://orgaincspro.onrender.com/codorders`, cObj)
         .then((res) => {
           console.log(res);
           toast.success("Order Done!", {
@@ -75,7 +75,7 @@ export default function ChakOutPage() {
       redirect();
 
       axios
-        .post(`http://localhost:3030/pporders`, obj)
+        .post(`https://orgaincspro.onrender.com/pporders`, obj)
         .then((res) => {
           console.log(res);
           toast.success("Payment Done!", {

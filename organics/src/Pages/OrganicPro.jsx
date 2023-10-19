@@ -14,7 +14,7 @@ export default function OrganicPro() {
   const getData = (page, filter) => {
     setLoad(true);
     const categoryParam = filter ? `category=${filter}` : "";
-    const url = `http://localhost:3030/orgproducts?${categoryParam}&_limit=${limit}&_page=${page}`;
+    const url = `https://orgaincspro.onrender.com/orgproducts?${categoryParam}&_limit=${limit}&_page=${page}`;
 
     axios
       .get(url)
@@ -44,11 +44,11 @@ export default function OrganicPro() {
   const addToCart = (id) => {
     // get for cart
     axios
-      .get(`http://localhost:3030/orgproducts/${id}`)
+      .get(`https://orgaincspro.onrender.com/orgproducts/${id}`)
       .then((res) => {
         // console.warn(res.data);
         axios
-          .post(`http://localhost:3030/cartdata`, res.data)
+          .post(`https://orgaincspro.onrender.com/cartdata`, res.data)
           .then((res) => {
             console.warn(res.data);
           })

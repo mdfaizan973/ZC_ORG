@@ -12,7 +12,7 @@ export default function Cart() {
   useEffect(() => {
     setLoad(true);
     axios
-      .get(`http://localhost:3030/cartdata`)
+      .get(`https://orgaincspro.onrender.com/cartdata`)
       .then((res) => {
         // console.log(res);
         setLoad(false);
@@ -24,7 +24,7 @@ export default function Cart() {
   }, []);
   const delefromcart = (itemId) => {
     axios
-      .delete(`http://localhost:3030/cartdata/${itemId}`)
+      .delete(`https://orgaincspro.onrender.com/cartdata/${itemId}`)
       .then((res) => {
         console.log(res);
         setCartData(cartdata.filter((item) => item.id !== itemId));
@@ -36,6 +36,9 @@ export default function Cart() {
 
   const totalPrice = cartdata.reduce((acc, item) => {
     return acc + item.discount_price_inr;
+  }, 0);
+  const totalPriceoff = cartdata.reduce((acc, item) => {
+    return acc + item.price_inr;
   }, 0);
 
   // console.log(totalPrice);
@@ -88,7 +91,7 @@ export default function Cart() {
                         <span className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100  ">
                           <div className="flex w-12 flex-col gap-6">
                             <select size="md" label="select Version">
-                              <option> 1</option>
+                              <option>1</option>
                               {/* <option> 2</option>
                               <option> 3</option>
                               <option> 4</option>
@@ -131,21 +134,26 @@ export default function Cart() {
             <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
               <div className="mb-2 flex justify-between">
                 <p className="text-gray-700">Price</p>
-                <p className="text-gray-700">₹ {totalPrice} </p>
+                <p className="text-gray-700">₹ {totalPriceoff.toFixed(2)} </p>
               </div>
               <div className="flex justify-between">
-                <p className="text-gray-700">Total Price with Quantity</p>
-                <p className="text-gray-700">₹ {totalPrice} </p>
+                <p className="text-gray-700">Total Price with off</p>
+                <p className="text-gray-700">₹ {totalPrice.toFixed(2)} </p>
               </div>
               <hr className="my-4" />
               <div className="flex justify-between">
                 <p className="text-lg font-bold">Total</p>
                 <div className="">
-                  <p className="mb-1 text-lg font-bold">₹ {totalPrice}</p>
+                  <p className="mb-1 text-lg font-bold">
+                    ₹ {totalPrice.toFixed(2)}
+                  </p>
                 </div>
               </div>
               <RouterLink to="/checkout">
-                <button className="mt-6 w-full rounded-md bg-emerald-600 hover:bg-emerald-800 py-1.5  transition duration-150 ease-in-out hover:translate-y-1 font-medium text-blue-50">
+                <button
+                  disabled={cartdata.length <= 0}
+                  className="mt-6 w-full rounded-md bg-emerald-600 hover:bg-emerald-800 py-1.5  transition duration-150 ease-in-out hover:translate-y-1 font-medium text-blue-50"
+                >
                   <a> Check out </a>
                 </button>
               </RouterLink>
