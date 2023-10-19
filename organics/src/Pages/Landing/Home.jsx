@@ -94,7 +94,7 @@ export default function Home() {
       </div>
 
       <div className="w-[80%] mx-auto mt-8">
-        <h1 className="font-bold text-7xl text-gray-500">
+        <h1 className="font-bold md:text-7xl text-4xl text-gray-500">
           Top Organic Food Products Online in India, Organic Grocery Store
           Online
         </h1>
