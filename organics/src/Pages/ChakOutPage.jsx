@@ -241,7 +241,7 @@ export default function ChakOutPage() {
                         onClick={handlepaypal}
                         className="font-medium text-sm inline-flex items-center justify-center px-3 py-2 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out w-full bg-indigo-500 hover:bg-indigo-600 text-white focus:outline-none focus-visible:ring-2"
                       >
-                        Pay ₹ {totalPrice}
+                        Pay ₹ {totalPrice.toFixed(2)}
                       </button>
                     </div>
                     <div className="text-xs text-gray-500 italic text-center">
@@ -363,7 +363,7 @@ export default function ChakOutPage() {
                           onClick={handleCashOnD}
                           className="font-medium text-sm inline-flex items-center justify-center px-3 py-2 border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out w-full bg-indigo-500 hover:bg-indigo-600 text-white focus:outline-none focus-visible:ring-2"
                         >
-                          Pay ₹ {totalPrice}
+                          Pay ₹ {totalPrice.toFixed(2)}
                         </button>
                       </div>
                       <div className="text-xs text-gray-500 italic text-center">
