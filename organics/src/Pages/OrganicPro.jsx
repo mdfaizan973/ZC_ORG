@@ -11,20 +11,19 @@ export default function OrganicPro() {
   const [fileter, setFilter] = useState("");
   const curdatalength = orgData.length;
   let limit = 9;
-  const getData = (page, filter) => {
-    setLoad(true);
-    const categoryParam = filter ? `category=${filter}` : "";
-    const url = `https://orgaincspro.onrender.com/orgproducts?${categoryParam}&_limit=${limit}&_page=${page}`;
+  const getData = async (page, filter) => {
+    try {
+      setLoad(true);
+      const categoryParam = filter ? `category=${filter}` : "";
+      const url = `https://orgaincspro.onrender.com/orgproducts?${categoryParam}&_limit=${limit}&_page=${page}`;
 
-    axios
-      .get(url)
-      .then((res) => {
-        setLoad(false);
-        setOrgData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      const response = await axios.get(url);
+
+      setLoad(false);
+      setOrgData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // {Pagination function}
