@@ -139,19 +139,17 @@ export default function Cart() {
             <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
               <div className="mb-2 flex justify-between">
                 <p className="text-gray-700">Price</p>
-                <p className="text-gray-700">₹ {totalPriceoff.toFixed(2)} </p>
+                <p className="text-gray-700">₹ {totalPriceoff} </p>
               </div>
               <div className="flex justify-between">
                 <p className="text-gray-700">Total Price with off</p>
-                <p className="text-gray-700">₹ {totalPrice.toFixed(2)} </p>
+                <p className="text-gray-700">₹ {totalPrice} </p>
               </div>
               <hr className="my-4" />
               <div className="flex justify-between">
                 <p className="text-lg font-bold">Total</p>
                 <div className="">
-                  <p className="mb-1 text-lg font-bold">
-                    ₹ {totalPrice.toFixed(2)}
-                  </p>
+                  <p className="mb-1 text-lg font-bold">₹ {totalPrice}</p>
                 </div>
               </div>
               <RouterLink to="/checkout">

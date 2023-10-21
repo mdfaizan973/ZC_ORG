@@ -55,7 +55,6 @@ export default function Orders() {
       <ToastContainer />
       <AdminNav />
       <hr />
-      Cash On Delivery
       {load ? (
         <TableIndid />
       ) : (
