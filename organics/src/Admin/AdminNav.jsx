@@ -44,6 +44,11 @@ export default function AdminNav() {
                   <a className="flex items-center">UpComing Products</a>
                 </RouterLink>
               </li>
+              <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
+                <RouterLink to="/orders">
+                  <a className="flex items-center">Orders</a>
+                </RouterLink>
+              </li>
             </ul>
 
             {/* <RouterLink to="/login"> */}

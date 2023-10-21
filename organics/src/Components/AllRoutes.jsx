@@ -13,6 +13,7 @@ import AdminUsers from "../Admin/AdminUsers";
 import ChakOutPage from "../Pages/ChakOutPage";
 import ShpoingDone from "../Pages/ShpoingDone";
 import UpCaoming from "../Pages/UpCaoming";
+import Orders from "../Admin/Orders";
 export default function AllRoutes() {
   return (
     <div>
@@ -47,6 +48,7 @@ export default function AllRoutes() {
 
         <Route path="/admindashboard" element={<AdminDashBoard />}></Route>
         <Route path="/adminusers" element={<AdminUsers />}></Route>
+        <Route path="/orders" element={<Orders />}></Route>
       </Routes>
     </div>
   );

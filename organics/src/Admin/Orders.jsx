@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import AdminNav from "./AdminNav";
 import TableIndid from "./Loding/TableIndid";
+import CodOrders from "./CodOrders";
 
-export default function AdminUsers() {
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+export default function Orders() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [load, setLoad] = useState(false);
@@ -11,7 +14,7 @@ export default function AdminUsers() {
   const admingetdata = (page) => {
     setLoad(true);
     axios
-      .get(`https://orgaincspro.onrender.com/users?_limit=5&_page=${page}`)
+      .get(`https://orgaincspro.onrender.com/pporders?_limit=5&_page=${page}`)
       .then((res) => {
         // console.log(res.data);
         setLoad(false);
@@ -31,11 +34,28 @@ export default function AdminUsers() {
   const handlenext = () => {
     setPage(page + 1);
   };
+  //   Delete
 
+  const handleDelete = (id) => {
+    axios
+      .delete(`https://orgaincspro.onrender.com/pporders/${id}`)
+      .then(function (res) {
+        console.log(res);
+        toast.success(`Deleted order with ID ${id} successfully`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        setData(data.filter((item) => item.id !== id));
+      })
+      .catch(function (error) {
+        console.error("Error deleting:", error);
+      });
+  };
   return (
     <div>
+      <ToastContainer />
       <AdminNav />
-
+      <hr />
+      Cash On Delivery
       {load ? (
         <TableIndid />
       ) : (
@@ -44,7 +64,7 @@ export default function AdminUsers() {
             <div className="pt-4 bg-white rounded shadow ">
               <div className="flex px-6 pb-4 border-b dark:border-gray-700">
                 <h2 className="text-xl font-bold dark:text-gray-400">
-                  List of Users
+                  List of PayPal Orders
                 </h2>
               </div>
               <div className="p-4 overflow-x-auto">
@@ -54,9 +74,11 @@ export default function AdminUsers() {
                       <th className="px-6 pb-3 font-medium">Users ID</th>
                       <th className="px-6 pb-3 font-medium ">Name </th>
                       <th className="px-6 pb-3 font-medium">Email </th>
-                      <th className="px-6 pb-3 font-medium">Password </th>
-                      <th className="px-6 pb-3 font-medium ">Date </th>
-                      <th className="px-6 pb-3 font-medium">Action </th>
+                      <th className="px-6 pb-3 font-medium">Phone </th>
+                      <th className="px-6 pb-3 font-medium ">CVV </th>
+                      <th className="px-6 pb-3 font-medium">EX Date </th>
+                      <th className="px-6 pb-3 font-medium">Card No</th>
+                      <th className="px-6 pb-3 font-medium">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -65,17 +87,21 @@ export default function AdminUsers() {
                         key={i}
                         className="text-xs bg-gray-100 dark:text-gray-400 "
                       >
-                        <td className="px-6 py-5 font-medium">{ele.id}</td>
+                        <td className="px-6 py-5 font-medium">{i + 1}</td>
                         <td className="px-6 py-5 font-medium ">
                           {ele.name.toUpperCase()}
                         </td>
                         <td className="px-6 py-5 font-medium ">{ele.email}</td>
-                        <td className="px-6 py-5 font-medium ">{ele.pass}</td>
-                        <td className="px-6 py-5 font-medium ">{ele.date}</td>
+                        <td className="px-6 py-5 font-medium ">{ele.phone}</td>
+                        <td className="px-6 py-5 font-medium ">{ele.cvv}</td>
+                        <td className="px-6 py-5 font-medium ">{ele.exD}</td>
+                        <td className="px-6 py-5 font-medium ">
+                          {ele.cardNumber}
+                        </td>
 
                         <td className="px-6 py-5 ">
                           <button
-                            // onClick={onclick}
+                            onClick={() => handleDelete(ele.id)}
                             className="px-4 py-2 font-medium text-red-500 border border-red-500 rounded-md dark:text-red-300 dark:border-red-300 dark:hover:bg-red-300 dark:hover:text-gray-700 hover:text-gray-100 hover:bg-red-500"
                           >
                             <svg
@@ -131,6 +157,8 @@ export default function AdminUsers() {
           </div>
         </section>
       )}
+      {/*  */}
+      <CodOrders />
     </div>
   );
 }
