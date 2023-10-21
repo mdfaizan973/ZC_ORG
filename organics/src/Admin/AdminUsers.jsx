@@ -3,6 +3,8 @@ import axios from "axios";
 import AdminNav from "./AdminNav";
 import TableIndid from "./Loding/TableIndid";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function AdminUsers() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -31,11 +33,26 @@ export default function AdminUsers() {
   const handlenext = () => {
     setPage(page + 1);
   };
-
+  // Delete\
+  const handledelteusers = (id) => {
+    axios
+      .delete(`https://orgaincspro.onrender.com/users/${id}`)
+      .then(function (res) {
+        console.log(res);
+        toast.success(`Deleted Usres with ID ${id} successfully`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        setData(data.filter((item) => item.id !== id));
+      })
+      .catch(function (error) {
+        console.error("Error deleting:", error);
+      });
+  };
   return (
     <div>
-      <AdminNav />
+      <ToastContainer />
 
+      <AdminNav />
       {load ? (
         <TableIndid />
       ) : (
@@ -75,7 +92,7 @@ export default function AdminUsers() {
 
                         <td className="px-6 py-5 ">
                           <button
-                            // onClick={onclick}
+                            onClick={() => handledelteusers(ele.id)}
                             className="px-4 py-2 font-medium text-red-500 border border-red-500 rounded-md dark:text-red-300 dark:border-red-300 dark:hover:bg-red-300 dark:hover:text-gray-700 hover:text-gray-100 hover:bg-red-500"
                           >
                             <svg
