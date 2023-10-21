@@ -16,6 +16,13 @@ export default function LoginPage() {
         position: toast.POSITION.TOP_CENTER,
       });
       return;
+    } else if (email === "admin@admin.com" && pass === "admingo") {
+      toast.success("Admin LogIn SuccessFul!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      setTimeout(() => {
+        navigate("/admindashboard");
+      }, 1200);
     } else {
       axios
         .get(
