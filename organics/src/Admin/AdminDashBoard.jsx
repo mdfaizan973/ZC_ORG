@@ -119,7 +119,7 @@ export default function AdminDashBoard() {
       ) : (
         <div className="min-h-screen bg-gray-50">
           <div className="flex">
-            {/* Main Content */}
+            {/* Main-Content */}
             <div className="flex-1 p-4">
               {/* Header */}
               <header className="mb-4">
