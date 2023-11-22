@@ -4,33 +4,33 @@ import Navbar from "../Components/Navbar";
 export default function Blog() {
   let blogsdata = [
     {
-      img: "https://www.organictattva.com/wp-content/uploads/2021/06/Website-Blog-Psyllium-Husk.jpg",
+      img: "https://www.viralspices.com/wp-content/uploads/2023/11/Why-choose-dehydrated-onion-manufacturers-from-India.jpg",
       heading: "     5 Essential Nutritional Benefits of Psyllium Husk",
       paragraph:
         "Benefits of Psyllium Husk Commonly found in the fields of Gujarat, psyllium husk, also known as isabgol, is one of the most effective forms of laxative there is. Psyllium husk has a variety of health benefits that we’ve known about for a long time.",
     },
     {
-      img: "https://www.organictattva.com/wp-content/uploads/2021/08/ot_July-blog-banner.jpg",
+      img: "https://www.viralspices.com/wp-content/uploads/2023/11/How-to-Partner-with-Indian-Spice-Exporters.jpg",
       heading:
         "Whole Wheat Flour vs Regular Wheat Flour – Here’s what’s Healthier",
       paragraph:
         "When you go grocery shopping, do you reach for whole wheat flour or regular wheat flour? Making the right choice can be challenging with phrases like whole wheat, whole grain, and multigrain printed over every product. Well, don't worry, we are here to help.",
     },
     {
-      img: "https://www.organictattva.com/wp-content/uploads/2021/06/blog-honey-for-immunity.jpg",
+      img: "https://www.viralspices.com/wp-content/uploads/2023/11/Who-is-a-Leading-Cardamom-Supplier-in-India-for-Bulk-Purchase.jpg",
       heading: "5 Health Benefits of Organic Honey for Immunity",
       paragraph:
         "As they say, nothing can beat nature. With many people turning vegan, organic products are the new definition of modern living. Organic products are healthier, fresher, and richer in taste. Healthy eating has endless advantages, and considering healthy food to be tasteless is quite.",
     },
     {
-      img: "https://www.organictattva.com/wp-content/uploads/2021/04/Black-salt-blog-banner.jpg",
+      img: "https://www.viralspices.com/wp-content/uploads/2023/10/Nutritional-Benefits-of-Organic-Black-Cumin-Seeds.jpg",
       heading:
         "Is Black Salt Better than Regular Salt? Uses and Health Benefits",
       paragraph:
         "Benefits of Black Salt? Himalayan Black salt is unlike any other salt. It has a very distinct taste, and looks different too. Himalayan Black salt is first produced as Pink Salt, which is a form of rock salt. The Himalayan Pink Salt is then.",
     },
     {
-      img: "https://www.organictattva.com/wp-content/uploads/2021/03/clove-blog-570x397-01-01.jpg",
+      img: "https://www.viralspices.com/wp-content/uploads/2023/10/Impact-of-Climate-Change-on-Sesame-Exporter-and-Production.jpg",
       heading: "5 Different Uses of Cloves to Try at Home",
       paragraph:
         "5 different uses of clove you must try at home Clove is a pungent, aromatic spice derived from flower buds of an evergreen tree, also known as Syzygium aromaticum. Used extensively in Indian cuisine, they also feature in various sweet dishes as well. Apart.",
