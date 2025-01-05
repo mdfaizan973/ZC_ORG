@@ -69,7 +69,7 @@ export default function SignupPage() {
       // console.log("Form Data:", user_data);
     }
   };
-
+  // fizn
   return (
     <>
       <Navbar />
