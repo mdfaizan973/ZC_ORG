@@ -45,11 +45,11 @@ Navigate to the project directory
 
 📌 Features
 
-✅ Browse a variety of organic food products 🌾🍎
-✅ Responsive and modern UI 📱💻
-✅ Add products to cart 🛍️
-✅ Secure checkout process 🔒
-✅ Smooth and fast navigation 🚀
+✅ Browse a variety of organic food products 🌾🍎 </br>
+✅ Responsive and modern UI 📱💻  </br>
+✅ Add products to cart 🛍️  </br>
+✅ Secure checkout process 🔒  </br>
+✅ Smooth and fast navigation 🚀  </br>
 
 🤝 Contributing
 
@@ -57,9 +57,9 @@ Contributions are welcome! Feel free to fork the repository and create a pull re
 
 📞 Contact
 
-For any queries or collaborations, feel free to reach out:
-📧 Email: faizan.md9735@gmail.com
-🔗 LinkedIn: <a href="https://www.linkedin.com/in/md-faizan973/"> Click </a>
-🐦 Portfolio: <a href="https://mdfaizan973.github.io/"> Click </a>
+For any queries or collaborations, feel free to reach out:  </br>
+📧 Email: faizan.md9735@gmail.com  </br>
+🔗 LinkedIn: <a href="https://www.linkedin.com/in/md-faizan973/"> Click </a>  </br>
+🐦 Portfolio: <a href="https://mdfaizan973.github.io/"> Click </a>  </br>
 
 Md Faizan
