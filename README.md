@@ -74,11 +74,11 @@ Navigate to the project directory
 `npm run dev`
 
 
-🤝 Contributing
+# 🤝 Contributing
 
 Contributions are welcome! Feel free to fork the repository and create a pull request. 🎉
 
-📞 Contact
+# 📞 Contact
 
 For any queries or collaborations, feel free to reach out:  </br>
 📧 Email: faizan.md9735@gmail.com  </br>
