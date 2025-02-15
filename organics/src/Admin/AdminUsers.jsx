@@ -58,7 +58,7 @@ export default function AdminUsers() {
         <TableIndid />
       ) : (
         <div className="flex">
-          <aside className="w-1/5 flex items-center justify-center">
+          <aside className="w-1/5 flex ">
             <SuperDashBoard show_descrition={false} />
           </aside>
 

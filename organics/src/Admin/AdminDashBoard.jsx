@@ -163,7 +163,7 @@ export default function AdminDashBoard() {
                 </header>
 
                 <div className="flex">
-                  <aside className="w-1/5 flex items-center justify-center">
+                  <aside className="w-1/5 flex ">
                     <SuperDashBoard show_descrition={false} />
                   </aside>
 
@@ -241,13 +241,30 @@ export default function AdminDashBoard() {
                                       onClick={() => handleEdit(ele.id)}
                                       className="px-3 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all"
                                     >
-                                      ✏️
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        className="w-5 h-5"
+                                      >
+                                        <path d="M14.06 2.94a1.5 1.5 0 0 1 2.12 0l4.88 4.88a1.5 1.5 0 0 1 0 2.12l-12 12a1.5 1.5 0 0 1-.71.39l-6 1.5a1 1 0 0 1-1.21-1.21l1.5-6a1.5 1.5 0 0 1 .39-.71l12-12zm-2.65 3.65L4 14.94V19h4.06l7.41-7.41-4.06-4.06zm6.59-1.59l-2.12-2.12-2.83 2.83 2.12 2.12 2.83-2.83z" />
+                                      </svg>
                                     </button>
+
                                     <button
                                       onClick={() => handleDelete(ele.id)}
                                       className="px-3 py-2 text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all"
                                     >
-                                      🗑️
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        fill="currentColor"
+                                        className="w-5 h-5"
+                                        viewBox="0 0 16 16"
+                                      >
+                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5z" />
+                                      </svg>
                                     </button>
                                   </td>
                                 </tr>
