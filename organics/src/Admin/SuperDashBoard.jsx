@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import AdminNav from "./AdminNav";
 import PropTypes from "prop-types";
+import { AboutOrganic } from "../Pages/Landing/Home";
 
 export default function SuperDashBoard({ show_descrition = true }) {
   const cards = [
@@ -79,6 +80,8 @@ export default function SuperDashBoard({ show_descrition = true }) {
           </Link>
         ))}
       </div>
+
+      {show_descrition && <AboutOrganic />}
     </>
   );
 }

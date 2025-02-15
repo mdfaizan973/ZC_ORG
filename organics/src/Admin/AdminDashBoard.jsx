@@ -137,37 +137,36 @@ export default function AdminDashBoard() {
       <ToastContainer />
       <div>
         <AdminNav />
+        <div className="min-h-screen ">
+          <div className="flex">
+            {/* Main-Content */}
+            <div className="flex-1 p-4">
+              {/* Header */}
+              <header>
+                <div className=" flex flex-wrap justify-between align-center font-bold text-gray-500">
+                  <div className="text-4xl"></div>
 
-        {load ? (
-          <TableIndid />
-        ) : (
-          <div className="min-h-screen ">
-            <div className="flex">
-              {/* Main-Content */}
-              <div className="flex-1 p-4">
-                {/* Header */}
-                <header>
-                  <div className=" flex flex-wrap justify-between align-center font-bold text-gray-500">
-                    <div className="text-4xl"></div>
+                  <button
+                    onClick={() =>
+                      document.getElementById("my_modal_1").showModal()
+                    }
+                    className="m-3 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg self-end mt-3"
+                    type="button"
+                  >
+                    Add Products
+                  </button>
+                </div>
+              </header>
 
-                    <button
-                      onClick={() =>
-                        document.getElementById("my_modal_1").showModal()
-                      }
-                      className="m-3 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg self-end mt-3"
-                      type="button"
-                    >
-                      Add Products
-                    </button>
-                  </div>
-                </header>
+              <div className="flex">
+                <aside className="w-1/5 flex ">
+                  <SuperDashBoard show_descrition={false} />
+                </aside>
 
-                <div className="flex">
-                  <aside className="w-1/5 flex ">
-                    <SuperDashBoard show_descrition={false} />
-                  </aside>
-
-                  {/* Right Section (Table) */}
+                {/* Right Section (Table) */}
+                {load ? (
+                  <TableIndid />
+                ) : (
                   <main className="w-4/5  rounded bg-white shadow-lg">
                     <section className="items-center flex justify-center min-h-screen font-poppins">
                       <div className="w-full max-w-6xl px-6 py-8 bg-white rounded-lg">
@@ -304,11 +303,11 @@ export default function AdminDashBoard() {
                       </div>
                     </section>
                   </main>
-                </div>
+                )}
               </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* this modal pop for Add Products */}

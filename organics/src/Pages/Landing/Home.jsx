@@ -4,7 +4,7 @@ import Navbar from "../../Components/Navbar";
 export default function Home() {
   const data = [
     {
-      img: "https://challenge22.b-cdn.net/wp-content/uploads/Quinoa-and-Tofu-Salad-edited.jpg",
+      img: "https://i.pinimg.com/736x/dc/cc/a2/dccca27d07678f10b1493b95d9bbeb99.jpg",
       name: "Latest Product",
     },
     {
@@ -93,6 +93,20 @@ export default function Home() {
         </div>
       </div>
 
+      <AboutOrganic />
+
+      <div>
+        <img src="https://res.cloudinary.com/farmersfreshzone/image/upload/v1690462847/banner/eyrk9ls3hidu00miboq6.jpg" />
+      </div>
+    </div>
+  );
+}
+
+// autoplayLoopMutedPlaysinline
+
+export const AboutOrganic = () => {
+  return (
+    <>
       <div className="w-[80%] mx-auto mt-8">
         <h1 className="font-bold md:text-7xl text-4xl text-gray-500">
           Top Organic Food Products Online in India, Organic Grocery Store
@@ -121,12 +135,6 @@ export default function Home() {
           harmful for our health and also to our future generations.
         </p>
       </div>
-
-      <div>
-        <img src="https://res.cloudinary.com/farmersfreshzone/image/upload/v1690462847/banner/eyrk9ls3hidu00miboq6.jpg" />
-      </div>
-    </div>
+    </>
   );
-}
-
-// autoplayLoopMutedPlaysinline
+};

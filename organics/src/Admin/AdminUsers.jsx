@@ -54,15 +54,16 @@ export default function AdminUsers() {
 
       <AdminNav />
       <br />
-      {load ? (
-        <TableIndid />
-      ) : (
-        <div className="flex">
-          <aside className="w-1/5 flex ">
-            <SuperDashBoard show_descrition={false} />
-          </aside>
 
-          {/* Right Section (Table) */}
+      <div className="flex">
+        <aside className="w-1/5 flex ">
+          <SuperDashBoard show_descrition={false} />
+        </aside>
+
+        {/* Right Section (Table) */}
+        {load ? (
+          <TableIndid />
+        ) : (
           <main className="w-4/5  rounded bg-white shadow-lg">
             <section className="items-center flex justify-center  min-h-screen font-poppins m-2">
               <div className="w-full max-w-6xl px-6 py-8 bg-white  rounded-lg">
@@ -154,8 +155,8 @@ export default function AdminUsers() {
               </div>
             </section>
           </main>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

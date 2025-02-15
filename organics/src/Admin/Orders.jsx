@@ -56,15 +56,16 @@ export default function Orders() {
       <ToastContainer />
       <AdminNav />
       <hr />
-      {load ? (
-        <TableIndid />
-      ) : (
-        <div className="flex">
-          <aside className="w-1/5 flex ">
-            <SuperDashBoard show_descrition={false} />
-          </aside>
+      <div className="flex">
+        <aside className="w-1/5 flex ">
+          <SuperDashBoard show_descrition={false} />
+        </aside>
 
-          {/* Right Section (Table) */}
+        {/* Right Section (Table) */}
+
+        {load ? (
+          <TableIndid />
+        ) : (
           <main className="w-4/5  rounded bg-white ">
             <section className="flex items-center justify-center p-6">
               <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
@@ -166,8 +167,8 @@ export default function Orders() {
             </section>
             <CodOrders />
           </main>
-        </div>
-      )}
+        )}
+      </div>
       {/*  */}
     </div>
   );
