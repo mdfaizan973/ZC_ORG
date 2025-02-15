@@ -12,7 +12,7 @@ export default function CodOrders() {
   const admingetdata = (page) => {
     setLoad(true);
     axios
-      .get(`https://orgaincspro.onrender.com/codorders?_limit=5&_page=${page}`)
+      .get(`https://orgaincspro.onrender.com/codorders?_limit=10&_page=${page}`)
       .then((res) => {
         // console.log(res.data);
         setLoad(false);
@@ -26,10 +26,10 @@ export default function CodOrders() {
     admingetdata(page);
   }, [page]);
 
-  const handlepre = () => {
+  const handlePre = () => {
     setPage(page - 1);
   };
-  const handlenext = () => {
+  const handleNext = () => {
     setPage(page + 1);
   };
   //   Delete
@@ -54,95 +54,74 @@ export default function CodOrders() {
       {load ? (
         <TableIndid />
       ) : (
-        <section className="items-center lg:flex bg-gray-50 lg:h-screen font-poppins ">
-          <div className="justify-center flex-1 max-w-6xl px-4 py-4 mx-auto lg:py-8 md:px-6">
-            <div className="pt-4 bg-white rounded shadow ">
-              <div className="flex px-6 pb-4 border-b dark:border-gray-700">
-                <h2 className="text-xl font-bold dark:text-gray-400">
-                  List of Cash On Delivery Orders
-                </h2>
-              </div>
-              <div className="p-4 overflow-x-auto">
-                <table className="w-full table-auto">
-                  <thead>
-                    <tr className="text-xs text-left text-gray-500 dark:text-gray-400">
-                      <th className="px-6 pb-3 font-medium">Users ID</th>
-                      <th className="px-6 pb-3 font-medium">Name </th>
-                      <th className="px-6 pb-3 font-medium">Email </th>
-                      <th className="px-6 pb-3 font-medium">Phone </th>
-                      <th className="px-6 pb-3 font-medium">Address </th>
-                      <th className="px-6 pb-3 font-medium">Action </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.map((ele, i) => (
-                      <tr
-                        key={i}
-                        className="text-xs bg-gray-100 dark:text-gray-400 "
-                      >
-                        <td className="px-6 py-5 font-medium">{i + 1}</td>
-                        <td className="px-6 py-5 font-medium ">{ele.cName}</td>
-                        <td className="px-6 py-5 font-medium ">{ele.cEmail}</td>
-                        <td className="px-6 py-5 font-medium ">{ele.cPhone}</td>
-                        <td className="px-6 py-5 font-medium ">
-                          {ele.CAddress}
-                        </td>
-                        <td className="px-6 py-5 font-medium ">{ele.cPhone}</td>
-
-                        <td className="px-6 py-5 ">
-                          <button
-                            onClick={() => handleDelete(ele.id)}
-                            className="px-4 py-2 font-medium text-red-500 border border-red-500 rounded-md dark:text-red-300 dark:border-red-300 dark:hover:bg-red-300 dark:hover:text-gray-700 hover:text-gray-100 hover:bg-red-500"
+        <section className="flex items-center justify-center p-6">
+          <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
+            <div className="border-b pb-4 mb-4">
+              <h2 className="text-2xl font-semibold text-gray-800">
+                Cash On Delivery Orders
+              </h2>
+            </div>
+            <div className="overflow-x-auto mt-4">
+              <table className="w-full border-collapse rounded-lg overflow-hidden shadow-sm">
+                <thead>
+                  <tr className="text-sm text-left bg-green-500 text-white">
+                    <th className="p-3 text-left">User ID</th>
+                    <th className="p-3 text-left">Name</th>
+                    <th className="p-3 text-left">Email</th>
+                    <th className="p-3 text-left">Phone</th>
+                    <th className="p-3 text-left">Address</th>
+                    <th className="p-3 text-left">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((ele, i) => (
+                    <tr
+                      key={i}
+                      className="border-b hover:bg-gray-100 transition"
+                    >
+                      <td className="p-3">{ele.id}</td>
+                      <td className="p-3">{ele.cName}</td>
+                      <td className="p-3">{ele.cEmail}</td>
+                      <td className="p-3">{ele.cPhone}</td>
+                      <td className="p-3">{ele.CAddress}</td>
+                      <td className="p-3 flex gap-2">
+                        <button
+                          onClick={() => handleDelete(ele.id)}
+                          className="px-3 py-2 text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            className="w-5 h-5"
+                            viewBox="0 0 16 16"
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="currentColor"
-                              className="w-4 h-4 bi bi-trash-fill"
-                              viewBox="0 0 16 16"
-                            >
-                              <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                            </svg>
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <div className="flex justify-end pt-4 mt-4 border-t dark:border-gray-700">
-                  <nav aria-label="page-navigation">
-                    <ul className="flex list-style-none">
-                      <li className="page-item " onClick={handlepre}>
-                        <button
-                          disabled={page == 1}
-                          href=""
-                          className="relative block px-3 py-1.5 text-base text-gray-700 transition-all duration-300 dark:text-gray-400 dark:hover:bg-gray-700 hover:bg-blue-100 rounded-md "
-                        >
-                          Previous
+                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                          </svg>
                         </button>
-                      </li>
-                      <li className="page-item ">
-                        <a
-                          href="#"
-                          className="relative block px-3 py-1.5 text-base text-gray-700 transition-all duration-300 dark:text-gray-400 dark:hover:bg-gray-700 hover:bg-blue-100 rounded-md mr-3 "
-                        >
-                          {page}
-                        </a>
-                      </li>
-                      <li className="page-item " onClick={handlenext}>
-                        <button
-                          disabled={data.length <= 4}
-                          href="#"
-                          className="relative block px-3 py-1.5 text-base text-gray-700 transition-all duration-300 dark:text-gray-400 dark:hover:bg-gray-700 hover:bg-blue-100 rounded-md "
-                        >
-                          Next
-                        </button>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
-              </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={handlePre}
+                disabled={page === 1}
+                className="px-4 py-2 mr-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span className="px-4 py-2 bg-gray-200 rounded">{page}</span>
+              <button
+                onClick={handleNext}
+                disabled={data.length <= 9}
+                className="px-4 py-2 ml-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition disabled:opacity-50"
+              >
+                Next
+              </button>
             </div>
           </div>
         </section>

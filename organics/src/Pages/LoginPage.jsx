@@ -16,12 +16,15 @@ export default function LoginPage() {
         position: toast.POSITION.TOP_CENTER,
       });
       return;
-    } else if (email === "admin@admin.com" && pass === "admingo") {
+    } else if (email === "admin123@admin.com" && pass === "1234pass") {
       toast.success("Admin LogIn SuccessFul!", {
         position: toast.POSITION.TOP_CENTER,
       });
+      sessionStorage.setItem("user_loged_in", "true");
+      sessionStorage.setItem("isOrganicAdmin", "true");
       setTimeout(() => {
-        navigate("/admindashboard");
+        // navigate("/admindashboard");
+        navigate("/");
       }, 1200);
     } else {
       axios
@@ -34,6 +37,8 @@ export default function LoginPage() {
               position: toast.POSITION.TOP_CENTER,
             });
             sessionStorage.setItem("user_loged_in", "true");
+            sessionStorage.setItem("isOrganicAdmin", "false");
+
             setTimeout(() => {
               navigate("/");
             }, 1200);
@@ -62,6 +67,7 @@ export default function LoginPage() {
 
   const handleLogOut = () => {
     sessionStorage.removeItem("user_loged_in");
+    sessionStorage.removeItem("isOrganicAdmin");
     setIslogin(false);
     toast.error("Logout Successful", {
       position: toast.POSITION.TOP_CENTER,

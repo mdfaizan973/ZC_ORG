@@ -1,8 +1,20 @@
 // import React from 'react'
-import { AiOutlineShopping, AiOutlineUser } from "react-icons/ai";
+import { useEffect, useState } from "react";
+import {
+  AiFillAndroid,
+  AiOutlineShopping,
+  AiOutlineUser,
+} from "react-icons/ai";
 import { Link as RouterLink } from "react-router-dom";
 
 export default function Sidebar() {
+  const [isOrgAdmin, setisOrgAdmin] = useState(false);
+
+  useEffect(() => {
+    const isAdmin = sessionStorage.getItem("isOrganicAdmin");
+
+    setisOrgAdmin(isAdmin === "true");
+  }, []);
   return (
     <div>
       <div className="sidebar  bg-opacity-80 shadow-md backdrop-blur-2xl backdrop-saturate-200 text-black flex flex-col">
@@ -19,6 +31,7 @@ export default function Sidebar() {
               />
             </a>
           </RouterLink> */}
+
           <RouterLink to="/cartpage">
             <button
               className="middle none center  rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-2 px-4 mr-1 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
@@ -37,7 +50,19 @@ export default function Sidebar() {
               <AiOutlineUser />
             </button>
           </RouterLink>
+          {isOrgAdmin && (
+            <RouterLink to="/admindashboard">
+              <button
+                className="middle none center  rounded-lg bg-gradient-to-tr from-blue-600 to-blue-400 py-2 px-4 ml-1 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
+                type="button"
+                data-ripple-light="true"
+              >
+                <AiFillAndroid />
+              </button>
+            </RouterLink>
+          )}
         </div>
+
         <ul className="menu p-4">
           <li className="menu-item mb-5">
             <RouterLink to="/">

@@ -14,7 +14,7 @@ export default function AdminDashBoard() {
     setLoad(true);
     axios
       .get(
-        `https://orgaincspro.onrender.com/orgproducts?_limit=5&_page=${page}`
+        `https://orgaincspro.onrender.com/orgproducts?_limit=10&_page=${page}`
       )
       .then((res) => {
         // console.log(res.data);
@@ -140,7 +140,7 @@ export default function AdminDashBoard() {
         {load ? (
           <TableIndid />
         ) : (
-          <div className="min-h-screen bg-gray-50">
+          <div className="min-h-screen ">
             <div className="flex">
               {/* Main-Content */}
               <div className="flex-1 p-4">
@@ -165,162 +165,134 @@ export default function AdminDashBoard() {
                 <main className=" p-4 w-[80%] mx-auto rounded ">
                   {/* Table */}
 
-                  <section className="items-center bg-white font-poppins ">
-                    <div className="justify-center flex-1 max-w-6xl px-4 py-4 mx-auto lg:py-8 md:px-6">
-                      <div className="pt-4 rounded shadow bg-white ">
-                        <div className="flex flex-wrap  items-center justify-between px-6 pb-4 border-b dark:border-gray-700">
-                          <h2 className="mb-4 text-xl font-bold md:mb-0 dark:text-gray-400">
-                            List of Products
-                          </h2>
-                          <div className="flex px-6 py-2 mb-4 border border-gray-600 rounded-md md:mb-0 dark:border-gray-400">
-                            <input
-                              type="text"
-                              className="w-full pr-4 text-sm text-gray-700 bg-white dark:text-gray-400  placeholder-text-100 "
-                              placeholder="search..."
-                            />
-                            <button className="flex items-center text-gray-700 dark:text-gray-400 dark:hover:text-blue-300 hover:text-blue-600">
-                              <span className="mr-2 text-xs ">Go</span>
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                className="bi bi-arrow-right"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
-                                />
-                              </svg>
-                            </button>
-                          </div>
+                  <section className="items-center flex justify-center  min-h-screen font-poppins">
+                    <div className="w-full max-w-6xl px-6 py-8 bg-white shadow-lg rounded-lg">
+                      <div className="flex justify-between items-center px-6 pb-4 border-b border-gray-300">
+                        <h2 className="text-2xl font-semibold text-gray-700">
+                          List of Products
+                        </h2>
+                        <div className="flex items-center border border-gray-400 rounded-md overflow-hidden">
+                          <input
+                            type="text"
+                            className="px-4 py-2 w-64 text-gray-700 focus:outline-none"
+                            placeholder="Search..."
+                          />
+                          <button className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600">
+                            Go
+                          </button>
                         </div>
-                        <div className="p-4 overflow-x-auto">
-                          <table className="w-full table-auto">
-                            <thead>
-                              <tr className="text-sm text-left text-gray-500 dark:text-gray-400">
-                                <th className="flex items-center px-6 pb-3 font-medium dark:text-gray-400">
-                                  <span className="mr-4">Id</span>
-                                  <span>Name</span>
-                                </th>
-                                <th className="px-6 pb-3 font-medium ">
-                                  Category
-                                </th>
-                                <th className="px-6 pb-3 font-medium">
-                                  Price{" "}
-                                </th>
-                                <th className="px-6 pb-3 font-medium">ETA </th>
-                                <th className="px-6 pb-3 font-medium">View </th>
-                                <th className="px-6 pb-3 font-medium">
-                                  {" "}
-                                  Action
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {/* Show data */}
-                              {data.map((ele, i) => (
-                                <tr
-                                  key={i}
-                                  className="text-sm bg-white dark:text-gray-400 "
-                                >
-                                  <td className="flex items-center px-6 py-5 font-medium">
-                                    <span className="mr-4">{ele.id}</span>
-                                    <p className="">{ele.title}</p>
-                                  </td>
-                                  <td className="px-6 py-5 font-medium ">
-                                    {ele.category}
-                                  </td>
-                                  <td className="px-6 py-5 font-medium ">
-                                    ₹ {ele.price_inr}
-                                  </td>
-                                  <td className="px-6 py-5 font-medium ">
-                                    {ele.ETA}
-                                  </td>
-                                  <td className="px-6 py-5 font-medium">
-                                    <button
-                                      onClick={() => handleviewpop(ele.id)}
-                                      className="inline-block px-2 py-1 text-center text-green-600 bg-green-100 rounded-full dark:text-green-700 dark:bg-green-200"
-                                    >
-                                      View
-                                    </button>
-                                  </td>
-                                  <td className="flex items-center px-6 py-5 ">
-                                    <button
-                                      onClick={() => handleEdit(ele.id)}
-                                      className="font-medium text-blue-600 hover:text-blue-500 dark:hover:text-gray-300 "
-                                    >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="16"
-                                        height="16"
-                                        fill="currentColor"
-                                        className="w-4 h-4 mr-3 bi bi-pencil-square"
-                                        viewBox="0 0 16 16"
-                                      >
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                        <path
-                                          fillRule="evenodd"
-                                          d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
-                                        />
-                                      </svg>
-                                    </button>
+                      </div>
 
-                                    <button
-                                      onClick={() => handleDelete(ele.id)}
-                                      className="font-medium text-red-600 hover:text-red-500 dark:hover:text-red-300 dark:text-red-400"
+                      <div className="overflow-x-auto mt-4">
+                        <table className="w-full border-collapse rounded-lg overflow-hidden shadow-sm">
+                          <thead>
+                            <tr className="text-sm text-left bg-green-500  text-white">
+                              <th className="px-6 py-3 font-medium">
+                                ID & Name
+                              </th>
+                              <th className="px-6 py-3 font-medium">
+                                Category
+                              </th>
+                              <th className="px-6 py-3 font-medium">Price</th>
+                              <th className="px-6 py-3 font-medium">ETA</th>
+                              <th className="px-6 py-3 font-medium text-center">
+                                View
+                              </th>
+                              <th className="px-6 py-3 font-medium text-center">
+                                Actions
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {data.map((ele, i) => (
+                              <tr
+                                key={i}
+                                className={`text-sm ${
+                                  i % 2 === 0 ? "bg-gray-50" : "bg-gray-100"
+                                }`}
+                              >
+                                <td className="px-6 py-4 flex items-center space-x-3">
+                                  <span className="font-semibold">
+                                    {ele.id}
+                                  </span>
+                                  <p className="text-gray-700">{ele.title}</p>
+                                </td>
+                                <td className="px-6 py-4">{ele.category}</td>
+                                <td className="px-6 py-4 font-medium text-gray-800">
+                                  ₹ {ele.price_inr}
+                                </td>
+                                <td className="px-6 py-4">{ele.ETA}</td>
+                                <td className="px-6 py-4 text-center">
+                                  <button
+                                    onClick={() => handleviewpop(ele.id)}
+                                    className="px-3 py-2 text-green-600 border border-green-600 rounded-lg hover:bg-green-600 hover:text-white transition-all"
+                                  >
+                                    View
+                                  </button>
+                                </td>
+                                <td className="px-6 py-4 flex justify-center space-x-4">
+                                  <button
+                                    onClick={() => handleEdit(ele.id)}
+                                    className="px-3 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 0 24 24"
+                                      fill="currentColor"
+                                      className="w-5 h-5"
                                     >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="16"
-                                        height="16"
-                                        fill="currentColor"
-                                        className="w-4 h-4 bi bi-trash-fill"
-                                        viewBox="0 0 16 16"
-                                      >
-                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                                      </svg>
-                                    </button>
-                                  </td>
-                                </tr>
-                              ))}
-                              {/* ---- */}
-                            </tbody>
-                          </table>
-                          <div className="flex justify-end pt-4 mt-4 border-t dark:border-gray-700">
-                            <nav aria-label="page-navigation">
-                              <ul className="flex list-style-none">
-                                <li className="page-item " onClick={handlepre}>
-                                  <button
-                                    disabled={page == 1}
-                                    href=""
-                                    className="relative block px-3 py-1.5 text-base text-gray-700 transition-all duration-300 dark:text-gray-400 dark:hover:bg-gray-700 hover:bg-blue-100 rounded-md "
-                                  >
-                                    Previous
+                                      <path d="M14.06 2.94a1.5 1.5 0 0 1 2.12 0l4.88 4.88a1.5 1.5 0 0 1 0 2.12l-12 12a1.5 1.5 0 0 1-.71.39l-6 1.5a1 1 0 0 1-1.21-1.21l1.5-6a1.5 1.5 0 0 1 .39-.71l12-12zm-2.65 3.65L4 14.94V19h4.06l7.41-7.41-4.06-4.06zm6.59-1.59l-2.12-2.12-2.83 2.83 2.12 2.12 2.83-2.83z" />
+                                    </svg>
                                   </button>
-                                </li>
-                                <li className="page-item ">
-                                  <a
-                                    href="#"
-                                    className="relative block px-3 py-1.5 text-base text-gray-700 transition-all duration-300 dark:text-gray-400 dark:hover:bg-gray-700 hover:bg-blue-100 rounded-md mr-3 "
-                                  >
-                                    {page}
-                                  </a>
-                                </li>
-                                <li className="page-item " onClick={handlenext}>
+
                                   <button
-                                    disabled={data.length <= 4}
-                                    href="#"
-                                    className="relative block px-3 py-1.5 text-base text-gray-700 transition-all duration-300 dark:text-gray-400 dark:hover:bg-gray-700 hover:bg-blue-100 rounded-md "
+                                    onClick={() => handleDelete(ele.id)}
+                                    className="px-3 py-2 text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all"
                                   >
-                                    Next
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      fill="currentColor"
+                                      className="w-5 h-5"
+                                      viewBox="0 0 16 16"
+                                    >
+                                      <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5z" />
+                                    </svg>
                                   </button>
-                                </li>
-                              </ul>
-                            </nav>
-                          </div>
-                        </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <div className="flex justify-end pt-6 border-t border-gray-300">
+                        <nav aria-label="Page navigation">
+                          <ul className="flex space-x-2">
+                            <li onClick={handlepre}>
+                              <button
+                                disabled={page === 1}
+                                className="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+                              >
+                                Previous
+                              </button>
+                            </li>
+                            <li>
+                              <span className="px-4 py-2 text-white bg-blue-600 rounded-lg">
+                                {page}
+                              </span>
+                            </li>
+                            <li onClick={handlenext}>
+                              <button
+                                disabled={data.length <= 9}
+                                className="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+                              >
+                                Next
+                              </button>
+                            </li>
+                          </ul>
+                        </nav>
                       </div>
                     </div>
                   </section>

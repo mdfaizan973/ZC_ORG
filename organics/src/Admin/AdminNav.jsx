@@ -1,11 +1,12 @@
-import { useState } from "react";
+// import { useState } from "react";
+import { AiOutlineUser } from "react-icons/ai";
 import { Link as RouterLink } from "react-router-dom";
 export default function AdminNav() {
-  const [ispopup, setIspopup] = useState(false);
-  const showpopup = () => {
-    setIspopup(true);
-  };
-  console.log(ispopup);
+  // const [ispopup, setIspopup] = useState(false);
+  // const showpopup = () => {
+  //   setIspopup(true);
+  // };
+  // console.log(ispopup);
   // const closepopup = () => {};
   return (
     <div className="mb-[70px]">
@@ -52,14 +53,24 @@ export default function AdminNav() {
             </ul>
 
             {/* <RouterLink to="/login"> */}
-            <button
+            {/* <button
               onClick={showpopup}
               className="middle none center hidden rounded-lg bg-gradient-to-tr from-pink-600 to-blue-400 py-2 px-4 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
               type="button"
               data-ripple-light="true"
             >
               <span>Account</span>
-            </button>
+            </button> */}
+
+            <RouterLink to="/login">
+              <button
+                className="middle none center hidden rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-2 px-4 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
+                type="button"
+                data-ripple-light="true"
+              >
+                <AiOutlineUser />
+              </button>
+            </RouterLink>
             {/*  */}
             {/* {ispopup && (
            

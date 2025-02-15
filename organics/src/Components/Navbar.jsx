@@ -1,14 +1,25 @@
 // import React from 'react'
-import { useState } from "react";
-import { AiOutlineShopping, AiOutlineUser } from "react-icons/ai";
+import { useEffect, useState } from "react";
+import {
+  AiFillAndroid,
+  AiOutlineShopping,
+  AiOutlineUser,
+} from "react-icons/ai";
 import { Link as RouterLink } from "react-router-dom";
 import Sidebar from "./Sidebar";
 export default function Navbar() {
   const [showSidebar, setShowSidebar] = useState(false);
+  const [isOrgAdmin, setisOrgAdmin] = useState(false);
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
   };
+
+  useEffect(() => {
+    const isAdmin = sessionStorage.getItem("isOrganicAdmin");
+
+    setisOrgAdmin(isAdmin === "true");
+  }, []);
 
   return (
     <div className="mb-[60px] md:mb-20">
@@ -99,6 +110,18 @@ export default function Navbar() {
                   <AiOutlineUser />
                 </button>
               </RouterLink>
+
+              {isOrgAdmin && (
+                <RouterLink to="/admindashboard">
+                  <button
+                    className="middle none center hidden rounded-lg bg-gradient-to-tr from-blue-600 to-blue-400 py-2 px-4 ml-1 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
+                    type="button"
+                    data-ripple-light="true"
+                  >
+                    <AiFillAndroid />
+                  </button>
+                </RouterLink>
+              )}
             </div>
 
             <button
