@@ -23,7 +23,7 @@ export default function LoginPage() {
       sessionStorage.setItem("user_loged_in", "true");
       sessionStorage.setItem("isOrganicAdmin", "true");
       setTimeout(() => {
-        // navigate("/admindashboard");
+        // navigate("/admin-portal");
         navigate("/");
       }, 1200);
     } else {

@@ -14,6 +14,7 @@ import ChakOutPage from "../Pages/ChakOutPage";
 import ShpoingDone from "../Pages/ShpoingDone";
 import UpCaoming from "../Pages/UpCaoming";
 import Orders from "../Admin/Orders";
+import SuperDashBoard from "../Admin/SuperDashBoard";
 export default function AllRoutes() {
   return (
     <div>
@@ -46,7 +47,8 @@ export default function AllRoutes() {
           element={<ProtectedRoute component={SingleProducts} />}
         ></Route>
 
-        <Route path="/admindashboard" element={<AdminDashBoard />}></Route>
+        <Route path="/admin-portal" element={<SuperDashBoard />}></Route>
+        <Route path="/adminproducts" element={<AdminDashBoard />}></Route>
         <Route path="/adminusers" element={<AdminUsers />}></Route>
         <Route path="/orders" element={<Orders />}></Route>
       </Routes>

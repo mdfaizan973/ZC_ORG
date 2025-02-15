@@ -112,7 +112,7 @@ export default function Navbar() {
               </RouterLink>
 
               {isOrgAdmin && (
-                <RouterLink to="/admindashboard">
+                <RouterLink to="/admin-portal">
                   <button
                     className="middle none center hidden rounded-lg bg-gradient-to-tr from-blue-600 to-blue-400 py-2 px-4 ml-1 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
                     type="button"
