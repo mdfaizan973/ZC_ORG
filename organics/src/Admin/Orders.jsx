@@ -128,7 +128,7 @@ export default function Orders() {
                   </table>
                   <div className="flex justify-end pt-4 mt-4 border-t dark:border-gray-700">
                     <nav>
-                      <ul className="flex space-x-2">
+                      <ul className="flex items-center justify-center space-x-4">
                         <li>
                           <button
                             onClick={handlepre}

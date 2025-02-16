@@ -131,7 +131,7 @@ export default function AdminUsers() {
 
                 <div className="flex justify-end pt-6 border-t border-gray-300">
                   <nav aria-label="Page navigation">
-                    <ul className="flex space-x-2">
+                    <ul className="flex items-center justify-center space-x-4">
                       <li onClick={handlepre}>
                         <button
                           disabled={page === 1}

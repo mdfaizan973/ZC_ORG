@@ -281,24 +281,26 @@ export default function AdminDashBoard() {
                         {/* Pagination */}
                         <div className="flex justify-end pt-6 border-t border-gray-300">
                           <nav aria-label="Page navigation">
-                            <ul className="flex space-x-2">
-                              <li onClick={handlepre}>
+                            <ul className="flex items-center justify-center space-x-4">
+                              <li>
                                 <button
+                                  onClick={handlepre}
                                   disabled={page === 1}
-                                  className="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+                                  className="px-4 py-2 text-gray-700 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 disabled:opacity-50"
                                 >
                                   Previous
                                 </button>
                               </li>
                               <li>
-                                <span className="px-4 py-2 text-white bg-blue-600 rounded-lg">
+                                <span className="px-4 py-2 text-white bg-blue-600 border border-blue-700 rounded-lg">
                                   {page}
                                 </span>
                               </li>
-                              <li onClick={handlenext}>
+                              <li>
                                 <button
+                                  onClick={handlenext}
                                   disabled={data.length <= 9}
-                                  className="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+                                  className="px-4 py-2 text-gray-700 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 disabled:opacity-50"
                                 >
                                   Next
                                 </button>

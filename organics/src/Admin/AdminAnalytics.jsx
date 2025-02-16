@@ -88,6 +88,8 @@ export default function AdminAnalytics() {
 
         <main className="w-full md:w-3/4 lg:w-4/5 p-6">
           <div className="space-y-6">
+            {/* add a tab */}
+
             {/* Products Chart */}
             <section className="rounded-lg p-4 bg-white shadow-md">
               <div className="flex justify-between items-center mb-4">
