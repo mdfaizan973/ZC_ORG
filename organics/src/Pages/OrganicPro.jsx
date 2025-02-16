@@ -12,18 +12,24 @@ export default function OrganicPro() {
   const [fileter, setFilter] = useState("");
   const curdatalength = orgData.length;
   let limit = 9;
+
   const getData = async (page, filter) => {
     try {
       setLoad(true);
-      const categoryParam = filter ? `category=${filter}` : "";
-      const url = `${baseUrl}/orgproducts?${categoryParam}&_limit=${limit}&_page=${page}`;
+
+      // Encode filter to handle special characters like '&' and spaces
+      const encodedFilter = filter
+        ? `category=${encodeURIComponent(filter)}`
+        : "";
+
+      const url = `${baseUrl}/orgproducts?${encodedFilter}&_limit=${limit}&_page=${page}`;
 
       const response = await axios.get(url);
 
       setLoad(false);
       setOrgData(response.data);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching data:", error);
     }
   };
 
@@ -99,10 +105,14 @@ export default function OrganicPro() {
             className="bg-white-50 border border-white-300 text-black-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option value="">Filter</option>
-            <option value="fruits">Fruites</option>
+            <option value="fruits">Fruits</option>
             <option value="vegetables">Vegetables</option>
             <option value="dairy">Dairy</option>
             <option value="grains">Grains</option>
+            <option value="nuts & seeds">Nuts & Seeds</option>
+            <option value="herbs & spices">Herbs & Spices</option>
+            <option value="oils & fats">Oils & Fats</option>
+            <option value="sweeteners">Sweeteners</option>
           </select>
           <select
             onChange={(e) => setSort(e.target.value)}
