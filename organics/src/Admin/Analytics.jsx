@@ -37,7 +37,7 @@ export default function Analytics({
     yAxis: { type: "value" },
     series: [
       {
-        name: "Sales Value",
+        name: "Total ",
         type: "bar",
         data: chart_data?.map((item, index) => ({
           value: item.value,
@@ -58,7 +58,7 @@ export default function Analytics({
     legend: { orient: "horizontal", bottom: 10 },
     series: [
       {
-        name: "Sales",
+        name: "",
         type: "pie",
         radius: "50%",
         data: chart_data?.map((item, index) => ({

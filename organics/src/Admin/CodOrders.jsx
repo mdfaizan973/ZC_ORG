@@ -5,11 +5,12 @@ import TableIndid from "./Loding/TableIndid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { baseUrl } from "../../config/confg";
+import { fetchData } from "./AdminAnalytics";
 export default function CodOrders() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [load, setLoad] = useState(false);
-
+  const [codOrders, setCodOrdersData] = useState([]);
   const admingetdata = (page) => {
     setLoad(true);
     axios
@@ -33,6 +34,21 @@ export default function CodOrders() {
   const handleNext = () => {
     setPage(page + 1);
   };
+
+  const users_url = `${baseUrl}/codorders`;
+
+  useEffect(() => {
+    const load_Data = async () => {
+      try {
+        const cod_Data = await fetchData(users_url);
+        setCodOrdersData(cod_Data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    load_Data();
+  }, []);
   //   Delete
 
   const handleDelete = (id) => {
@@ -59,7 +75,7 @@ export default function CodOrders() {
           <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
             <div className="border-b pb-4 mb-4">
               <h2 className="text-2xl font-semibold text-gray-800">
-                Cash On Delivery Orders
+                Cash On Delivery Orders ({codOrders?.length})
               </h2>
             </div>
             <div className="overflow-x-auto mt-4">

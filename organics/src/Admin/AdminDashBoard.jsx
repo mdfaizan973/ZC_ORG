@@ -6,12 +6,15 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SuperDashBoard from "./SuperDashBoard";
 import { baseUrl } from "../../config/confg";
+import { fetchData } from "./AdminAnalytics";
 export default function AdminDashBoard() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [showsingle, setShowsingle] = useState({});
   const [editdata, setEditdata] = useState({});
   const [load, setLoad] = useState(false);
+  const [prodData, setProdData] = useState([]);
+
   const admingetdata = (page) => {
     setLoad(true);
     axios
@@ -35,6 +38,21 @@ export default function AdminDashBoard() {
   const handlenext = () => {
     setPage(page + 1);
   };
+
+  const product_url = `${baseUrl}/orgproducts`;
+
+  useEffect(() => {
+    const load_Data = async () => {
+      try {
+        const prod_Data = await fetchData(product_url);
+        setProdData(prod_Data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    load_Data();
+  }, []);
 
   // Here is the code of adding data ---->
   const [formData, setFormData] = useState({
@@ -138,6 +156,7 @@ export default function AdminDashBoard() {
       });
   };
 
+  console.log(prodData);
   return (
     <>
       <ToastContainer />
@@ -179,7 +198,7 @@ export default function AdminDashBoard() {
                         {/* Header */}
                         <div className="flex justify-between items-center px-6 pb-4 border-b border-gray-300">
                           <h2 className="text-2xl font-semibold text-gray-700">
-                            List of Products
+                            List of Products ({prodData?.length})
                           </h2>
                           <div className="flex items-center border border-gray-400 rounded-md overflow-hidden">
                             <input

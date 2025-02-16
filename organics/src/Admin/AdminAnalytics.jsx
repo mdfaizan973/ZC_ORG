@@ -218,7 +218,7 @@ export default function AdminAnalytics() {
   );
 }
 
-const fetchData = async (url) => {
+export const fetchData = async (url) => {
   try {
     const response = await axios.get(url);
     return response.data; // Returns the fetched data

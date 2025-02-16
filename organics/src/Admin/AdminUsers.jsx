@@ -7,10 +7,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SuperDashBoard from "./SuperDashBoard";
 import { baseUrl } from "../../config/confg";
+import { fetchData } from "./AdminAnalytics";
 export default function AdminUsers() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [load, setLoad] = useState(false);
+  const [usersData, setUsersData] = useState([]);
 
   const admingetdata = (page) => {
     setLoad(true);
@@ -24,6 +26,7 @@ export default function AdminUsers() {
         console.log(err);
       });
   };
+
   useEffect(() => {
     admingetdata(page);
   }, [page]);
@@ -34,6 +37,21 @@ export default function AdminUsers() {
   const handlenext = () => {
     setPage(page + 1);
   };
+
+  const users_url = `${baseUrl}/users`;
+
+  useEffect(() => {
+    const load_Data = async () => {
+      try {
+        const prod_Data = await fetchData(users_url);
+        setUsersData(prod_Data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    load_Data();
+  }, []);
   // Delete\
   const handledelteusers = (id) => {
     axios
@@ -73,7 +91,7 @@ export default function AdminUsers() {
               <div className="w-full max-w-6xl px-6 py-8 bg-white  rounded-lg">
                 <div className="flex justify-between items-center px-6 pb-4 border-b border-gray-300">
                   <h2 className="text-2xl font-semibold text-gray-700">
-                    List of Users
+                    List of Users ({usersData?.length})
                   </h2>
                 </div>
 

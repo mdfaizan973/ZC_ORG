@@ -8,11 +8,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SuperDashBoard from "./SuperDashBoard";
 import { baseUrl } from "../../config/confg";
+import { fetchData } from "./AdminAnalytics";
 export default function Orders() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [load, setLoad] = useState(false);
-
+  const [ppOrders, setPpOrdersData] = useState([]);
   const admingetdata = (page) => {
     setLoad(true);
     axios
@@ -36,8 +37,23 @@ export default function Orders() {
   const handlenext = () => {
     setPage(page + 1);
   };
-  //   Delete
 
+  const users_url = `${baseUrl}/pporders`;
+
+  useEffect(() => {
+    const load_Data = async () => {
+      try {
+        const cod_Data = await fetchData(users_url);
+        setPpOrdersData(cod_Data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    load_Data();
+  }, []);
+
+  //   Delete
   const handleDelete = (id) => {
     axios
       .delete(`${baseUrl}/pporders/${id}`)
@@ -73,7 +89,7 @@ export default function Orders() {
                 <div className="border-b pb-4 mb-4">
                   <h2 className="text-2xl font-semibold text-gray-800">
                     {" "}
-                    List of PayPal Orders
+                    List of PayPal Orders ({ppOrders?.length})
                   </h2>
                 </div>
                 <div className="overflow-x-auto mt-4">

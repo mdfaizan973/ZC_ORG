@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AdminNav from "./AdminNav";
 import PropTypes from "prop-types";
 import { AboutOrganic } from "../Pages/Landing/Home";
@@ -46,7 +46,11 @@ export default function SuperDashBoard({ show_descrition = true }) {
       route: "/upcoming",
     },
   ];
+  const navigate = useNavigate();
 
+  const handleAdminDashboardRoute = (link) => {
+    navigate(link);
+  };
   return (
     <>
       <AdminNav />
@@ -61,8 +65,9 @@ export default function SuperDashBoard({ show_descrition = true }) {
           Organic Store (Admin Panel)
         </h2>
         {cards.map((card, index) => (
-          <Link
-            to={card.route}
+          <div
+            // to={card.route}
+            onClick={() => handleAdminDashboardRoute(card.route)}
             key={index}
             className="flex flex-col sm:flex-row w-full max-w-2xl items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer hover:bg-gray-100"
           >
@@ -77,7 +82,7 @@ export default function SuperDashBoard({ show_descrition = true }) {
                 <p className="text-gray-600">{card.description}</p>
               )}
             </div>
-          </Link>
+          </div>
         ))}
       </div>
 
