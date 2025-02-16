@@ -14,6 +14,7 @@ export default function AdminDashBoard() {
   const [editdata, setEditdata] = useState({});
   const [load, setLoad] = useState(false);
   const [prodData, setProdData] = useState([]);
+  const [searchProdValue, setSearchProdValue] = useState("");
 
   const admingetdata = (page) => {
     setLoad(true);
@@ -156,6 +157,17 @@ export default function AdminDashBoard() {
       });
   };
 
+  const gosSarchData = () => {
+    // searchProdValue;
+    const value = searchProdValue.toLowerCase();
+    const dataSearch = prodData.filter((ele) => {
+      const title = ele.title.toLowerCase();
+      const category = ele.category.toLowerCase();
+      return title.includes(value) || category.includes(value);
+    });
+    setData(dataSearch);
+  };
+
   return (
     <>
       <ToastContainer />
@@ -165,7 +177,7 @@ export default function AdminDashBoard() {
           <div className="flex">
             {/* Main-Content */}
             <div className="flex-1 ">
-              <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900">
+              <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900  items-start">
                 <aside className="w-full md:w-1/4 lg:w-1/5  bg-white shadow-lg dark:bg-gray-800">
                   <SuperDashBoard show_descrition={false} />
                 </aside>
@@ -204,8 +216,14 @@ export default function AdminDashBoard() {
                               type="text"
                               className="px-4 py-2 w-64 text-gray-700 focus:outline-none"
                               placeholder="Search..."
+                              onChange={(e) =>
+                                setSearchProdValue(e.target.value)
+                              }
                             />
-                            <button className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600">
+                            <button
+                              className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
+                              onClick={gosSarchData}
+                            >
                               Go
                             </button>
                           </div>

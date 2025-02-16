@@ -55,7 +55,7 @@ export default function SuperDashBoard({ show_descrition = true }) {
     <>
       <AdminNav />
 
-      <div className="flex flex-col items-center space-y-4 p-6 max-w-3xl mx-auto">
+      <div className="flex flex-col items-center space-y-4 p-4 max-w-3xl mx-auto">
         <img
           src="https://i.pinimg.com/736x/a6/19/71/a619716b7be42ceaf64215ec4b7ad1ed.jpg"
           alt="Products"

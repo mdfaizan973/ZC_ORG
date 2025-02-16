@@ -74,7 +74,7 @@ export default function Orders() {
       <AdminNav />
       <hr />
 
-      <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900">
+      <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900  items-start">
         <aside className="w-full md:w-1/4 lg:w-1/5  bg-white shadow-lg dark:bg-gray-800">
           <SuperDashBoard show_descrition={false} />
         </aside>

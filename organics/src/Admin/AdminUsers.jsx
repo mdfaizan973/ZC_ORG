@@ -77,7 +77,7 @@ export default function AdminUsers() {
       <AdminNav />
       {/* <br /> */}
 
-      <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900">
+      <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900  items-start">
         <aside className="w-full md:w-1/4 lg:w-1/5  bg-white shadow-lg dark:bg-gray-800">
           <SuperDashBoard show_descrition={false} />
         </aside>
@@ -87,9 +87,9 @@ export default function AdminUsers() {
           <TableIndid />
         ) : (
           <main className="w-4/5  rounded p-4 ">
-            <section className="items-center flex justify-center  min-h-screen font-poppins m-2">
+            <section className="items-start flex justify-center  min-h-screen font-poppins m-2">
               <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
-                <div className="flex justify-between items-center px-6 pb-4 border-b border-gray-300">
+                <div className="flex justify-between items-start px-6 pb-4 border-b border-gray-300">
                   <h2 className="text-2xl font-semibold text-gray-700">
                     List of Users ({usersData?.length})
                   </h2>
