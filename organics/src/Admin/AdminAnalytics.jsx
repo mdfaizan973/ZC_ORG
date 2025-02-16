@@ -4,11 +4,15 @@ import AdminNav from "./AdminNav";
 import SuperDashBoard from "./SuperDashBoard";
 import { baseUrl } from "../../config/confg";
 import axios from "axios";
-
+import { FaChartBar, FaChartPie } from "react-icons/fa";
 export default function AdminAnalytics() {
   const [productsData, setProductsData] = useState([]);
   const [usersData, setUsersData] = useState([]);
   const [ordersData, setOrdersData] = useState([]);
+
+  const [showBarChartProducts, setShowBarChartProducts] = useState(true);
+  const [showBarChartUsers, setShowBarChartUsers] = useState(true);
+  const [showBarChartOrders, setShowBarChartOrders] = useState(true);
 
   useEffect(() => {
     const product_url = `${baseUrl}/orgproducts`;
@@ -83,40 +87,126 @@ export default function AdminAnalytics() {
         </aside>
 
         <main className="w-full md:w-3/4 lg:w-4/5 p-6">
-          <div className="space-y-8">
+          <div className="space-y-6">
             {/* Products Chart */}
-            <section className="rounded-lg p-4">
-              <h2 className="text-2xl font-bold text-green-700  mb-4">
-                Product Categories Distribution
-              </h2>
+            <section className="rounded-lg p-4 bg-white shadow-md">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-green-700">
+                  Product Categories Distribution
+                </h2>
+
+                <div className="flex gap-2">
+                  {/* Bar Chart Button */}
+                  <button
+                    className={`px-4 py-2 font-semibold rounded-md flex items-center gap-2 transition ${
+                      showBarChartProducts
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-gray-300 text-black border-black"
+                    }`}
+                    onClick={() => setShowBarChartProducts(true)}
+                  >
+                    <FaChartBar /> Bar
+                  </button>
+
+                  {/* Pie Chart Button */}
+                  <button
+                    className={`px-4 py-2 font-semibold rounded-md flex items-center gap-2 transition ${
+                      !showBarChartProducts
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-gray-300 text-black border-black"
+                    }`}
+                    onClick={() => setShowBarChartProducts(false)}
+                  >
+                    <FaChartPie /> Pie
+                  </button>
+                </div>
+              </div>
               <Analytics
                 chart_data={productsData}
                 bar_title="Bar Chart"
                 pie_title="Pie Chart"
+                showBarChart={showBarChartProducts}
               />
             </section>
 
             {/* Users Chart */}
-            <section className="rounded-lg p-4">
-              <h2 className="text-2xl font-bold text-green-700  mb-4">
-                User Signups Over Time
-              </h2>
+            <section className="rounded-lg p-4 bg-white shadow-md">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-green-700">
+                  User Signups Over Time
+                </h2>
+
+                <div className="flex gap-2">
+                  {/* Bar Chart Button */}
+                  <button
+                    className={`px-4 py-2 font-semibold rounded-md flex items-center gap-2 transition ${
+                      showBarChartUsers
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-gray-300 text-black border-black"
+                    }`}
+                    onClick={() => setShowBarChartUsers(true)}
+                  >
+                    <FaChartBar /> Bar
+                  </button>
+
+                  {/* Pie Chart Button */}
+                  <button
+                    className={`px-4 py-2 font-semibold rounded-md flex items-center gap-2 transition ${
+                      !showBarChartUsers
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-gray-300 text-black border-black"
+                    }`}
+                    onClick={() => setShowBarChartUsers(false)}
+                  >
+                    <FaChartPie /> Pie
+                  </button>
+                </div>
+              </div>
               <Analytics
                 chart_data={usersData}
                 bar_title="Bar Chart"
                 pie_title="Pie Chart"
+                showBarChart={showBarChartUsers}
               />
             </section>
 
             {/* Orders Chart */}
-            <section className="rounded-lg p-4">
-              <h2 className="text-2xl font-bold text-green-700  mb-4">
-                Orders Distribution: COD vs PayPal
-              </h2>
+            <section className="rounded-lg p-4 bg-white shadow-md">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-green-700">
+                  Orders Distribution: COD vs PayPal
+                </h2>
+                <div className="flex gap-2">
+                  {/* Bar Chart Button */}
+                  <button
+                    className={`px-4 py-2 font-semibold rounded-md flex items-center gap-2 transition ${
+                      showBarChartOrders
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-gray-300 text-black border-black"
+                    }`}
+                    onClick={() => setShowBarChartOrders(true)}
+                  >
+                    <FaChartBar /> Bar
+                  </button>
+
+                  {/* Pie Chart Button */}
+                  <button
+                    className={`px-4 py-2 font-semibold rounded-md flex items-center gap-2 transition ${
+                      !showBarChartOrders
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-gray-300 text-black border-black"
+                    }`}
+                    onClick={() => setShowBarChartOrders(false)}
+                  >
+                    <FaChartPie /> Pie
+                  </button>
+                </div>
+              </div>
               <Analytics
                 chart_data={ordersData}
                 bar_title="Bar Chart"
                 pie_title="Pie Chart"
+                showBarChart={showBarChartOrders}
               />
             </section>
           </div>

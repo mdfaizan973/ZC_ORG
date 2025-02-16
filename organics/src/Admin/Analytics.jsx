@@ -1,19 +1,24 @@
 import PropTypes from "prop-types";
 import ReactECharts from "echarts-for-react";
+import { useEffect, useState } from "react";
 
-export default function Analytics({ chart_data, bar_title, pie_title }) {
-  //   const colors = ["#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#A133FF"];
+export default function Analytics({
+  chart_data,
+  bar_title,
+  pie_title,
+  showBarChart,
+}) {
   const colors = [
-    "#00A8E8", // Cyan
-    "#FF6F61", // Coral
-    "#3357FF", // Blue
-    "#33FF57", // Green
-    "#FF5733", // Red-Orange
-    "#6A0572", // Deep Violet
-    "#A133FF", // Purple
-    "#FFC300", // Yellow
-    "#FF33A1", // Pink
-    "#2ECC71", // Emerald Green
+    "#6366F1", // Modern Indigo
+    "#14B8A6", // Teal Green
+    "#F59E0B", // Vibrant Amber
+    "#EF4444", // Bright Red
+    "#3B82F6", // Electric Blue
+    "#10B981", // Fresh Green
+    "#A855F7", // Soft Purple
+    "#EC4899", // Neon Pink
+    "#EAB308", // Golden Yellow
+    "#9333EA", // Deep Violet
   ];
 
   const barOptions = {
@@ -74,7 +79,11 @@ export default function Analytics({ chart_data, bar_title, pie_title }) {
 
   return (
     <>
-      <ChartDisplay barOptions={barOptions} pieOptions={pieOptions} />
+      <ChartDisplay
+        barOptions={barOptions}
+        pieOptions={pieOptions}
+        showBarChart={showBarChart}
+      />
     </>
   );
 }
@@ -89,25 +98,34 @@ Analytics.propTypes = {
   ).isRequired,
   bar_title: PropTypes.object.isRequired,
   pie_title: PropTypes.object.isRequired,
+  showBarChart: PropTypes.object.isRequired,
 };
 
-const ChartDisplay = ({ barOptions, pieOptions }) => {
+const ChartDisplay = ({ barOptions, pieOptions, showBarChart = true }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => setIsLoading(false), 300);
+    return () => clearTimeout(timer);
+  }, [showBarChart]);
+
   return (
-    <>
-      <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+    <div className="bg-white dark:bg-gray-800  rounded-lg p-6 min-h-[420px] flex items-center justify-center">
+      {isLoading ? (
+        <p className="text-gray-500">Loading chart...</p>
+      ) : showBarChart ? (
         <ReactECharts
           option={barOptions}
           style={{ height: 400, width: "100%" }}
         />
-      </div>
-
-      <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+      ) : (
         <ReactECharts
           option={pieOptions}
           style={{ height: 400, width: "100%" }}
         />
-      </div>
-    </>
+      )}
+    </div>
   );
 };
 
@@ -115,4 +133,5 @@ const ChartDisplay = ({ barOptions, pieOptions }) => {
 ChartDisplay.propTypes = {
   barOptions: PropTypes.object.isRequired,
   pieOptions: PropTypes.object.isRequired,
+  showBarChart: PropTypes.object.isRequired,
 };
