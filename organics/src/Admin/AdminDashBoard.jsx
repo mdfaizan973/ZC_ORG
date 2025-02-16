@@ -156,7 +156,6 @@ export default function AdminDashBoard() {
       });
   };
 
-  console.log(prodData);
   return (
     <>
       <ToastContainer />
@@ -165,26 +164,9 @@ export default function AdminDashBoard() {
         <div className="min-h-screen ">
           <div className="flex">
             {/* Main-Content */}
-            <div className="flex-1 p-4">
-              {/* Header */}
-              <header>
-                <div className=" flex flex-wrap justify-between align-center font-bold text-gray-500">
-                  <div className="text-4xl"></div>
-
-                  <button
-                    onClick={() =>
-                      document.getElementById("my_modal_1").showModal()
-                    }
-                    className="m-3 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg self-end mt-3"
-                    type="button"
-                  >
-                    Add Products
-                  </button>
-                </div>
-              </header>
-
-              <div className="flex">
-                <aside className="w-1/5 flex ">
+            <div className="flex-1 ">
+              <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900">
+                <aside className="w-full md:w-1/4 lg:w-1/5  bg-white shadow-lg dark:bg-gray-800">
                   <SuperDashBoard show_descrition={false} />
                 </aside>
 
@@ -192,9 +174,26 @@ export default function AdminDashBoard() {
                 {load ? (
                   <TableIndid />
                 ) : (
-                  <main className="w-4/5  rounded bg-white shadow-lg">
+                  <main className="w-4/5  rounded p-4 ">
+                    {/* Header */}
+                    <header>
+                      <div className=" flex flex-wrap justify-between align-center font-bold text-gray-500">
+                        <div className="text-4xl"></div>
+
+                        <button
+                          onClick={() =>
+                            document.getElementById("my_modal_1").showModal()
+                          }
+                          className="m-3 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg self-end mt-3"
+                          type="button"
+                        >
+                          Add Products
+                        </button>
+                      </div>
+                    </header>
                     <section className="items-center flex justify-center min-h-screen font-poppins">
-                      <div className="w-full max-w-6xl px-6 py-8 bg-white rounded-lg">
+                      {/* <div className="w-full max-w-6xl px-6 py-8 bg-white rounded-lg"> */}
+                      <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
                         {/* Header */}
                         <div className="flex justify-between items-center px-6 pb-4 border-b border-gray-300">
                           <h2 className="text-2xl font-semibold text-gray-700">

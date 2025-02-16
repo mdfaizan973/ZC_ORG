@@ -2,9 +2,11 @@
 import { useEffect, useState } from "react";
 import {
   AiFillAndroid,
-  AiOutlineShopping,
+  // AiOutlineShopping,
   AiOutlineUser,
+  AiOutlineShoppingCart,
 } from "react-icons/ai";
+
 import { Link as RouterLink } from "react-router-dom";
 import Sidebar from "./Sidebar";
 export default function Navbar() {
@@ -97,7 +99,8 @@ export default function Navbar() {
                   type="button"
                   data-ripple-light="true"
                 >
-                  <AiOutlineShopping />
+                  {/* <AiOutlineShopping /> */}
+                  <AiOutlineShoppingCart />
                 </button>
               </RouterLink>
 

@@ -73,8 +73,9 @@ export default function Orders() {
       <ToastContainer />
       <AdminNav />
       <hr />
-      <div className="flex">
-        <aside className="w-1/5 flex ">
+
+      <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900">
+        <aside className="w-full md:w-1/4 lg:w-1/5  bg-white shadow-lg dark:bg-gray-800">
           <SuperDashBoard show_descrition={false} />
         </aside>
 
@@ -83,7 +84,7 @@ export default function Orders() {
         {load ? (
           <TableIndid />
         ) : (
-          <main className="w-4/5  rounded bg-white ">
+          <main className="w-4/5  rounded ">
             <section className="flex items-center justify-center p-6">
               <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
                 <div className="border-b pb-4 mb-4">

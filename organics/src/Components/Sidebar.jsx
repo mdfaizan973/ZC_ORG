@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import {
   AiFillAndroid,
-  AiOutlineShopping,
+  AiOutlineShoppingCart,
   AiOutlineUser,
 } from "react-icons/ai";
 import { Link as RouterLink } from "react-router-dom";
@@ -38,7 +38,7 @@ export default function Sidebar() {
               type="button"
               data-ripple-light="true"
             >
-              <AiOutlineShopping />
+              <AiOutlineShoppingCart />
             </button>
           </RouterLink>
           <RouterLink to="/login">
