@@ -57,42 +57,51 @@ export default function SingleProducts() {
       {load ? (
         <DiscriptionLoad />
       ) : (
-        <section className="w-screen">
-          <div className="m-4 mx-auto max-w-screen-lg rounded-md border border-gray-100 text-gray-600 shadow-md">
-            <div className="relative flex h-full flex-col text-gray-600 md:flex-row">
-              <div className="mx-auto flex items-center px-5 pt-1 md:p-8">
+        <section className="flex justify-center items-start  min-h-screen ">
+          <div className="mx-auto mt-24 max-w-screen-xl w-full rounded-md border border-gray-100 text-gray-600 shadow-lg bg-white overflow-hidden">
+            <div className="flex flex-col md:flex-row">
+              {/* Image Section */}
+              <div className="flex items-center justify-center p-4 md:w-1/3">
                 <img
-                  className="block h-[100%] max-w-full rounded-md "
-                  // src="https://i.pinimg.com/564x/5f/23/52/5f2352717a7be25e2e0ec4d309edacaa.jpg"
+                  className="block w-full max-h-[400px] object-cover rounded-md"
                   src={data.image}
                   alt="Shop image"
                 />
               </div>
-              <div className="relative p-8 md:w-4/6">
-                <div className="flex flex-col md:flex-row">
-                  <h2 className="mb-2 text-2xl font-black">{data.title}</h2>
-                  <span className="ml-2 text-xs uppercase">
+
+              {/* Content Section */}
+              <div className="p-6 md:w-2/3">
+                {/* Title & Category */}
+                <div className="flex flex-col md:flex-row items-start md:items-center">
+                  <h2 className="text-2xl font-bold">{data.title}</h2>
+                  <span className="ml-2 text-sm uppercase text-gray-500">
                     {data.category}
                   </span>
                 </div>
-                <p className="mt-3 font-sans text-md tracking-normal">
-                  {data.description}.....
+
+                {/* Description */}
+                <p className="mt-3 text-md leading-relaxed">
+                  {data.description}...
                 </p>
-                <div className="flex flex-col md:flex-row md:items-end">
-                  <p className="mt-6 text-4xl font-black">
+
+                {/* Price Section */}
+                <div className="flex items-center mt-6">
+                  <p className="text-4xl font-extrabold text-green-600">
                     ₹ {data.discount_price_inr}
                   </p>
-                  <span className="ml-2 text-sm uppercase line-through">
+                  <span className="ml-3 text-sm line-through text-gray-400">
                     ₹{data.price_inr}
-                  </span>{" "}
-                  <span className="ml-2 text-sm uppercase ">
+                  </span>
+                  <span className="ml-2 text-sm font-bold text-red-500">
                     %{data.discount_percentage}
                   </span>
                 </div>
+
+                {/* Buttons */}
                 <div className="mt-8 flex flex-col sm:flex-row">
                   <button
                     onClick={addToCart}
-                    className="mr-2 mb-4 flex cursor-pointer items-center justify-center rounded-md bg-emerald-400 py-2 px-8 text-center text-white transition duration-150 ease-in-out hover:translate-y-1 hover:bg-emerald-500"
+                    className="mr-2 mb-4 flex items-center justify-center rounded-md bg-emerald-500 py-2 px-6 text-white text-lg font-medium shadow-md transition hover:scale-105"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -107,59 +116,46 @@ export default function SingleProducts() {
                         strokeLinejoin="round"
                         d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                       />
-                    </svg>
+                    </svg>{" "}
                     Add To Cart
                   </button>
-                  <button className="mr-2 mb-4 flex cursor-pointer items-center justify-center rounded-md border py-2 px-8 text-center text-gray-500 transition duration-150 ease-in-out hover:translate-y-1 hover:bg-yellow-300 hover:text-white">
-                    Buy now
+                  <button className="mr-2 mb-4 flex items-center justify-center rounded-md border py-2 px-6 text-lg font-medium text-gray-600 transition hover:bg-yellow-400 hover:text-white">
+                    ⚡ Buy Now
                   </button>
                 </div>
-                <div className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-teal-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
-                  Benifits
-                </div>
-                <br />
-                {data.health_benefits_rich_in_vitamins_and_antioxidants ? (
-                  <div className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-green-500 py-1 px-1 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
-                    <div className="mt-px">✅</div>
+
+                {/* Benefits Section */}
+                <div className="mt-6">
+                  <h3 className="text-lg font-bold mb-2">Benefits</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {data.health_benefits_rich_in_vitamins_and_antioxidants ? (
+                      <span className="px-3 py-1 text-sm font-bold text-white bg-green-500 rounded-md">
+                        ✅ Rich in Vitamins
+                      </span>
+                    ) : (
+                      <span className="px-3 py-1 text-sm font-bold text-white bg-red-500 rounded-md">
+                        ❌ Lacks Vitamins
+                      </span>
+                    )}
+                    {data.health_benefits_improves_immunity ? (
+                      <span className="px-3 py-1 text-sm font-bold text-white bg-green-500 rounded-md">
+                        ✅ Boosts Immunity
+                      </span>
+                    ) : (
+                      <span className="px-3 py-1 text-sm font-bold text-white bg-red-500 rounded-md">
+                        ❌ No Immunity Boost
+                      </span>
+                    )}
+                    {data.health_benefits_enhances_skin_health ? (
+                      <span className="px-3 py-1 text-sm font-bold text-white bg-green-500 rounded-md">
+                        ✅ Improves Skin Health
+                      </span>
+                    ) : (
+                      <span className="px-3 py-1 text-sm font-bold text-white bg-red-500 rounded-md">
+                        ❌ No Skin Benefits
+                      </span>
+                    )}
                   </div>
-                ) : (
-                  <div className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-red-500 py-1 px-1 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
-                    <div className="mt-px px-1">X</div>
-                  </div>
-                )}
-                -
-                <div className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-1 px-1 align-baseline font-sans text-[10px] font-bold uppercase leading-none text-white">
-                  <div className="mt-px">Vital Nutrients</div>
-                </div>
-                <br />
-                <br />
-                {data.health_benefits_improves_immunity ? (
-                  <div className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-green-500 py-1 px-1 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
-                    <div className="mt-px">✅</div>
-                  </div>
-                ) : (
-                  <div className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-red-500 py-1 px-1 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
-                    <div className="mt-px px-1">X</div>
-                  </div>
-                )}
-                -
-                <div className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-1 px-1 align-baseline font-sans text-[10px]  font-bold uppercase leading-none text-white">
-                  <div className="mt-px"> Immunity Empowering</div>
-                </div>
-                <br />
-                <br />
-                {data.health_benefits_enhances_skin_health ? (
-                  <div className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-green-500 py-1 px-1 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
-                    <div className="mt-px">✅</div>
-                  </div>
-                ) : (
-                  <div className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-red-500 py-1 px-1 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
-                    <div className="mt-px px-1">X</div>
-                  </div>
-                )}
-                -
-                <div className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-1 px-1 align-baseline font-sans text-[10px]  font-bold uppercase leading-none text-white">
-                  <div className="mt-px"> Skin Beautification</div>
                 </div>
               </div>
             </div>

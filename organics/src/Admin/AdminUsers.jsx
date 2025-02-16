@@ -65,7 +65,7 @@ export default function AdminUsers() {
       })
       .catch(function (error) {
         console.error("Error deleting:", error);
-        toast.info(`User can not be Deleted! `, {
+        toast.info(`This User can not be Deleted! `, {
           position: toast.POSITION.TOP_CENTER,
         });
       });
