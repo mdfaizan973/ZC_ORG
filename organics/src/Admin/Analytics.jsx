@@ -117,12 +117,12 @@ const ChartDisplay = ({ barOptions, pieOptions, showBarChart = true }) => {
       ) : showBarChart ? (
         <ReactECharts
           option={barOptions}
-          style={{ height: 400, width: "100%" }}
+          style={{ height: 600, width: "100%" }}
         />
       ) : (
         <ReactECharts
           option={pieOptions}
-          style={{ height: 400, width: "100%" }}
+          style={{ height: 600, width: "100%" }}
         />
       )}
     </div>
