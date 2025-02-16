@@ -35,7 +35,7 @@ export default function SuperDashBoard({ show_descrition = true }) {
         "Analyze sales performance, track user behavior, and generate business insights for strategic decisions.",
       image:
         "https://i.pinimg.com/736x/c8/75/76/c87576d9a43bb9fbf3e14b4f671caf93.jpg",
-      route: "/adminproducts",
+      route: "/admin-analytics",
     },
     {
       title: "Upcoming",
@@ -43,7 +43,7 @@ export default function SuperDashBoard({ show_descrition = true }) {
         "Stay updated on upcoming product launches, pending approvals, and scheduled orders. Plan ahead with insights.",
       image:
         "https://i.pinimg.com/736x/08/d6/06/08d60626a00cf729346aa1107f7efe12.jpg",
-      route: "/adminproducts",
+      route: "/upcoming",
     },
   ];
 
