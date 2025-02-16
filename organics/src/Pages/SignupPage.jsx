@@ -4,6 +4,7 @@ import axios from "axios";
 import Navbar from "../Components/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { baseUrl } from "../../config/confg";
 export default function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,7 +30,7 @@ export default function SignupPage() {
       return;
     } else {
       axios
-        .post(`https://orgaincspro.onrender.com/users`, obj)
+        .post(`${baseUrl}/users`, obj)
         .then((res) => {
           console.log(res);
           toast.success("User Created Successfully", {

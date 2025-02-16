@@ -5,6 +5,7 @@ import { BiExit } from "react-icons/bi";
 import Navbar from "../Components/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { baseUrl } from "../../config/confg";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -28,9 +29,7 @@ export default function LoginPage() {
       }, 1200);
     } else {
       axios
-        .get(
-          `https://orgaincspro.onrender.com/users?email=${email}&pass=${pass}`
-        )
+        .get(`${baseUrl}/users?email=${email}&pass=${pass}`)
         .then((res) => {
           if (res.data.length > 0) {
             toast.success("LogIn SuccessFul!", {

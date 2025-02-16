@@ -7,6 +7,7 @@ import CodOrders from "./CodOrders";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SuperDashBoard from "./SuperDashBoard";
+import { baseUrl } from "../../config/confg";
 export default function Orders() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -15,7 +16,7 @@ export default function Orders() {
   const admingetdata = (page) => {
     setLoad(true);
     axios
-      .get(`https://orgaincspro.onrender.com/pporders?_limit=10&_page=${page}`)
+      .get(`${baseUrl}/pporders?_limit=10&_page=${page}`)
       .then((res) => {
         // console.log(res.data);
         setLoad(false);
@@ -39,7 +40,7 @@ export default function Orders() {
 
   const handleDelete = (id) => {
     axios
-      .delete(`https://orgaincspro.onrender.com/pporders/${id}`)
+      .delete(`${baseUrl}/pporders/${id}`)
       .then(function (res) {
         console.log(res);
         toast.success(`Deleted order with ID ${id} successfully`, {

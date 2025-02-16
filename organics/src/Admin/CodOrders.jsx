@@ -4,6 +4,7 @@ import TableIndid from "./Loding/TableIndid";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { baseUrl } from "../../config/confg";
 export default function CodOrders() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -12,7 +13,7 @@ export default function CodOrders() {
   const admingetdata = (page) => {
     setLoad(true);
     axios
-      .get(`https://orgaincspro.onrender.com/codorders?_limit=10&_page=${page}`)
+      .get(`${baseUrl}/codorders?_limit=10&_page=${page}`)
       .then((res) => {
         // console.log(res.data);
         setLoad(false);
@@ -36,7 +37,7 @@ export default function CodOrders() {
 
   const handleDelete = (id) => {
     axios
-      .delete(`https://orgaincspro.onrender.com/codorders/${id}`)
+      .delete(`${baseUrl}/codorders/${id}`)
       .then(function (res) {
         console.log(res);
         toast.success(`Deleted order with ID ${id} successfully`, {

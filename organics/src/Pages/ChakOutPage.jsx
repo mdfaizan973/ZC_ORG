@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { baseUrl } from "../../config/confg";
 export default function ChakOutPage() {
   const [cardNumber, setCardNumber] = useState("");
   const [exD, setExD] = useState("");
@@ -34,7 +35,7 @@ export default function ChakOutPage() {
       redirect();
 
       axios
-        .post(`https://orgaincspro.onrender.com/codorders`, cObj)
+        .post(`${baseUrl}/codorders`, cObj)
         .then((res) => {
           console.log(res);
           toast.success("Order Done!", {
@@ -75,7 +76,7 @@ export default function ChakOutPage() {
       redirect();
 
       axios
-        .post(`https://orgaincspro.onrender.com/pporders`, obj)
+        .post(`${baseUrl}/pporders`, obj)
         .then((res) => {
           console.log(res);
           toast.success("Payment Done!", {

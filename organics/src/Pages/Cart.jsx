@@ -5,6 +5,7 @@ import { Link as RouterLink } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { baseUrl } from "../../config/confg";
 export default function Cart() {
   const [cartdata, setCartData] = useState([]);
   const [load, setLoad] = useState(false);
@@ -12,7 +13,7 @@ export default function Cart() {
   useEffect(() => {
     setLoad(true);
     axios
-      .get(`https://orgaincspro.onrender.com/cartdata`)
+      .get(`${baseUrl}/cartdata`)
       .then((res) => {
         // console.log(res);
         setLoad(false);
@@ -24,7 +25,7 @@ export default function Cart() {
   }, []);
   const delefromcart = (itemId) => {
     axios
-      .delete(`https://orgaincspro.onrender.com/cartdata/${itemId}`)
+      .delete(`${baseUrl}/cartdata/${itemId}`)
       .then((res) => {
         console.log(res);
         setCartData(cartdata.filter((item) => item.id !== itemId));

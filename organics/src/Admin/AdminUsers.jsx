@@ -6,6 +6,7 @@ import TableIndid from "./Loding/TableIndid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SuperDashBoard from "./SuperDashBoard";
+import { baseUrl } from "../../config/confg";
 export default function AdminUsers() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -14,7 +15,7 @@ export default function AdminUsers() {
   const admingetdata = (page) => {
     setLoad(true);
     axios
-      .get(`https://orgaincspro.onrender.com/users?_limit=10&_page=${page}`)
+      .get(`${baseUrl}/users?_limit=10&_page=${page}`)
       .then((res) => {
         setLoad(false);
         setData(res.data);
@@ -36,7 +37,7 @@ export default function AdminUsers() {
   // Delete\
   const handledelteusers = (id) => {
     axios
-      .delete(`https://orgaincspro.onrender.com/users/${id}`)
+      .delete(`${baseUrl}/users/${id}`)
       .then(function (res) {
         console.log(res);
         toast.success(`Deleted Usres with ID ${id} successfully`, {
@@ -46,6 +47,9 @@ export default function AdminUsers() {
       })
       .catch(function (error) {
         console.error("Error deleting:", error);
+        toast.info(`User can not be Deleted! `, {
+          position: toast.POSITION.TOP_CENTER,
+        });
       });
   };
   return (

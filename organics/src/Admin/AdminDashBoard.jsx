@@ -5,6 +5,7 @@ import TableIndid from "./Loding/TableIndid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SuperDashBoard from "./SuperDashBoard";
+import { baseUrl } from "../../config/confg";
 export default function AdminDashBoard() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -14,9 +15,7 @@ export default function AdminDashBoard() {
   const admingetdata = (page) => {
     setLoad(true);
     axios
-      .get(
-        `https://orgaincspro.onrender.com/orgproducts?_limit=10&_page=${page}`
-      )
+      .get(`${baseUrl}/orgproducts?_limit=10&_page=${page}`)
       .then((res) => {
         // console.log(res.data);
         setLoad(false);
@@ -64,16 +63,18 @@ export default function AdminDashBoard() {
     event.preventDefault();
     // console.log(formData);
     axios
-      .post(`https://orgaincspro.onrender.com/orgproducts`, formData)
+      .post(`${baseUrl}/orgproducts`, formData)
       .then((response) => {
         console.log("Response:", response.data);
         admingetdata(page);
         toast.success(`Added Product successfully`, {
           position: toast.POSITION.TOP_CENTER,
         });
+        document.getElementById("my_modal_1").close();
       })
       .catch((error) => {
         console.error("Error:", error);
+        document.getElementById("my_modal_1").close();
       });
   };
 
@@ -81,7 +82,7 @@ export default function AdminDashBoard() {
   const handleviewpop = (id) => {
     document.getElementById("my_modal_2").showModal();
     axios
-      .get(`https://orgaincspro.onrender.com/orgproducts/${id}`)
+      .get(`${baseUrl}/orgproducts/${id}`)
       .then((res) => {
         // console.log(res);
         setShowsingle(res.data);
@@ -96,7 +97,7 @@ export default function AdminDashBoard() {
     document.getElementById("edit_modal").showModal();
     // handleEditFormSubmit(id);
     axios
-      .get(`https://orgaincspro.onrender.com/orgproducts/${id}`)
+      .get(`${baseUrl}/orgproducts/${id}`)
       .then((res) => {
         console.log(res.data);
         setEditdata(res.data);
@@ -108,7 +109,7 @@ export default function AdminDashBoard() {
   // Delete function
   const handleDelete = (id) => {
     axios
-      .delete(`https://orgaincspro.onrender.com/orgproducts/${id}`)
+      .delete(`${baseUrl}/orgproducts/${id}`)
       .then(function (res) {
         console.log(res);
         toast.success(`Deleted Product with ID ${id} successfully`, {
@@ -123,12 +124,17 @@ export default function AdminDashBoard() {
   const handleEditFormSubmit = (e) => {
     e.preventDefault();
     axios
-      .put(`https://orgaincspro.onrender.com/orgproducts`, editdata)
+      .put(`${baseUrl}/orgproducts`, editdata)
       .then((res) => {
         console.log(res);
+        document.getElementById("edit_modal").close();
       })
       .catch((err) => {
         console.log(err);
+        toast.info(`Issue With Edit!`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        document.getElementById("edit_modal").close();
       });
   };
 

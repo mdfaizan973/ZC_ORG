@@ -3,6 +3,7 @@ import ProductsCarload from "./LoadingUI/ProductsCarload";
 import OrgPro from "./Cards/OrgPro";
 import axios from "axios";
 import Navbar from "../Components/Navbar";
+import { baseUrl } from "../../config/confg";
 export default function OrganicPro() {
   const [orgData, setOrgData] = useState([]);
   const [page, setPage] = useState(1);
@@ -15,7 +16,7 @@ export default function OrganicPro() {
     try {
       setLoad(true);
       const categoryParam = filter ? `category=${filter}` : "";
-      const url = `https://orgaincspro.onrender.com/orgproducts?${categoryParam}&_limit=${limit}&_page=${page}`;
+      const url = `${baseUrl}/orgproducts?${categoryParam}&_limit=${limit}&_page=${page}`;
 
       const response = await axios.get(url);
 
@@ -43,11 +44,11 @@ export default function OrganicPro() {
   const addToCart = (id) => {
     // get for cart
     axios
-      .get(`https://orgaincspro.onrender.com/orgproducts/${id}`)
+      .get(`${baseUrl}/orgproducts/${id}`)
       .then((res) => {
         // console.warn(res.data);
         axios
-          .post(`https://orgaincspro.onrender.com/cartdata`, res.data)
+          .post(`${baseUrl}/cartdata`, res.data)
           .then((res) => {
             console.warn(res.data);
           })

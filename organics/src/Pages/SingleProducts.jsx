@@ -6,6 +6,7 @@ import DiscriptionLoad from "./LoadingUI/DiscriptionLoad";
 import Navbar from "../Components/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { baseUrl } from "../../config/confg";
 export default function SingleProducts() {
   let { id } = useParams();
   const [data, setData] = useState({});
@@ -13,7 +14,7 @@ export default function SingleProducts() {
   const getSingleData = (id) => {
     setLoad(true);
     axios
-      .get(`https://orgaincspro.onrender.com/orgproducts/${id}`)
+      .get(`${baseUrl}/orgproducts/${id}`)
       .then((res) => {
         setLoad(false);
         setData(res.data);
@@ -32,11 +33,11 @@ export default function SingleProducts() {
       position: toast.POSITION.TOP_CENTER,
     });
     axios
-      .get(`https://orgaincspro.onrender.com/orgproducts/${id}`)
+      .get(`${baseUrl}/orgproducts/${id}`)
       .then((res) => {
         console.warn(res.data);
         axios
-          .post(`https://orgaincspro.onrender.com/cartdata`, res.data)
+          .post(`${baseUrl}/cartdata`, res.data)
           .then((res) => {
             console.warn(res.data);
           })
