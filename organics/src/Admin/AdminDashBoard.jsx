@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import AdminNav from "./AdminNav";
 import TableIndid from "./Loding/TableIndid";
@@ -15,6 +15,7 @@ export default function AdminDashBoard() {
   const [load, setLoad] = useState(false);
   const [prodData, setProdData] = useState([]);
   const [searchProdValue, setSearchProdValue] = useState("");
+  const editIdRef = useRef("");
 
   const admingetdata = (page) => {
     setLoad(true);
@@ -114,6 +115,7 @@ export default function AdminDashBoard() {
   // Edite function
   const handleEdit = (id) => {
     document.getElementById("edit_modal").showModal();
+    editIdRef.current = id;
     // handleEditFormSubmit(id);
     axios
       .get(`${baseUrl}/orgproducts/${id}`)
@@ -143,9 +145,12 @@ export default function AdminDashBoard() {
   const handleEditFormSubmit = (e) => {
     e.preventDefault();
     axios
-      .put(`${baseUrl}/orgproducts`, editdata)
+      .put(`${baseUrl}/orgproducts/${editIdRef.current}`, editdata)
       .then((res) => {
         console.log(res);
+        toast.success(`Successfully Edited!`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
         document.getElementById("edit_modal").close();
       })
       .catch((err) => {
