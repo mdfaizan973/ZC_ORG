@@ -3,6 +3,7 @@
 export default function DiscriptionLoad() {
   return (
     <div>
+      {/*  */}
       <section className="w-screen">
         <div className="m-4 mx-auto max-w-screen-lg rounded-md border border-gray-100 text-gray-600 shadow-md">
           <div className="relative flex h-full flex-col text-gray-600 md:flex-row">
