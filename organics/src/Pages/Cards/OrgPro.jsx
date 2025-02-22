@@ -1,11 +1,25 @@
 // import React from "react";
 import PropTypes from "prop-types";
+import { useState } from "react";
+import { AiOutlineHeart } from "react-icons/ai";
+import { FiShare2 } from "react-icons/fi";
 import { Link as RouterLink } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export default function OrgPro(props) {
   const { image, price, title, addtocart, id } = props;
   // image , price ,title
+
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const handleShare = () => {
+    const url = `${window.location.origin}/productdiscription/${id}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setShowTooltip(true);
+      setTimeout(() => setShowTooltip(false), 1000); // Hide after 2 sec
+    });
+  };
+
   return (
     <div>
       <ToastContainer />
@@ -23,10 +37,30 @@ export default function OrgPro(props) {
           {/* <span className="text-red-400 font-bold mr-3 uppercase text-xs">
               View
             </span> */}
-          <div className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-1 px-2 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
-            <RouterLink to={`/productdiscription/${id}`}>
-              <div className="mt-px">Details</div>
-            </RouterLink>
+          <div className="flex justify-between items-center gap-3">
+            {/* Details Button */}
+            <div className="relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-1 px-3 font-sans text-xs font-bold uppercase text-white">
+              <RouterLink to={`/productdiscription/${id}`}>
+                <div>Details</div>
+              </RouterLink>
+            </div>
+
+            <div>
+              <button className="text-red-500 hover:text-red-600 text-xl">
+                <AiOutlineHeart />
+              </button>
+              <button
+                className="text-blue-500 hover:text-blue-600 text-xl ml-2"
+                onClick={handleShare}
+              >
+                <FiShare2 />
+              </button>
+              {showTooltip && (
+                <div className="absolute whitespace-nowrap bg-gray-800 text-white text-xs font-semibold py-1 px-2 rounded-md shadow-md">
+                  Link Copied!
+                </div>
+              )}
+            </div>
           </div>
           {/* <span className="text-red-400 mr-3 text-xs">{title}</span> */}
           <p className="text-lg font-bold text-black truncate block capitalize">

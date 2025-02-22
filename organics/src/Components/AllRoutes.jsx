@@ -17,6 +17,7 @@ import Orders from "../Admin/Orders";
 import SuperDashBoard from "../Admin/SuperDashBoard";
 import { useEffect, useState } from "react";
 import AdminAnalytics from "../Admin/AdminAnalytics";
+import PageNotFound from "./PageNotFound";
 export default function AllRoutes() {
   const [isOrgAdmin, setisOrgAdmin] = useState(false);
 
@@ -29,6 +30,7 @@ export default function AllRoutes() {
     <div>
       <Routes>
         <Route path="/" element={<Home />}></Route>
+        <Route path="*" element={<PageNotFound />}></Route>
         <Route path="/blogs" element={<Blog />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/register" element={<SignupPage />}></Route>
