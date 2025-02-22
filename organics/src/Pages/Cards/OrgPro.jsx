@@ -11,6 +11,7 @@ export default function OrgPro(props) {
   // image , price ,title
 
   const [showTooltip, setShowTooltip] = useState(false);
+  const [showWishlist, setShowWishlist] = useState(false);
 
   const handleShare = () => {
     const url = `${window.location.origin}/productdiscription/${id}`;
@@ -18,6 +19,11 @@ export default function OrgPro(props) {
       setShowTooltip(true);
       setTimeout(() => setShowTooltip(false), 1000); // Hide after 2 sec
     });
+  };
+
+  const handleWishlist = () => {
+    setShowWishlist(true);
+    setTimeout(() => setShowWishlist(false), 1000);
   };
 
   return (
@@ -46,9 +52,18 @@ export default function OrgPro(props) {
             </div>
 
             <div>
-              <button className="text-red-500 hover:text-red-600 text-xl">
+              <button
+                className="text-red-500 hover:text-red-600 text-xl"
+                onClick={handleWishlist}
+              >
                 <AiOutlineHeart />
               </button>
+              {showWishlist && (
+                <div className="absolute whitespace-nowrap bg-red-800 text-white text-xs font-semibold py-1 px-2 rounded-md shadow-md">
+                  Work in progres!
+                </div>
+              )}
+
               <button
                 className="text-blue-500 hover:text-blue-600 text-xl ml-2"
                 onClick={handleShare}

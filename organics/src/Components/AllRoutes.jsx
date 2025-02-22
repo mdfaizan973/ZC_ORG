@@ -8,24 +8,25 @@ import Cart from "../Pages/Cart";
 import OrganicPro from "../Pages/OrganicPro";
 import SingleProducts from "../Pages/SingleProducts";
 import AdminDashBoard from "../Admin/AdminDashBoard";
-import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoute, { AdminProtectedRoute } from "./ProtectedRoute";
 import AdminUsers from "../Admin/AdminUsers";
 import ChakOutPage from "../Pages/ChakOutPage";
 import ShpoingDone from "../Pages/ShpoingDone";
 import UpCaoming from "../Pages/UpCaoming";
 import Orders from "../Admin/Orders";
 import SuperDashBoard from "../Admin/SuperDashBoard";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import AdminAnalytics from "../Admin/AdminAnalytics";
 import PageNotFound from "./PageNotFound";
+
 export default function AllRoutes() {
-  const [isOrgAdmin, setisOrgAdmin] = useState(false);
+  // const [isOrgAdmin, setisOrgAdmin] = useState(false);
 
-  useEffect(() => {
-    const isAdmin = sessionStorage.getItem("isOrganicAdmin");
+  // useEffect(() => {
+  //   const isAdmin = sessionStorage.getItem("isOrganicAdmin");
 
-    setisOrgAdmin(isAdmin === "true");
-  }, []);
+  //   setisOrgAdmin(isAdmin === "true");
+  // }, []);
   return (
     <div>
       <Routes>
@@ -55,18 +56,34 @@ export default function AllRoutes() {
         ></Route>
         <Route
           path="/productdiscription/:id"
-          element={<ProtectedRoute component={SingleProducts} />}
+          element={<SingleProducts />}
         ></Route>
 
-        {isOrgAdmin && (
-          <>
-            <Route path="/admin-portal" element={<SuperDashBoard />}></Route>
-            <Route path="/adminproducts" element={<AdminDashBoard />}></Route>
-            <Route path="/adminusers" element={<AdminUsers />}></Route>
-            <Route path="/orders" element={<Orders />}></Route>
-            <Route path="/admin-analytics" element={<AdminAnalytics />}></Route>
-          </>
-        )}
+        {/* {isOrgAdmin && (
+          <> */}
+        <Route
+          path="/admin-portal"
+          element={<AdminProtectedRoute component={SuperDashBoard} />}
+        />
+        <Route
+          path="/adminproducts"
+          element={<AdminProtectedRoute component={AdminDashBoard} />}
+        />
+        <Route
+          path="/adminusers"
+          element={<AdminProtectedRoute component={AdminUsers} />}
+        />
+        <Route
+          path="/orders"
+          element={<AdminProtectedRoute component={Orders} />}
+        />
+        <Route
+          path="/admin-analytics"
+          element={<AdminProtectedRoute component={AdminAnalytics} />}
+        />
+
+        {/* </>
+        )} */}
       </Routes>
     </div>
   );
