@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import axios from "axios";
 import Navbar from "../Components/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { baseUrl, baseUrl2 } from "../../config/confg";
+import { baseUrl2 } from "../../config/confg";
 import { AiFillLock, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
@@ -51,7 +50,7 @@ export default function SignupPage() {
       return;
     } else {
       const user_data = await postData(
-        `${baseUrl2}/users/registers`,
+        `${baseUrl2}/users/register`,
         updatedUserData
       );
 
@@ -73,12 +72,21 @@ export default function SignupPage() {
     <>
       <Navbar />
       <ToastContainer />
-      <div className=" w-full h-screen flex items-center justify-center">
+
+      <div className="flex flex-col md:flex-row items-center justify-center min-h-screen p-4">
+        {/* Left Side - Image */}
+        <div className="w-full md:w-1/2 flex justify-center mb-6 md:mb-0">
+          <img
+            src="/loginPageUIImg.jpg"
+            alt="Login"
+            className="w-full max-w-md rounded-lg"
+          />
+        </div>
+
+        {/* Right Side - Form */}
         <div className="relative flex w-96 flex-col rounded-xl bg-white shadow-md">
-          <div className="relative mx-4 -mt-6 mb-4 grid h-28 place-items-center overflow-hidden rounded-xl bg-gradient-to-tr from-green-600 to-green-400 bg-clip-border text-white shadow-lg shadow-green-500/40">
-            <h3 className="block font-sans text-3xl font-semibold leading-snug tracking-normal text-white antialiased">
-              Create Account
-            </h3>
+          <div className="relative mx-4 -mt-6 mb-4 grid h-28 place-items-center overflow-hidden rounded-xl bg-gradient-to-tr from-green-600 to-green-400 text-white shadow-lg shadow-green-500/40">
+            <h3 className="text-3xl font-semibold">Create Account</h3>
           </div>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6">
             <div className="relative h-11 w-full min-w-[200px]">
@@ -186,6 +194,17 @@ export default function SignupPage() {
             >
               Sign Up
             </button>
+            <p className="mt-6 flex justify-center font-sans text-sm font-light leading-normal text-inherit antialiased">
+              Already an account?
+              <RouterLink to="/login">
+                <a
+                  href="#signup"
+                  className="ml-1 block font-sans text-sm font-bold leading-normal text-green-500 antialiased"
+                >
+                  LogIn
+                </a>
+              </RouterLink>
+            </p>
           </form>
         </div>
       </div>

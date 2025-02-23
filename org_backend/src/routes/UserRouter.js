@@ -9,7 +9,7 @@ var jwt = require("jsonwebtoken");
  * @desc    Register a new user
  * @access  Public
  */
-UserRouter.post("/registers", async (req, res) => {
+UserRouter.post("/register", async (req, res) => {
   try {
     const { pass, ...otherData } = req.body; // Extract password separately
     const { email } = req.body;
