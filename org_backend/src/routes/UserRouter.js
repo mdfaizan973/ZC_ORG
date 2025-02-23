@@ -16,7 +16,7 @@ UserRouter.post("/registers", async (req, res) => {
 
     const isUserPresent = await UserModel.findOne({ email });
     if (isUserPresent) {
-      return res.status(400).json({ message: "User Already Present!" });
+      return res.status(201).json({ message: "User Already Present!" });
     }
 
     // Hash the password before saving to the database
@@ -100,7 +100,12 @@ UserRouter.post("/login", async (req, res) => {
 UserRouter.get("/", async (req, res) => {
   try {
     const userData = await UserModel.find(); // Fetch all users from the database
-    res.status(200).json(userData);
+
+    const userList = {
+      total_users: userData.length,
+      ...userData,
+    };
+    res.status(200).json(userList);
   } catch (error) {
     console.error("Error fetching users:", error);
     res.status(500).json({ message: "Internal Server Error" });
