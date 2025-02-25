@@ -77,7 +77,7 @@ export default function SignupPage() {
         {/* Left Side - Image */}
         <div className="w-full md:w-1/2 flex justify-center mb-6 md:mb-0">
           <img
-            src="/loginPageUIImg.jpg"
+            src="/5b864f906a901f259e54148f1dc8278f.jpg"
             alt="Login"
             className="w-full max-w-md rounded-lg"
           />
