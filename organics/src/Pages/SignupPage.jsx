@@ -20,7 +20,6 @@ export default function SignupPage() {
   });
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleString();
-
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     setFormData({
