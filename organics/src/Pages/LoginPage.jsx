@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { BiExit } from "react-icons/bi";
 import Navbar from "../Components/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { baseUrl, baseUrl2 } from "../../config/confg";
-import { postData } from "../utils/utils";
+import { baseUrl2 } from "../../config/confg";
+import { hasToken, postData } from "../utils/utils";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -59,20 +58,19 @@ export default function LoginPage() {
   // };
   // For Private Route
   useEffect(() => {
-    let userLogin = sessionStorage.getItem("user_loged_in");
-    if (userLogin) {
-      // navigate("/");
+    let isUserLogin = hasToken();
+    if (isUserLogin) {
       setIslogin(true);
     }
   }, []);
 
   const handleLogOut = () => {
-    sessionStorage.removeItem("user_loged_in");
-    sessionStorage.removeItem("isOrganicAdmin");
+    sessionStorage.removeItem("OranicSessionStorge");
     setIslogin(false);
     toast.error("Logout Successful", {
       position: toast.POSITION.TOP_CENTER,
     });
+    window.location.reload();
   };
 
   const handleLogin = async () => {

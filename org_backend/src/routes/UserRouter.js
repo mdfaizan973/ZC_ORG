@@ -86,8 +86,6 @@ UserRouter.post("/login", async (req, res) => {
           res.status(401).json({ message: "Invalid credentials" });
         }
       });
-
-      console.log(user);
     } else {
       res.status(404).json({ message: "User not found" });
     }

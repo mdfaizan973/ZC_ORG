@@ -9,18 +9,23 @@ import {
 
 import { Link as RouterLink } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import { getSessionData } from "../utils/utils";
 export default function Navbar() {
   const [showSidebar, setShowSidebar] = useState(false);
-  const [isOrgAdmin, setisOrgAdmin] = useState(false);
+  const [isOrgAdmin, setIsOrgAdmin] = useState(false);
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
   };
 
   useEffect(() => {
-    const isAdmin = sessionStorage.getItem("isOrganicAdmin");
+    let roleId = getSessionData("role_id");
 
-    setisOrgAdmin(isAdmin === "true");
+    if ([1, 2].includes(roleId)) {
+      setIsOrgAdmin(true);
+    } else {
+      setIsOrgAdmin(false);
+    }
   }, []);
 
   return (

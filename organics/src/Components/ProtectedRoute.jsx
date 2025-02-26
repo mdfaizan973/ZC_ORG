@@ -1,12 +1,15 @@
 // import React from 'react'
 import PropTypes from "prop-types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getSessionData, hasToken } from "../utils/utils";
+import PageNotFound from "./PageNotFound";
 export default function ProtectedRoute({ component: Component }) {
   const navigate = useNavigate();
   useEffect(() => {
-    let userLogin = sessionStorage.getItem("user_loged_in");
-    if (!userLogin) {
+    let isUserLogin = hasToken();
+
+    if (!isUserLogin) {
       navigate("/login");
     }
   }, [navigate]);
@@ -14,17 +17,36 @@ export default function ProtectedRoute({ component: Component }) {
   return <Component />;
 }
 
+// export function AdminProtectedRoute({ component: Component }) {
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     let isUserLogin = hasToken();
+
+//     if (!isUserLogin) {
+//       navigate("/login");
+//     }
+//   }, [navigate]);
+
+//   return <Component />;
+// }
 export function AdminProtectedRoute({ component: Component }) {
   const navigate = useNavigate();
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
-    let isAdmin = sessionStorage.getItem("isOrganicAdmin");
-    if (!isAdmin) {
-      navigate("/login");
+    let isUserLogin = hasToken();
+    let roleId = getSessionData("role_id");
+
+    if (isUserLogin && [1, 2].includes(roleId)) {
+      setIsAuthorized(true);
     }
+    // else {
+    //   navigate("/login");
+    // }
   }, [navigate]);
 
-  return <Component />;
+  return isAuthorized ? <Component /> : <PageNotFound />;
 }
 
 ProtectedRoute.propTypes = {

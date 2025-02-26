@@ -45,10 +45,49 @@ export const fetchData = async (url, token = null) => {
 //   }
 // };
 
+// export const postData = async (url, data, token = null) => {
+//   const toastId = toast.loading("We are prossing... 🚀", {
+//     position: toast.POSITION.TOP_CENTER,
+//   });
+//   console.log(data);
+
+//   try {
+//     const headers = {
+//       "Content-Type": "application/json",
+//       ...(token && { Authorization: `Bearer ${token}` }),
+//     };
+
+//     const response = await axios.post(url, data, { headers });
+//     toast.dismiss(toastId); // Remove the loading toast on success
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error posting data:", error);
+
+//     let errorMessage = "Oops! Something went wrong.🚀";
+
+//     toast.error(errorMessage, {
+//       position: toast.POSITION.TOP_CENTER,
+//     });
+
+//     throw error;
+//   } finally {
+//     toast.dismiss(toastId); // Ensure loader disappears even on error
+//   }
+// };
 export const postData = async (url, data, token = null) => {
-  const toastId = toast.loading("We are prossing... 🚀", {
+  const toastId = toast.loading("We are processing... 🚀", {
     position: toast.POSITION.TOP_CENTER,
   });
+
+  console.log("Data being sent:", data);
+
+  if (!data || Object.keys(data).length === 0) {
+    toast.dismiss(toastId);
+    toast.error("No data provided for the request!", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+    return;
+  }
 
   try {
     const headers = {
@@ -64,6 +103,13 @@ export const postData = async (url, data, token = null) => {
     console.error("Error posting data:", error);
 
     let errorMessage = "Oops! Something went wrong.🚀";
+
+    if (error.response?.status === 401) {
+      errorMessage =
+        "Invalid credentials. Please check your email and password.";
+    } else if (error.response?.status === 404) {
+      errorMessage = "User not found. Please check your email.";
+    }
 
     toast.error(errorMessage, {
       position: toast.POSITION.TOP_CENTER,

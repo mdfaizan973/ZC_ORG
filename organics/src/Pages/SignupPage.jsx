@@ -34,7 +34,7 @@ export default function SignupPage() {
     const updatedUserData = {
       ...formData,
       date: formattedDate,
-      role_id: 3,
+      role_id: 2,
     };
 
     if (
