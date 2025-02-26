@@ -5,56 +5,58 @@ import { BiExit } from "react-icons/bi";
 import Navbar from "../Components/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { baseUrl } from "../../config/confg";
+import { baseUrl, baseUrl2 } from "../../config/confg";
+import { postData } from "../utils/utils";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [islogin, setIslogin] = useState(false);
   const navigate = useNavigate();
-  const handleLogin = () => {
-    if (email === "" || pass === "") {
-      toast.error("Please enter both email and password", {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      return;
-    } else if (email === "admin123@admin.com" && pass === "1234pass") {
-      toast.success("Admin LogIn SuccessFul!", {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      sessionStorage.setItem("user_loged_in", "true");
-      sessionStorage.setItem("isOrganicAdmin", "true");
-      setTimeout(() => {
-        // navigate("/admin-portal");
-        navigate("/");
-      }, 1200);
-    } else {
-      axios
-        .get(`${baseUrl}/users?email=${email}&pass=${pass}`)
-        .then((res) => {
-          if (res.data.length > 0) {
-            toast.success("LogIn SuccessFul!", {
-              position: toast.POSITION.TOP_CENTER,
-            });
-            sessionStorage.setItem("user_loged_in", "true");
-            sessionStorage.setItem("isOrganicAdmin", "false");
 
-            setTimeout(() => {
-              navigate("/");
-            }, 1200);
-          } else {
-            toast.error("Login failed. Please check your email and password.", {
-              position: toast.POSITION.TOP_CENTER,
-            });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          toast.error("An error occurred while logging in. Please try again.", {
-            position: toast.POSITION.TOP_CENTER,
-          });
-        });
-    }
-  };
+  // const handleLoginn = () => {
+  //   if (email === "" || pass === "") {
+  //     toast.error("Please enter both email and password", {
+  //       position: toast.POSITION.TOP_CENTER,
+  //     });
+  //     return;
+  //   } else if (email === "admin123@admin.com" && pass === "1234pass") {
+  //     toast.success("Admin LogIn SuccessFul!", {
+  //       position: toast.POSITION.TOP_CENTER,
+  //     });
+  //     sessionStorage.setItem("user_loged_in", "true");
+  //     sessionStorage.setItem("isOrganicAdmin", "true");
+  //     setTimeout(() => {
+  //       // navigate("/admin-portal");
+  //       navigate("/");
+  //     }, 1200);
+  //   } else {
+  //     axios
+  //       .get(`${baseUrl}/users?email=${email}&pass=${pass}`)
+  //       .then((res) => {
+  //         if (res.data.length > 0) {
+  //           toast.success("LogIn SuccessFul!", {
+  //             position: toast.POSITION.TOP_CENTER,
+  //           });
+  //           sessionStorage.setItem("user_loged_in", "true");
+  //           sessionStorage.setItem("isOrganicAdmin", "false");
+
+  //           setTimeout(() => {
+  //             navigate("/");
+  //           }, 1200);
+  //         } else {
+  //           toast.error("Login failed. Please check your email and password.", {
+  //             position: toast.POSITION.TOP_CENTER,
+  //           });
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //         toast.error("An error occurred while logging in. Please try again.", {
+  //           position: toast.POSITION.TOP_CENTER,
+  //         });
+  //       });
+  //   }
+  // };
   // For Private Route
   useEffect(() => {
     let userLogin = sessionStorage.getItem("user_loged_in");
@@ -71,6 +73,46 @@ export default function LoginPage() {
     toast.error("Logout Successful", {
       position: toast.POSITION.TOP_CENTER,
     });
+  };
+
+  const handleLogin = async () => {
+    const updatedUserData = {
+      email: email,
+      pass: pass,
+    };
+
+    if (email === "" || pass === "") {
+      toast.error("Please enter both email and password", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    } else {
+      const user_data = await postData(
+        `${baseUrl2}/users/login`,
+        updatedUserData
+      );
+
+      if (
+        user_data?.userDetails &&
+        Object.keys(user_data.userDetails).length > 0
+      ) {
+        sessionStorage.setItem(
+          "OranicSessionStorge",
+          JSON.stringify(user_data.userDetails)
+        );
+        setTimeout(() => {
+          navigate("/");
+        }, 1200);
+
+        toast.success(`${user_data?.msg}`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      } else {
+        toast.info(`${user_data?.msg}`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      }
+    }
   };
 
   return (

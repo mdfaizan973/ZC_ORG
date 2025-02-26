@@ -57,32 +57,37 @@ UserRouter.post("/login", async (req, res) => {
     const { pass, email } = req.body;
 
     // Find user by email
-    const user = await UserModel.find({ email });
+    const user = await UserModel.findOne({ email });
 
-    if (user.length > 0) {
+    if (user) {
       // Compare input password with stored hashed password
-      bcrypt.compare(pass, user[0].pass, function (err, result) {
+      bcrypt.compare(pass, user.pass, function (err, result) {
         if (err) {
           console.error("Error comparing password:", err);
           return res.status(500).json({ message: "Error comparing password" });
         }
+
         if (result === true) {
           // Generate JWT token for authentication
           const token = jwt.sign(
-            { userID: user[0]._id, user: user[0].name },
-            "oganicstore"
+            { userID: user._id, user: user.name },
+            "oganicstore",
+            { expiresIn: "7d" }
           );
+
           res.status(201).json({
             msg: "Login successful",
             userDetails: {
               token: token,
-              ...user[0]._doc, // Return user details along with token
+              ...user._doc, // Return user details along with token
             },
           });
         } else {
           res.status(401).json({ message: "Invalid credentials" });
         }
       });
+
+      console.log(user);
     } else {
       res.status(404).json({ message: "User not found" });
     }

@@ -63,7 +63,7 @@ export const postData = async (url, data, token = null) => {
   } catch (error) {
     console.error("Error posting data:", error);
 
-    let errorMessage = "Oops! Something went wrong while sending data. 🚀";
+    let errorMessage = "Oops! Something went wrong.🚀";
 
     toast.error(errorMessage, {
       position: toast.POSITION.TOP_CENTER,
@@ -72,5 +72,33 @@ export const postData = async (url, data, token = null) => {
     throw error;
   } finally {
     toast.dismiss(toastId); // Ensure loader disappears even on error
+  }
+};
+
+export const getSessionData = (key) => {
+  try {
+    const data = sessionStorage.getItem("OranicSessionStorge");
+    if (data) {
+      const parsedData = JSON.parse(data);
+      return parsedData[key] ?? null; // Return the value or null if key doesn't exist
+    }
+    return null;
+  } catch (error) {
+    console.error("Error retrieving session data:", error);
+    return null;
+  }
+};
+
+export const hasToken = () => {
+  try {
+    const data = sessionStorage.getItem("OranicSessionStorge");
+    if (data) {
+      const parsedData = JSON.parse(data);
+      return !!parsedData.token; // Return true if token exists, false otherwise
+    }
+    return false;
+  } catch (error) {
+    console.error("Error checking token:", error);
+    return false;
   }
 };
