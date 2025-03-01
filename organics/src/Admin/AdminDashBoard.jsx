@@ -178,6 +178,9 @@ export default function AdminDashBoard() {
       <ToastContainer />
       <div>
         <AdminNav />
+
+        <ProductForm />
+
         <div className="min-h-screen ">
           <div className="flex">
             {/* Main-Content */}
@@ -900,5 +903,586 @@ export default function AdminDashBoard() {
         </div>
       </dialog>
     </>
+  );
+}
+
+import { FaClosedCaptioning, FaFileUpload } from "react-icons/fa";
+
+function ProductForm() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  const modalRef = useRef(null);
+
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+
+  // Handle click outside to close modal
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        closeModal();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]); // Removed closeModal from dependencies
+
+  // Handle image upload
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAddProducts = (e) => {
+    e.preventDefault();
+  };
+
+  return (
+    <div>
+      <button
+        className="m-3 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg self-end mt-3"
+        type="button"
+        onClick={openModal}
+      >
+        Add Product Form is creted just need to impliment functionality.
+      </button>
+
+      {/* Modal Overlay */}
+      {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center p-4">
+          {/* Modal Content */}
+          <div
+            ref={modalRef}
+            className="bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+          >
+            <div className="sticky top-0 bg-white z-10 flex justify-between items-center p-4 border-b">
+              <h2 className="text-xl font-bold text-gray-800">
+                Add New Product
+              </h2>
+              <button
+                onClick={closeModal}
+                className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+              >
+                <FaClosedCaptioning className="h-6 w-6 text-gray-500" />
+              </button>
+            </div>
+
+            <form className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Left Column */}
+                <div className="space-y-6">
+                  {/* Basic Information */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
+                      Basic Information
+                    </h3>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="category"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Category *
+                      </label>
+                      <select
+                        id="category"
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        required
+                      >
+                        <option value="">Select a category</option>
+                        <option value="fruits">Fruits</option>
+                        <option value="vegetables">Vegetables</option>
+                        <option value="grains">Grains</option>
+                        <option value="dairy">Dairy</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="title"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Title *
+                      </label>
+                      <input
+                        type="text"
+                        id="title"
+                        placeholder="e.g. Organic Mango"
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="description"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Description *
+                      </label>
+                      <textarea
+                        id="description"
+                        rows={3}
+                        placeholder="Describe your product..."
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="image"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Product Image *
+                      </label>
+                      <div className="flex items-center space-x-4">
+                        <div className="flex-1">
+                          <label
+                            htmlFor="image-upload"
+                            className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
+                          >
+                            {imagePreview ? (
+                              <img
+                                src={imagePreview || "/placeholder.svg"}
+                                alt="Preview"
+                                className="h-full object-contain"
+                              />
+                            ) : (
+                              <div className="text-center">
+                                <FaFileUpload className="mx-auto h-8 w-8 text-gray-400" />
+                                <p className="mt-1 text-sm text-gray-500">
+                                  Click to upload image
+                                </p>
+                              </div>
+                            )}
+                            <input
+                              id="image-upload"
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={handleImageChange}
+                              // required
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Pricing Information */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
+                      Pricing Information
+                    </h3>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="price_inr"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Price (INR) *
+                        </label>
+                        <input
+                          type="number"
+                          id="price_inr"
+                          placeholder="e.g. 120"
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="discount_price_inr"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Discount Price (INR)
+                        </label>
+                        <input
+                          type="number"
+                          id="discount_price_inr"
+                          placeholder="e.g. 100"
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="discount_percentage"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Discount Percentage
+                        </label>
+                        <input
+                          type="number"
+                          id="discount_percentage"
+                          placeholder="e.g. 15"
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="eta"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          ETA
+                        </label>
+                        <input
+                          type="text"
+                          id="eta"
+                          placeholder="e.g. 2-5 business days"
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Expiration & Storage */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
+                      Expiration & Storage
+                    </h3>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="expiration_date"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Expiration Date
+                        </label>
+                        <input
+                          type="date"
+                          id="expiration_date"
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="storage_instructions"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Storage Instructions
+                      </label>
+                      <input
+                        type="text"
+                        id="storage_instructions"
+                        placeholder="e.g. Keep refrigerated for freshness"
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column */}
+                <div className="space-y-6">
+                  {/* Health Benefits */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
+                      Health Benefits
+                    </h3>
+
+                    <div className="space-y-2">
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="rich_in_vitamins"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor="rich_in_vitamins"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Rich in vitamins and antioxidants
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="improves_immunity"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor="improves_immunity"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Improves immunity
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="enhances_skin_health"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor="enhances_skin_health"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Enhances skin health
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Certifications */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
+                      Certifications
+                    </h3>
+
+                    <div className="space-y-2">
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="certified_organic"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor="certified_organic"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Certified Organic
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="certification_body"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Organic Certification Body
+                      </label>
+                      <select
+                        id="certification_body"
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      >
+                        <option value="">Select certification</option>
+                        <option value="USDA Organic">USDA Organic</option>
+                        <option value="India Organic">India Organic</option>
+                        <option value="EU Organic">EU Organic</option>
+                        <option value="JAS Organic">JAS Organic</option>
+                        <option value="EcoCert">EcoCert</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="sustainability"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Sustainability
+                      </label>
+                      <textarea
+                        id="sustainability"
+                        rows={2}
+                        placeholder="Describe sustainability practices..."
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Product Attributes */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
+                      Product Attributes
+                    </h3>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="pesticide_free"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor="pesticide_free"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Pesticide Free
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="non_gmo"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor="non_gmo"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Non-GMO
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="fair_trade"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor="fair_trade"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Fair Trade Certified
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="gluten_free"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor="gluten_free"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Gluten Free
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="vegan"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor="vegan"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Vegan
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="raw"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor="raw"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Raw
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="local_source"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor="local_source"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Local Source
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="harvested_by_hand"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor="harvested_by_hand"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Harvested by Hand
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="cruelty_free"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor="cruelty_free"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Cruelty Free
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Ingredients */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
+                      Ingredients
+                    </h3>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="organic_ingredients"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Organic Ingredients (separate with spaces)
+                      </label>
+                      <input
+                        type="text"
+                        id="organic_ingredients"
+                        placeholder="e.g. mango apple banana"
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Form Actions */}
+              <div className="mt-8 flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAddProducts}
+                  type="submit"
+                  className="px-4 py-2 bg-green-500 hover:bg-green-700 text-white font-semibold rounded-lg"
+                >
+                  Save Product
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
