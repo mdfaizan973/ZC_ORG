@@ -2,9 +2,11 @@ import { useNavigate } from "react-router-dom";
 import AdminNav from "./AdminNav";
 import PropTypes from "prop-types";
 import { AboutOrganic } from "../Pages/Landing/Home";
+import { useEffect, useState } from "react";
+import { getSessionData } from "../utils/utils";
 
 export default function SuperDashBoard({ show_descrition = true }) {
-  const cards = [
+  const [dashboardCard, setDashboardCard] = useState([
     {
       title: "Products",
       description:
@@ -45,12 +47,29 @@ export default function SuperDashBoard({ show_descrition = true }) {
         "https://i.pinimg.com/736x/08/d6/06/08d60626a00cf729346aa1107f7efe12.jpg",
       route: "/upcoming",
     },
-  ];
+  ]);
+  useEffect(() => {
+    let roleId = getSessionData("role_id");
+    if ([1].includes(roleId)) {
+      const newCard = {
+        title: "Sallers",
+        description:
+          "Manage all listed products, add new items, update details, and remove listings as needed.",
+        image:
+          "https://i.pinimg.com/736x/bf/5f/ae/bf5fae190185579182ecf210327e2df3.jpg",
+        route: "/adminproducts",
+      };
+
+      setDashboardCard([...dashboardCard, newCard]);
+    }
+  }, []);
+
   const navigate = useNavigate();
 
   const handleAdminDashboardRoute = (link) => {
     navigate(link);
   };
+
   return (
     <>
       <AdminNav />
@@ -64,7 +83,7 @@ export default function SuperDashBoard({ show_descrition = true }) {
         <h2 className="text-3xl font-bold text-green-700 mt-2 text-center">
           Organic Store (Admin Panel)
         </h2>
-        {cards.map((card, index) => (
+        {dashboardCard?.map((card, index) => (
           <div
             // to={card.route}
             onClick={() => handleAdminDashboardRoute(card.route)}
