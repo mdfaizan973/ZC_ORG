@@ -40,6 +40,10 @@ export default function AdminDashBoard() {
 
   // ------------------New API's--------------------------
   const [products, setProducts] = useState([]);
+  const [singleData, setSingleData] = useState({});
+  const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
 
   useEffect(() => {
     loadProducts();
@@ -50,14 +54,16 @@ export default function AdminDashBoard() {
     loadProducts();
   };
 
+  const handleEditProduts = (data) => {
+    setSingleData(data);
+  };
+
   const loadProducts = async () => {
     const data = await fetchData(`${baseUrl2}/products`);
     if (data) {
       setProducts(data);
     }
   };
-
-  console.log(196, products);
 
   return (
     <>
@@ -67,7 +73,10 @@ export default function AdminDashBoard() {
 
         <ProductForm
           handleAddProducts={handleAddProducts}
-          // dataForEdit={}
+          isOpen={isOpen}
+          openModal={openModal}
+          closeModal={closeModal}
+          dataForEdit={singleData}
         />
 
         {/* {products.map((product, index) => (
@@ -133,7 +142,13 @@ export default function AdminDashBoard() {
 
                         {/* Table */}
                         <div className="overflow-x-auto mt-4">
-                          <ProductTable products={products} />
+                          <ProductTable
+                            products={products}
+                            handleEditProduts={handleEditProduts}
+                            isOpen={isOpen}
+                            openModal={openModal}
+                            closeModal={closeModal}
+                          />
                         </div>
 
                         {/* Pagination */}
@@ -182,8 +197,13 @@ export default function AdminDashBoard() {
 import { FaClosedCaptioning, FaFileUpload } from "react-icons/fa";
 import { getSessionData, postData } from "../utils/utils";
 
-function ProductForm({ handleAddProducts, dataForEdit }) {
-  const [isOpen, setIsOpen] = useState(false);
+function ProductForm({
+  handleAddProducts,
+  dataForEdit,
+  isOpen,
+  openModal,
+  closeModal,
+}) {
   const [imagePreview, setImagePreview] = useState(null);
   const modalRef = useRef(null);
 
@@ -226,9 +246,6 @@ function ProductForm({ handleAddProducts, dataForEdit }) {
       }
     }
   }, [dataForEdit]);
-
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
 
   // Handle click outside to close modal
   useEffect(() => {
@@ -299,7 +316,7 @@ function ProductForm({ handleAddProducts, dataForEdit }) {
         type="button"
         onClick={openModal}
       >
-        Add Product
+        Add Product-
       </button>
 
       {/* Modal Overlay */}
@@ -1115,6 +1132,9 @@ function ProductCard({ product }) {
 ProductForm.propTypes = {
   handleAddProducts: PropTypes.func.isRequired, // Define the expected prop type
   dataForEdit: PropTypes.object.isRequired, // Define the expected prop type
+  isOpen: PropTypes.object.isRequired,
+  openModal: PropTypes.func.isRequired,
+  closeModal: PropTypes.func.isRequired,
 };
 
 ProductCard.propTypes = {
@@ -1154,7 +1174,13 @@ ProductCard.propTypes = {
 
 import { FaEdit, FaTrash, FaEye, FaCopy } from "react-icons/fa";
 
-function ProductTable({ products }) {
+function ProductTable({
+  products,
+  handleEditProduts,
+  isOpen,
+  openModal,
+  closeModal,
+}) {
   return (
     <div className="overflow-x-auto mt-4">
       <table className="w-full border-collapse rounded-lg overflow-hidden shadow-sm">
@@ -1173,6 +1199,10 @@ function ProductTable({ products }) {
               key={product.saler_id || index}
               product={product}
               index={index}
+              handleEditProduts={handleEditProduts}
+              isOpen={isOpen}
+              openModal={openModal}
+              closeModal={closeModal}
             />
           ))}
         </tbody>
@@ -1181,21 +1211,29 @@ function ProductTable({ products }) {
   );
 }
 
-function ProductRow({ product, index }) {
-  const handleEdit = () => {
-    console.log("Edit product:", product);
+function ProductRow({
+  product,
+  index,
+  handleEditProduts,
+  isOpen,
+  openModal,
+  closeModal,
+}) {
+  const handleEdit = (product) => {
+    handleEditProduts(product);
+    openModal();
   };
 
-  const handleDelete = () => {
-    console.log("Delete product:", product);
+  const handleDelete = (id) => {
+    console.log("Delete id:", id);
   };
 
-  const handleView = () => {
-    console.log("View product:", product);
+  const handleView = (id) => {
+    console.log("View id:", id);
   };
 
-  const handleCopy = () => {
-    console.log("View product:", product);
+  const handleCopy = (id) => {
+    console.log("View id:", id);
   };
   return (
     <tr className={`text-sm ${index % 2 === 0 ? "bg-gray-50" : "bg-gray-100"}`}>
@@ -1213,25 +1251,25 @@ function ProductRow({ product, index }) {
       </td>
       <td className="px-6 py-4 flex justify-center space-x-4">
         <button
-          onClick={handleCopy}
+          onClick={() => handleCopy(product)}
           className="px-3 py-2 text-gray-600 border border-gray-600 rounded-lg hover:bg-gray-600 hover:text-white transition-all"
         >
           <FaCopy />
         </button>{" "}
         <button
-          onClick={handleView}
+          onClick={() => handleView(product)}
           className="px-3 py-2 text-green-600 border border-green-600 rounded-lg hover:bg-green-600 hover:text-white transition-all"
         >
           <FaEye />
         </button>
         <button
-          onClick={handleEdit}
+          onClick={() => handleEdit(product)}
           className="px-3 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all"
         >
           <FaEdit />
         </button>
         <button
-          onClick={handleDelete}
+          onClick={() => handleDelete(product)}
           className="px-3 py-2 text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all"
         >
           <FaTrash />
@@ -1249,6 +1287,7 @@ ProductTable.propTypes = {
       title: PropTypes.string.isRequired,
       category: PropTypes.string.isRequired,
       price_inr: PropTypes.number.isRequired,
+      handleEditProduts: PropTypes.func.isRequired,
     })
   ).isRequired,
 };
@@ -1260,6 +1299,8 @@ ProductRow.propTypes = {
     category: PropTypes.string.isRequired,
     price_inr: PropTypes.number.isRequired,
     description: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
   }).isRequired,
+  handleEditProduts: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
 };
