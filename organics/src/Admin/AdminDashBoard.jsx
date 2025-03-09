@@ -220,8 +220,8 @@ function ProductForm({
     description: "",
     image: "",
     price_inr: "",
-    discount_price_inr: "",
-    discount_percentage: "",
+    discount_price_inr: "0",
+    discount_percentage: "0",
     ETA: "",
     health_benefits_rich_in_vitamins_and_antioxidants: false,
     health_benefits_improves_immunity: false,
@@ -564,11 +564,12 @@ function ProductForm({
                           htmlFor="ETA"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          ETA
+                          ETA *
                         </label>
                         <input
                           type="text"
                           id="ETA"
+                          required
                           placeholder="e.g. 2-5 business days"
                           className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                           value={formData.ETA}
@@ -1281,8 +1282,8 @@ function ProductRow({
     setShowPopup(true);
   };
 
-  const handleView = (id) => {
-    navigate("/admin-products-view");
+  const handleView = (product) => {
+    navigate(`/admin-products-view/${product._id}`);
   };
 
   const handleCopy = (prod) => {

@@ -83,7 +83,7 @@ export default function AllRoutes() {
           element={<AdminProtectedRoute component={AdminAnalytics} />}
         />
         <Route
-          path="/admin-products-view"
+          path="/admin-products-view/:id"
           element={<AdminProtectedRoute component={AdminProductView} />}
         />
 

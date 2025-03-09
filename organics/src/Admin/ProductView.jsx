@@ -11,8 +11,13 @@ import {
   FaInfoCircle,
   FaEdit,
   FaTrash,
+  FaArrowLeft,
 } from "react-icons/fa";
 import AdminNav from "./AdminNav";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { fetchData } from "./AdminAnalytics";
+import { baseUrl2 } from "../../config/confg";
 
 const product = {
   _id: "67c41e3d08ab0e184e31e163",
@@ -51,6 +56,10 @@ const product = {
 };
 
 export default function AdminProductView() {
+  const navigate = useNavigate();
+  let { id } = useParams();
+  const [singleData, setSingleData] = useState({});
+
   // Admin functions (to be implemented)
   const handleEditProduct = () => {
     console.log("Edit product:", product._id);
@@ -63,7 +72,19 @@ export default function AdminProductView() {
       // Delete product logic
     }
   };
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+  useEffect(() => {
+    loadProducts();
+  }, [id]);
 
+  const loadProducts = async () => {
+    const data = await fetchData(`${baseUrl2}/products/${id}`);
+    if (data) {
+      setSingleData(data);
+    }
+  };
   return (
     <>
       <AdminNav />
@@ -72,7 +93,12 @@ export default function AdminProductView() {
           {/* Admin Header */}
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-2">
-              <button className="p-2 rounded-full hover:bg-green-50 text-green-700"></button>
+              <button
+                onClick={handleGoBack}
+                className="p-2 rounded-full hover:bg-green-50 text-green-700"
+              >
+                <FaArrowLeft />
+              </button>
               <h1 className="text-2xl font-bold text-gray-800">
                 Product Details
               </h1>
@@ -80,15 +106,15 @@ export default function AdminProductView() {
             <div className="flex gap-2">
               <button
                 onClick={handleEditProduct}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
               >
-                <FaEdit /> Edit Product
+                <FaEdit />
               </button>
               <button
                 onClick={handleDeleteProduct}
                 className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
               >
-                <FaTrash /> Delete
+                <FaTrash />
               </button>
             </div>
           </div>
@@ -96,23 +122,28 @@ export default function AdminProductView() {
           {/* Product ID and Status */}
           <div className="bg-gray-50 p-3 rounded-md mb-6 flex flex-wrap justify-between items-center">
             <div className="text-sm text-gray-500">
-              <span className="font-semibold">Product ID:</span> {product._id}
+              <span className="font-semibold">Product ID:</span>{" "}
+              {singleData._id}
             </div>
             <div className="text-sm text-gray-500">
               <span className="font-semibold">Last Updated:</span>{" "}
-              {new Date(product.updatedAt).toLocaleString()}
+              {new Date(singleData.updatedAt).toLocaleString()}
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Product Image */}
-            <div className="bg-green-50 rounded-xl p-6 flex items-center justify-center">
+            {/* bg-green-50 */}
+            <div className="border rounded-xl p-6 flex items-center justify-center">
               <img
-                src={product.image || "/placeholder.svg?height=400&width=400"}
-                alt={product.title}
+                src={
+                  singleData.image ||
+                  "https://i.pinimg.com/736x/dc/cc/a2/dccca27d07678f10b1493b95d9bbeb99.jpg"
+                }
+                alt={singleData.title}
                 width={400}
                 height={400}
-                className="object-contain max-h-[400px]"
+                className="object-contain max-h-[400px] rounded-xl"
               />
             </div>
 
@@ -121,42 +152,42 @@ export default function AdminProductView() {
               <div>
                 <div className="flex flex-wrap gap-2 mb-2">
                   <span className="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                    {product.category.toUpperCase()}
+                    {singleData?.category?.toUpperCase()}
                   </span>
-                  {product.certified_organic && (
+                  {singleData.certified_organic && (
                     <span className="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-green-600 text-white">
-                      {product.organic_certification_body}
+                      {singleData.organic_certification_body}
                     </span>
                   )}
                 </div>
                 <h1 className="text-3xl font-bold text-gray-900">
-                  {product.title}
+                  {singleData.title}
                 </h1>
-                <p className="text-gray-600 mt-2">{product.description}</p>
+                <p className="text-gray-600 mt-2">{singleData.description}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
                 <div>
                   <div className="text-sm text-gray-500">Regular Price</div>
                   <div className="text-xl font-semibold">
-                    ₹{product.price_inr}
+                    ₹{singleData.price_inr}
                   </div>
                 </div>
                 <div>
                   <div className="text-sm text-gray-500">Discount Price</div>
                   <div className="text-xl font-semibold text-green-600">
-                    ₹{product.discount_price_inr}
+                    ₹{singleData.discount_price_inr}
                   </div>
                 </div>
                 <div>
                   <div className="text-sm text-gray-500">Discount</div>
                   <div className="text-xl font-semibold">
-                    {product.discount_percentage}%
+                    {singleData.discount_percentage}%
                   </div>
                 </div>
                 <div>
                   <div className="text-sm text-gray-500">Delivery Estimate</div>
-                  <div className="text-xl font-semibold">{product.ETA}</div>
+                  <div className="text-xl font-semibold">{singleData.ETA}</div>
                 </div>
               </div>
 
@@ -167,10 +198,10 @@ export default function AdminProductView() {
                 <FaSnowflake className="text-blue-500 mt-1" />
                 <div>
                   <h3 className="font-semibold">Storage Instructions</h3>
-                  <p>{product.storage_instructions}</p>
+                  <p>{singleData.storage_instructions}</p>
                   <p className="text-sm text-gray-500 mt-1">
                     <span className="font-medium">Expires on:</span>{" "}
-                    {new Date(product.expiration_date).toLocaleDateString()}
+                    {new Date(singleData.expiration_date).toLocaleDateString()}
                   </p>
                 </div>
               </div>
@@ -186,7 +217,7 @@ export default function AdminProductView() {
               </h2>
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  {product.health_benefits_rich_in_vitamins_and_antioxidants ? (
+                  {singleData.health_benefits_rich_in_vitamins_and_antioxidants ? (
                     <FaCheck className="text-green-600" />
                   ) : (
                     <FaTimes className="text-red-500" />
@@ -194,7 +225,7 @@ export default function AdminProductView() {
                   <span>Rich in vitamins and antioxidants</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  {product.health_benefits_improves_immunity ? (
+                  {singleData.health_benefits_improves_immunity ? (
                     <FaCheck className="text-green-600" />
                   ) : (
                     <FaTimes className="text-red-500" />
@@ -202,7 +233,7 @@ export default function AdminProductView() {
                   <span>Improves immunity</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  {product.health_benefits_enhances_skin_health ? (
+                  {singleData.health_benefits_enhances_skin_health ? (
                     <FaCheck className="text-green-600" />
                   ) : (
                     <FaTimes className="text-red-500" />
@@ -220,23 +251,25 @@ export default function AdminProductView() {
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <span className="font-medium">Certified Organic:</span>
-                  {product.certified_organic ? (
+                  {singleData.certified_organic ? (
                     <FaCheck className="text-green-600" />
                   ) : (
                     <FaTimes className="text-red-500" />
                   )}
                 </div>
-                {product.certified_organic && (
+                {singleData.certified_organic && (
                   <div>
                     <span className="font-medium">Certification Body:</span>
                     <span className="ml-2">
-                      {product.organic_certification_body}
+                      {singleData.organic_certification_body}
                     </span>
                   </div>
                 )}
                 <div>
                   <span className="font-medium">Sustainability:</span>
-                  <p className="mt-1 text-gray-700">{product.sustainability}</p>
+                  <p className="mt-1 text-gray-700">
+                    {singleData.sustainability}
+                  </p>
                 </div>
               </div>
             </div>
@@ -249,28 +282,28 @@ export default function AdminProductView() {
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <FaUserCircle className="text-green-600 text-xl" />
-                  <span className="font-medium">{product.saler_name}</span>
+                  <span className="font-medium">{singleData.saler_name}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <FaEnvelope className="text-green-600" />
                   <a
-                    href={`mailto:${product.saler_email}`}
+                    href={`mailto:${singleData.saler_email}`}
                     className="text-green-700 hover:underline"
                   >
-                    {product.saler_email}
+                    {singleData.saler_email}
                   </a>
                 </div>
                 <div className="flex items-center gap-2">
                   <FaCalendarAlt className="text-green-600" />
                   <span className="text-sm">
                     Seller since{" "}
-                    {new Date(product.createdAt).toLocaleDateString()}
+                    {new Date(singleData.createdAt).toLocaleDateString()}
                   </span>
                 </div>
                 <div className="mt-2">
                   <span className="font-medium">Seller ID:</span>
                   <p className="text-sm text-gray-500 mt-1">
-                    {product.saler_id}
+                    {singleData.saler_id}
                   </p>
                 </div>
               </div>
@@ -285,7 +318,7 @@ export default function AdminProductView() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-md">
                 <span className="font-medium">Pesticide Free:</span>
-                {product.pesticide_free ? (
+                {singleData.pesticide_free ? (
                   <FaCheck className="text-green-600" />
                 ) : (
                   <FaTimes className="text-red-500" />
@@ -293,7 +326,7 @@ export default function AdminProductView() {
               </div>
               <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-md">
                 <span className="font-medium">Non-GMO:</span>
-                {product.non_GMO ? (
+                {singleData.non_GMO ? (
                   <FaCheck className="text-green-600" />
                 ) : (
                   <FaTimes className="text-red-500" />
@@ -301,7 +334,7 @@ export default function AdminProductView() {
               </div>
               <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-md">
                 <span className="font-medium">Gluten Free:</span>
-                {product.gluten_free ? (
+                {singleData.gluten_free ? (
                   <FaCheck className="text-green-600" />
                 ) : (
                   <FaTimes className="text-red-500" />
@@ -309,7 +342,7 @@ export default function AdminProductView() {
               </div>
               <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-md">
                 <span className="font-medium">Vegan:</span>
-                {product.vegan ? (
+                {singleData.vegan ? (
                   <FaCheck className="text-green-600" />
                 ) : (
                   <FaTimes className="text-red-500" />
@@ -317,7 +350,7 @@ export default function AdminProductView() {
               </div>
               <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-md">
                 <span className="font-medium">Locally Sourced:</span>
-                {product.local_source ? (
+                {singleData.local_source ? (
                   <FaCheck className="text-green-600" />
                 ) : (
                   <FaTimes className="text-red-500" />
@@ -325,7 +358,7 @@ export default function AdminProductView() {
               </div>
               <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-md">
                 <span className="font-medium">Cruelty Free:</span>
-                {product.cruelty_free ? (
+                {singleData.cruelty_free ? (
                   <FaCheck className="text-green-600" />
                 ) : (
                   <FaTimes className="text-red-500" />
@@ -333,7 +366,7 @@ export default function AdminProductView() {
               </div>
               <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-md">
                 <span className="font-medium">Raw:</span>
-                {product.raw ? (
+                {singleData.raw ? (
                   <FaCheck className="text-green-600" />
                 ) : (
                   <FaTimes className="text-red-500" />
@@ -341,7 +374,7 @@ export default function AdminProductView() {
               </div>
               <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-md">
                 <span className="font-medium">Hand Harvested:</span>
-                {product.harvested_by_hand ? (
+                {singleData.harvested_by_hand ? (
                   <FaCheck className="text-green-600" />
                 ) : (
                   <FaTimes className="text-red-500" />
@@ -349,7 +382,7 @@ export default function AdminProductView() {
               </div>
               <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-md">
                 <span className="font-medium">Fair Trade:</span>
-                {product.fair_trade_certified ? (
+                {singleData.fair_trade_certified ? (
                   <FaCheck className="text-green-600" />
                 ) : (
                   <FaTimes className="text-red-500" />
@@ -364,7 +397,7 @@ export default function AdminProductView() {
               Ingredients
             </h2>
             <ul className="list-disc list-inside">
-              {product.organic_ingredients.map((ingredient, index) => (
+              {singleData?.organic_ingredients?.map((ingredient, index) => (
                 <li key={index} className="capitalize">
                   {ingredient}
                 </li>
