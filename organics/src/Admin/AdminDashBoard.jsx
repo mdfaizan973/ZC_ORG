@@ -1240,8 +1240,8 @@ function ProductTable({
           <tr className="text-sm text-left bg-green-500 text-white">
             <th className="px-6 py-3 font-medium">ID & Name</th>
             <th className="px-6 py-3 font-medium">Category</th>
-            <th className="px-6 py-3 font-medium">Description</th>
             <th className="px-6 py-3 font-medium">Price</th>
+            <th className="px-6 py-3 font-medium">Saler Name & ID</th>
             <th className="px-6 py-3 font-medium text-center">Actions</th>
           </tr>
         </thead>
@@ -1293,17 +1293,20 @@ function ProductRow({
 
   return (
     <tr className={`text-sm ${index % 2 === 0 ? "bg-gray-50" : "bg-gray-100"}`}>
-      <td className="px-6 py-4 flex items-center space-x-3">
-        <span className="font-semibold">
-          {product.saler_id.substring(0, 5)}
-        </span>
+      <td className="px-6 py-4 flex items-center space-x-2">
+        <span className="font-semibold">{product._id.substring(0, 5)}</span>
 
         <p className="text-gray-700">{product.title}</p>
       </td>
       <td className="px-6 py-4">{product.category}</td>
-      <td className="px-6 py-4">{product.description.substring(0, 25)}</td>
       <td className="px-6 py-4 font-medium text-gray-800">
         ₹ {product.price_inr}
+      </td>
+      <td className="px-6 py-4">
+        <span className="font-semibold">
+          {product.saler_name} - {product.saler_id.substring(0, 5)}
+        </span>
+        {/* <p className="text-gray-700">{product.saler_name}</p> */}
       </td>
       <td className="px-6 py-4 flex justify-center space-x-4">
         <button
@@ -1355,6 +1358,7 @@ ProductTable.propTypes = {
 ProductRow.propTypes = {
   product: PropTypes.shape({
     saler_id: PropTypes.string.isRequired,
+    saler_name: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     category: PropTypes.string.isRequired,
     price_inr: PropTypes.number.isRequired,
