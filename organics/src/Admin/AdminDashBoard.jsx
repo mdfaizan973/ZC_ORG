@@ -1,42 +1,40 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-
-import axios from "axios";
 import AdminNav from "./AdminNav";
 import TableIndid from "./Loding/TableIndid";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SuperDashBoard from "./SuperDashBoard";
-import { baseUrl, baseUrl2 } from "../../config/confg";
+import { baseUrl2 } from "../../config/confg";
 import { fetchData } from "./AdminAnalytics";
 export default function AdminDashBoard() {
-  const [data, setData] = useState([]);
-  const [page, setPage] = useState(1);
-  const [load, setLoad] = useState(false);
+  // const [data, setData] = useState([]);
+  // const [page, setPage] = useState(1);
+  // const [load, setLoad] = useState(false);
 
-  const admingetdata = (page) => {
-    setLoad(true);
-    axios
-      .get(`${baseUrl}/orgproducts?_limit=10&_page=${page}`)
-      .then((res) => {
-        // console.log(res.data);
-        setLoad(false);
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  useEffect(() => {
-    admingetdata(page);
-  }, [page]);
+  // const admingetdata = (page) => {
+  //   setLoad(true);
+  //   axios
+  //     .get(`${baseUrl}/orgproducts?_limit=10&_page=${page}`)
+  //     .then((res) => {
+  //       // console.log(res.data);
+  //       setLoad(false);
+  //       setData(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+  // useEffect(() => {
+  //   admingetdata(page);
+  // }, [page]);
 
-  const handlepre = () => {
-    setPage(page - 1);
-  };
-  const handlenext = () => {
-    setPage(page + 1);
-  };
+  // const handlepre = () => {
+  //   setPage(page - 1);
+  // };
+  // const handlenext = () => {
+  //   setPage(page + 1);
+  // };
 
   // ------------------New API's--------------------------
   const [products, setProducts] = useState([]);
@@ -49,13 +47,19 @@ export default function AdminDashBoard() {
     loadProducts();
   }, []);
 
-  const handleAddProducts = async (e, data) => {
-    await postData(`${baseUrl2}/products`, data);
+  const handleAddProducts = async (url, data, isEdit) => {
+    console.log(url, data, isEdit);
+    await postData(url, data, isEdit ? "PUT" : "POST");
     loadProducts();
   };
 
   const handleEditProduts = (data) => {
     setSingleData(data);
+  };
+
+  const handleDaleteData = async (data) => {
+    await deleteData(`${baseUrl2}/products/${data._id}`);
+    loadProducts();
   };
 
   const loadProducts = async () => {
@@ -71,14 +75,6 @@ export default function AdminDashBoard() {
       <div>
         <AdminNav />
 
-        <ProductForm
-          handleAddProducts={handleAddProducts}
-          isOpen={isOpen}
-          openModal={openModal}
-          closeModal={closeModal}
-          dataForEdit={singleData}
-        />
-
         {/* {products.map((product, index) => (
           <ProductCard key={index} product={product} />
         ))} */}
@@ -93,98 +89,107 @@ export default function AdminDashBoard() {
                 </aside>
 
                 {/* Right Section (Table) */}
-                {load ? (
-                  <TableIndid />
-                ) : (
-                  <main className="w-4/5  rounded p-4 ">
-                    {/* Header */}
-                    <header>
-                      <div className=" flex flex-wrap justify-between align-center font-bold text-gray-500">
-                        <div className="text-4xl"></div>
+                {/* {load ? ( */}
+                {/* <TableIndid /> */}
+                {/* ) : ( */}
+                <main className="w-4/5  rounded p-4 ">
+                  {/* Header */}
+                  <header>
+                    <div className=" flex flex-wrap justify-between align-center font-bold text-gray-500">
+                      <div className="text-4xl"></div>
 
-                        <button
-                          onClick={() =>
-                            document.getElementById("my_modal_1").showModal()
-                          }
-                          className="m-3 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg self-end mt-3"
-                          type="button"
-                        >
-                          Add Products
-                        </button>
-                      </div>
-                    </header>
-                    <section className="items-center flex justify-center min-h-screen font-poppins">
-                      {/* <div className="w-full max-w-6xl px-6 py-8 bg-white rounded-lg"> */}
-                      <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
-                        {/* Header */}
-                        <div className="flex justify-between items-center px-6 pb-4 border-b border-gray-300">
-                          <h2 className="text-2xl font-semibold text-gray-700">
-                            List of Products (100)
-                          </h2>
-                          <div className="flex items-center border border-gray-400 rounded-md overflow-hidden">
-                            <input
-                              type="text"
-                              className="px-4 py-2 w-64 text-gray-700 focus:outline-none"
-                              placeholder="Search..."
-                              // onChange={(e) =>
-                              //   setSearchProdValue(e.target.value)
-                              // }
-                            />
-
-                            <button
-                              className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
-                              // onClick={gosSarchData}
-                            >
-                              Go
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Table */}
-                        <div className="overflow-x-auto mt-4">
-                          <ProductTable
-                            products={products}
-                            handleEditProduts={handleEditProduts}
-                            isOpen={isOpen}
-                            openModal={openModal}
-                            closeModal={closeModal}
+                      {/* <button
+                        onClick={() =>
+                          document.getElementById("my_modal_1").showModal()
+                        }
+                        className="m-3 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg self-end mt-3"
+                        type="button"
+                      >
+                        Add Products
+                      </button> */}
+                      <ProductForm
+                        handleAddProducts={handleAddProducts}
+                        isOpen={isOpen}
+                        openModal={openModal}
+                        closeModal={closeModal}
+                        dataForEdit={singleData}
+                      />
+                    </div>
+                  </header>
+                  <section className="items-center flex justify-center min-h-screen font-poppins">
+                    {/* <div className="w-full max-w-6xl px-6 py-8 bg-white rounded-lg"> */}
+                    <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
+                      {/* Header */}
+                      <div className="flex justify-between items-center px-6 pb-4 border-b border-gray-300">
+                        <h2 className="text-2xl font-semibold text-gray-700">
+                          List of Products (100)
+                        </h2>
+                        <div className="flex items-center border border-gray-400 rounded-md overflow-hidden">
+                          <input
+                            type="text"
+                            className="px-4 py-2 w-64 text-gray-700 focus:outline-none"
+                            placeholder="Search..."
+                            // onChange={(e) =>
+                            //   setSearchProdValue(e.target.value)
+                            // }
                           />
-                        </div>
 
-                        {/* Pagination */}
-                        <div className="flex justify-end pt-6 border-t border-gray-300">
-                          <nav aria-label="Page navigation">
-                            <ul className="flex items-center justify-center space-x-4">
-                              <li>
-                                <button
-                                  onClick={handlepre}
-                                  disabled={page === 1}
-                                  className="px-4 py-2 text-gray-700 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 disabled:opacity-50"
-                                >
-                                  Previous
-                                </button>
-                              </li>
-                              <li>
-                                <span className="px-4 py-2 text-white bg-blue-600 border border-blue-700 rounded-lg">
-                                  {page}
-                                </span>
-                              </li>
-                              <li>
-                                <button
-                                  onClick={handlenext}
-                                  disabled={data.length <= 9}
-                                  className="px-4 py-2 text-gray-700 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 disabled:opacity-50"
-                                >
-                                  Next
-                                </button>
-                              </li>
-                            </ul>
-                          </nav>
+                          <button
+                            className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
+                            // onClick={gosSarchData}
+                          >
+                            Go
+                          </button>
                         </div>
                       </div>
-                    </section>
-                  </main>
-                )}
+
+                      {/* Table */}
+                      <div className="overflow-x-auto mt-4">
+                        <ProductTable
+                          products={products}
+                          isOpen={isOpen}
+                          openModal={openModal}
+                          closeModal={closeModal}
+                          handleEditProduts={handleEditProduts}
+                          handleDaleteData={handleDaleteData}
+                          handleAddProducts={handleAddProducts}
+                        />
+                      </div>
+
+                      {/* Pagination */}
+                      <div className="flex justify-end pt-6 border-t border-gray-300">
+                        <nav aria-label="Page navigation">
+                          <ul className="flex items-center justify-center space-x-4">
+                            <li>
+                              <button
+                                // onClick={handlepre}
+                                // disabled={page === 1}
+                                className="px-4 py-2 text-gray-700 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+                              >
+                                Previous
+                              </button>
+                            </li>
+                            <li>
+                              <span className="px-4 py-2 text-white bg-blue-600 border border-blue-700 rounded-lg">
+                                {1}
+                              </span>
+                            </li>
+                            <li>
+                              <button
+                                // onClick={handlenext}
+                                // disabled={data.length <= 9}
+                                className="px-4 py-2 text-gray-700 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+                              >
+                                Next
+                              </button>
+                            </li>
+                          </ul>
+                        </nav>
+                      </div>
+                    </div>
+                  </section>
+                </main>
+                {/* )} */}
               </div>
             </div>
           </div>
@@ -195,7 +200,7 @@ export default function AdminDashBoard() {
 }
 
 import { FaClosedCaptioning, FaFileUpload } from "react-icons/fa";
-import { getSessionData, postData } from "../utils/utils";
+import { deleteData, getSessionData, postData } from "../utils/utils";
 
 function ProductForm({
   handleAddProducts,
@@ -240,7 +245,11 @@ function ProductForm({
   // Initialize form with edit data if available
   useEffect(() => {
     if (dataForEdit) {
-      setFormData(dataForEdit);
+      setFormData((prevState) => ({
+        ...prevState, // Keep all default values
+        ...dataForEdit, // Override only provided values
+      }));
+
       if (dataForEdit.image) {
         setImagePreview(dataForEdit.image);
       }
@@ -292,21 +301,61 @@ function ProductForm({
     // Process organic ingredients from space-separated string to array
     const processedData = {
       ...formData,
-      organic_ingredients: formData.organic_ingredients
-        ? formData.organic_ingredients.split(",")
-        : [],
+      organic_ingredients:
+        typeof formData.organic_ingredients === "string"
+          ? formData.organic_ingredients.split(" ")
+          : [],
       saler_name: getSessionData("name"),
       saler_id: getSessionData("_id"),
       saler_email: getSessionData("email"),
     };
 
-    // Call the parent handler with the form data
-    if (handleAddProducts) {
-      handleAddProducts(e, processedData);
+    let url;
+    let isEdit = false;
+
+    if (dataForEdit && dataForEdit._id) {
+      url = `${baseUrl2}/products/${dataForEdit._id}`;
+      isEdit = true; // Updating
+    } else {
+      url = `${baseUrl2}/products`;
     }
 
-    // Close the modal after submission
-    closeModal();
+    try {
+      await handleAddProducts(url, processedData, isEdit);
+
+      setFormData({
+        category: "",
+        title: "",
+        description: "",
+        image: "",
+        price_inr: "",
+        discount_price_inr: "",
+        discount_percentage: "",
+        ETA: "",
+        health_benefits_rich_in_vitamins_and_antioxidants: false,
+        health_benefits_improves_immunity: false,
+        health_benefits_enhances_skin_health: false,
+        certified_organic: false,
+        organic_certification_body: "",
+        sustainability: "",
+        pesticide_free: false,
+        non_GMO: false,
+        fair_trade_certified: false,
+        gluten_free: false,
+        vegan: false,
+        raw: false,
+        local_source: false,
+        organic_ingredients: "",
+        harvested_by_hand: false,
+        cruelty_free: false,
+        expiration_date: "",
+        storage_instructions: "",
+      });
+
+      closeModal();
+    } catch (error) {
+      console.error("Failed to submit form:", error);
+    }
   };
 
   return (
@@ -316,7 +365,7 @@ function ProductForm({
         type="button"
         onClick={openModal}
       >
-        Add Product-
+        Add Product
       </button>
 
       {/* Modal Overlay */}
@@ -1177,9 +1226,9 @@ import { FaEdit, FaTrash, FaEye, FaCopy } from "react-icons/fa";
 function ProductTable({
   products,
   handleEditProduts,
-  isOpen,
+  handleDaleteData,
+  handleAddProducts,
   openModal,
-  closeModal,
 }) {
   return (
     <div className="overflow-x-auto mt-4">
@@ -1199,10 +1248,10 @@ function ProductTable({
               key={product.saler_id || index}
               product={product}
               index={index}
-              handleEditProduts={handleEditProduts}
-              isOpen={isOpen}
               openModal={openModal}
-              closeModal={closeModal}
+              handleEditProduts={handleEditProduts}
+              handleDaleteData={handleDaleteData}
+              handleAddProducts={handleAddProducts}
             />
           ))}
         </tbody>
@@ -1214,27 +1263,31 @@ function ProductTable({
 function ProductRow({
   product,
   index,
-  handleEditProduts,
-  isOpen,
   openModal,
-  closeModal,
+  handleEditProduts,
+  handleDaleteData,
+  handleAddProducts,
 }) {
+  const [showPopup, setShowPopup] = useState(false);
+
   const handleEdit = (product) => {
     handleEditProduts(product);
     openModal();
   };
 
-  const handleDelete = (id) => {
-    console.log("Delete id:", id);
+  const handleShowPopcorn = () => {
+    setShowPopup(true);
   };
 
   const handleView = (id) => {
     console.log("View id:", id);
   };
 
-  const handleCopy = (id) => {
-    console.log("View id:", id);
+  const handleCopy = (prod) => {
+    const newProduct = { ...prod, _id: undefined }; // Remove _id to let MongoDB generate a new one
+    handleAddProducts(`${baseUrl2}/products`, newProduct, false);
   };
+
   return (
     <tr className={`text-sm ${index % 2 === 0 ? "bg-gray-50" : "bg-gray-100"}`}>
       <td className="px-6 py-4 flex items-center space-x-3">
@@ -1268,12 +1321,13 @@ function ProductRow({
         >
           <FaEdit />
         </button>
-        <button
-          onClick={() => handleDelete(product)}
-          className="px-3 py-2 text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all"
-        >
-          <FaTrash />
-        </button>
+        <PopcornUI
+          product={product}
+          showPopup={showPopup}
+          setShowPopup={setShowPopup}
+          handleShowPopcorn={handleShowPopcorn}
+          handleDaleteData={handleDaleteData}
+        />
       </td>
     </tr>
   );
@@ -1287,9 +1341,12 @@ ProductTable.propTypes = {
       title: PropTypes.string.isRequired,
       category: PropTypes.string.isRequired,
       price_inr: PropTypes.number.isRequired,
-      handleEditProduts: PropTypes.func.isRequired,
     })
   ).isRequired,
+  handleEditProduts: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
+  handleDaleteData: PropTypes.func.isRequired,
+  handleAddProducts: PropTypes.func.isRequired,
 };
 
 ProductRow.propTypes = {
@@ -1303,4 +1360,69 @@ ProductRow.propTypes = {
   }).isRequired,
   handleEditProduts: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
+  openModal: PropTypes.func.isRequired,
+  handleDaleteData: PropTypes.func.isRequired,
+  handleAddProducts: PropTypes.func.isRequired,
+};
+
+export const PopcornUI = ({
+  showPopup,
+  setShowPopup,
+  handleShowPopcorn,
+  product,
+  handleDaleteData,
+}) => {
+  const handleDelete = () => {
+    setShowPopup(false);
+    handleDaleteData(product);
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center bg-gray-100">
+      <button
+        onClick={handleShowPopcorn}
+        className="px-3 py-2 text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all"
+      >
+        <FaTrash />
+      </button>
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center w-80">
+            <h2 className="text-lg font-semibold text-gray-800">
+              Do you really want to delete the data?
+            </h2>
+            <div className="mt-4">
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 mr-1"
+              >
+                Yes
+              </button>
+
+              <button
+                onClick={() => setShowPopup(false)}
+                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400"
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+PopcornUI.propTypes = {
+  showPopup: PropTypes.bool.isRequired, // Ensures showPopup is a boolean and required
+  setShowPopup: PropTypes.func.isRequired, // Ensures setShowPopup is a function and required
+  handleShowPopcorn: PropTypes.func.isRequired, // Ensures handleShowPopcorn is a function and required
+  product: PropTypes.shape({
+    _id: PropTypes.string.isRequired, // Ensures product has an _id (adjust based on actual structure)
+    name: PropTypes.string,
+    price: PropTypes.number,
+    description: PropTypes.string,
+    image: PropTypes.string,
+  }).isRequired, // Ensures product object is required
+  handleDaleteData: PropTypes.func.isRequired, // Ensures handleDeleteData is a function and required
 };

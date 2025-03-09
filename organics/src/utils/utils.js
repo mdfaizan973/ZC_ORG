@@ -45,36 +45,75 @@ export const fetchData = async (url, token = null) => {
 //   }
 // };
 
-// export const postData = async (url, data, token = null) => {
-//   const toastId = toast.loading("We are prossing... 🚀", {
-//     position: toast.POSITION.TOP_CENTER,
-//   });
-//   console.log(data);
+export const postData = async (url, data, method = "POST", token = null) => {
+  const toastId = toast.loading("We are processing... 🚀", {
+    position: toast.POSITION.TOP_CENTER,
+  });
 
-//   try {
-//     const headers = {
-//       "Content-Type": "application/json",
-//       ...(token && { Authorization: `Bearer ${token}` }),
-//     };
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    };
 
-//     const response = await axios.post(url, data, { headers });
-//     toast.dismiss(toastId); // Remove the loading toast on success
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error posting data:", error);
+    const response = await axios({
+      method, // Can be "POST" or "PUT"
+      url,
+      data,
+      headers,
+    });
+    toast.success(response?.data?.message, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+    toast.dismiss(toastId); // Remove loading toast on success
+    return response.data;
+  } catch (error) {
+    console.error("Error sending data:", error);
 
-//     let errorMessage = "Oops! Something went wrong.🚀";
+    let errorMessage = "Oops! Something went wrong.🚀";
+    toast.error(errorMessage, {
+      position: toast.POSITION.TOP_CENTER,
+    });
 
-//     toast.error(errorMessage, {
-//       position: toast.POSITION.TOP_CENTER,
-//     });
+    throw error;
+  } finally {
+    toast.dismiss(toastId); // Ensure loader disappears even on error
+  }
+};
 
-//     throw error;
-//   } finally {
-//     toast.dismiss(toastId); // Ensure loader disappears even on error
-//   }
-// };
-export const postData = async (url, data, token = null) => {
+export const deleteData = async (url, token = null) => {
+  const toastId = toast.loading("Deleting... ⏳", {
+    position: toast.POSITION.TOP_CENTER,
+  });
+
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    };
+
+    const response = await axios.delete(url, { headers });
+
+    toast.dismiss(toastId); // Remove the loading toast on success
+    toast.success(response?.data?.message, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting data:", error);
+
+    toast.dismiss(toastId);
+    let errorMessage = "Oops! Something went wrong.🚀";
+    toast.error(errorMessage, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+
+    throw error;
+  }
+};
+
+export const postDataa = async (url, data, token = null) => {
   const toastId = toast.loading("We are processing... 🚀", {
     position: toast.POSITION.TOP_CENTER,
   });
