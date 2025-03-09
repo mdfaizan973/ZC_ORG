@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import AdminNav from "./AdminNav";
-import TableIndid from "./Loding/TableIndid";
+// import TableIndid from "./Loding/TableIndid";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SuperDashBoard from "./SuperDashBoard";
@@ -72,6 +72,7 @@ export default function AdminDashBoard() {
   return (
     <>
       <ToastContainer />
+
       <div>
         <AdminNav />
 
@@ -1222,6 +1223,7 @@ ProductCard.propTypes = {
 };
 
 import { FaEdit, FaTrash, FaEye, FaCopy } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 function ProductTable({
   products,
@@ -1269,7 +1271,7 @@ function ProductRow({
   handleAddProducts,
 }) {
   const [showPopup, setShowPopup] = useState(false);
-
+  const navigate = useNavigate();
   const handleEdit = (product) => {
     handleEditProduts(product);
     openModal();
@@ -1280,7 +1282,7 @@ function ProductRow({
   };
 
   const handleView = (id) => {
-    console.log("View id:", id);
+    navigate("/admin-products-view");
   };
 
   const handleCopy = (prod) => {

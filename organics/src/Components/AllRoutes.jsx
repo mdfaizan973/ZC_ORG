@@ -18,6 +18,7 @@ import SuperDashBoard from "../Admin/SuperDashBoard";
 // import { useEffect, useState } from "react";
 import AdminAnalytics from "../Admin/AdminAnalytics";
 import PageNotFound from "./PageNotFound";
+import AdminProductView from "../Admin/ProductView";
 
 export default function AllRoutes() {
   // const [isOrgAdmin, setisOrgAdmin] = useState(false);
@@ -80,6 +81,10 @@ export default function AllRoutes() {
         <Route
           path="/admin-analytics"
           element={<AdminProtectedRoute component={AdminAnalytics} />}
+        />
+        <Route
+          path="/admin-products-view"
+          element={<AdminProtectedRoute component={AdminProductView} />}
         />
 
         {/* </>
