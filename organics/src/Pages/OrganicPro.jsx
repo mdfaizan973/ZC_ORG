@@ -3,7 +3,8 @@ import ProductsCarload from "./LoadingUI/ProductsCarload";
 import OrgPro from "./Cards/OrgPro";
 import axios from "axios";
 import Navbar from "../Components/Navbar";
-import { baseUrl } from "../../config/confg";
+import { baseUrl, baseUrl2 } from "../../config/confg";
+import { fetchData, getSessionData, postData } from "../utils/utils";
 export default function OrganicPro() {
   const [orgData, setOrgData] = useState([]);
   const [page, setPage] = useState(1);
@@ -13,25 +14,25 @@ export default function OrganicPro() {
   const curdatalength = orgData.length;
   let limit = 9;
 
-  const getData = async (page, filter) => {
-    try {
-      setLoad(true);
+  // const getData = async (page, filter) => {
+  //   try {
+  //     setLoad(true);
 
-      // Encode filter to handle special characters like '&' and spaces
-      const encodedFilter = filter
-        ? `category=${encodeURIComponent(filter)}`
-        : "";
+  //     // Encode filter to handle special characters like '&' and spaces
+  //     const encodedFilter = filter
+  //       ? `category=${encodeURIComponent(filter)}`
+  //       : "";
 
-      const url = `${baseUrl}/orgproducts?${encodedFilter}&_limit=${limit}&_page=${page}`;
+  //     const url = `${baseUrl}/orgproducts?${encodedFilter}&_limit=${limit}&_page=${page}`;
 
-      const response = await axios.get(url);
+  //     const response = await axios.get(url);
 
-      setLoad(false);
-      setOrgData(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  //     setLoad(false);
+  //     setOrgData(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
 
   // {Pagination function}
   const handleprev = () => {
@@ -41,30 +42,38 @@ export default function OrganicPro() {
     setPage(page + 1);
   };
 
-  useEffect(() => {
-    getData(page, fileter);
-  }, [page, fileter]);
+  // useEffect(() => {
+  //   getData(page, fileter);
+  // }, [page, fileter]);
 
   // Adding to cart
 
-  const addToCart = (id) => {
+  const addToCart = async (cartData) => {
     // get for cart
-    axios
-      .get(`${baseUrl}/orgproducts/${id}`)
-      .then((res) => {
-        // console.warn(res.data);
-        axios
-          .post(`${baseUrl}/cartdata`, res.data)
-          .then((res) => {
-            console.warn(res.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    console.log(cartData);
+    const updatedData = {
+      ...cartData,
+      userId: getSessionData("_id"),
+      userName: getSessionData("name"),
+    };
+    const data = await postData(`${baseUrl2}/cart`, updatedData);
+    console.log(data);
+    // axios
+    //   .get(`${baseUrl}/orgproducts/${id}`)
+    //   .then((res) => {
+    //     // console.warn(res.data);
+    //     axios
+    //       .post(`${baseUrl}/cartdata`, res.data)
+    //       .then((res) => {
+    //         console.warn(res.data);
+    //       })
+    //       .catch((err) => {
+    //         console.log(err);
+    //       });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   // Sorting
@@ -78,7 +87,15 @@ export default function OrganicPro() {
     });
   }
 
-  console.log(fileter);
+  // console.log(fileter);
+  useEffect(() => {
+    load_prod_data();
+  }, []);
+
+  const load_prod_data = async () => {
+    const data = await fetchData(`${baseUrl2}/products`);
+    setOrgData(data);
+  };
 
   return (
     <div>
@@ -134,22 +151,23 @@ export default function OrganicPro() {
 
       {/* Passing props */}
 
-      {load ? (
+      {/* {load ? (
         <ProductsCarload />
-      ) : (
-        <div className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
-          {orgData.map((ele, i) => (
-            <OrgPro
-              key={i}
-              title={ele.title}
-              image={ele.image}
-              price={ele.discount_price_inr}
-              id={ele.id}
-              addtocart={addToCart}
-            />
-          ))}
-        </div>
-      )}
+      ) : ( */}
+      <div className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
+        {orgData?.map((ele, i) => (
+          <OrgPro
+            key={i}
+            title={ele.title}
+            image={ele.image}
+            price={ele.price_inr}
+            id={ele._id}
+            dataItem={ele}
+            addtocart={addToCart}
+          />
+        ))}
+      </div>
+      {/* )} */}
       {/* Pagination */}
       <div className="flex flex-col items-center mt-10 mb-10">
         <div className="inline-flex mt-2 xs:mt-0">

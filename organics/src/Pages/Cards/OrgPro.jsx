@@ -7,7 +7,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export default function OrgPro(props) {
-  const { image, price, title, addtocart, id } = props;
+  const { image, price, title, addtocart, id, dataItem } = props;
   // image , price ,title
 
   const [showTooltip, setShowTooltip] = useState(false);
@@ -33,7 +33,7 @@ export default function OrgPro(props) {
       <div className="bg-white w-72 shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
         <RouterLink to={`/productdiscription/${id}`}>
           <img
-            src={image}
+            src={image || "https://placehold.co/600x400"}
             // src="https://i.pinimg.com/564x/6d/1c/fa/6d1cfa4e1a5e58d31cc935fad125e046.jpg"
             alt=""
             className="h-60 w-72 object-cover rounded-t-xl"
@@ -99,7 +99,7 @@ export default function OrgPro(props) {
               <div className="ml-auto">
                 <button
                   onClick={() => {
-                    addtocart(id);
+                    addtocart(dataItem);
                     toast.success("Item Added To Cart", {
                       position: toast.POSITION.TOP_CENTER,
                     });

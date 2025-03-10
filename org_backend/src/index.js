@@ -3,6 +3,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const UserRouter = require("./routes/UserRouter");
 const ProductsRouter = require("./routes/ProductRouter");
+const cartRouter = require("./routes/CartRouter");
 const app = express();
 
 app.use(express.json());
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/users", UserRouter);
 app.use("/api/products", ProductsRouter);
+app.use("/api/cart", cartRouter);
 
 const PORT = 5000;
 app.listen(PORT, () => {

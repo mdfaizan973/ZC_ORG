@@ -6,7 +6,7 @@ import LoginPage from "../Pages/LoginPage";
 import SignupPage from "../Pages/SignupPage";
 import Cart from "../Pages/Cart";
 import OrganicPro from "../Pages/OrganicPro";
-import SingleProducts from "../Pages/SingleProducts";
+// import SingleProducts from "../Pages/SingleProducts";
 import AdminDashBoard from "../Admin/AdminDashBoard";
 import ProtectedRoute, { AdminProtectedRoute } from "./ProtectedRoute";
 import AdminUsers from "../Admin/AdminUsers";
@@ -19,6 +19,7 @@ import SuperDashBoard from "../Admin/SuperDashBoard";
 import AdminAnalytics from "../Admin/AdminAnalytics";
 import PageNotFound from "./PageNotFound";
 import AdminProductView from "../Admin/ProductView";
+import ProductDetailsPage from "../Pages/Cards/ProdutsDetailsPage";
 
 export default function AllRoutes() {
   // const [isOrgAdmin, setisOrgAdmin] = useState(false);
@@ -57,7 +58,7 @@ export default function AllRoutes() {
         ></Route>
         <Route
           path="/productdiscription/:id"
-          element={<SingleProducts />}
+          element={<ProductDetailsPage />} // <SingleProducts />
         ></Route>
 
         {/* {isOrgAdmin && (
