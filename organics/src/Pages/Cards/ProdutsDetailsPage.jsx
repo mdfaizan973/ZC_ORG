@@ -19,43 +19,43 @@ import {
 import Navbar from "../../Components/Navbar";
 import { useParams } from "react-router-dom";
 import { baseUrl2 } from "../../../config/confg";
-import { fetchData } from "../../utils/utils";
+import { fetchData, getSessionData, postData } from "../../utils/utils";
 
-const products = {
-  _id: "67c41e3d08ab0e184e31e163",
-  category: "dairy",
-  title: "Organic Cow Milk",
-  description: "Fresh organic cow milk sourced from grass-fed cows.",
-  image: "",
-  price_inr: 60,
-  discount_price_inr: 50,
-  discount_percentage: 16,
-  ETA: "1-3 business days",
-  health_benefits_rich_in_vitamins_and_antioxidants: true,
-  health_benefits_improves_immunity: true,
-  health_benefits_enhances_skin_health: true,
-  certified_organic: true,
-  organic_certification_body: "USDA Organic",
-  sustainability: "Ethically sourced from free-range cows.",
-  pesticide_free: true,
-  non_GMO: true,
-  fair_trade_certified: true,
-  gluten_free: true,
-  vegan: false,
-  raw: false,
-  local_source: true,
-  organic_ingredients: ["milk"],
-  harvested_by_hand: false,
-  cruelty_free: true,
-  expiration_date: "2024-07-10",
-  storage_instructions: "Keep refrigerated below 4°C.",
-  saler_email: "faizan9735@gmail.com",
-  saler_id: "67c34c6700514eb3d60b7993",
-  saler_name: "Md Faizan",
-  createdAt: "2025-03-02T09:00:45.213Z",
-  updatedAt: "2025-03-02T09:00:45.213Z",
-  __v: 0,
-};
+// const products = {
+//   _id: "67c41e3d08ab0e184e31e163",
+//   category: "dairy",
+//   title: "Organic Cow Milk",
+//   description: "Fresh organic cow milk sourced from grass-fed cows.",
+//   image: "",
+//   price_inr: 60,
+//   discount_price_inr: 50,
+//   discount_percentage: 16,
+//   ETA: "1-3 business days",
+//   health_benefits_rich_in_vitamins_and_antioxidants: true,
+//   health_benefits_improves_immunity: true,
+//   health_benefits_enhances_skin_health: true,
+//   certified_organic: true,
+//   organic_certification_body: "USDA Organic",
+//   sustainability: "Ethically sourced from free-range cows.",
+//   pesticide_free: true,
+//   non_GMO: true,
+//   fair_trade_certified: true,
+//   gluten_free: true,
+//   vegan: false,
+//   raw: false,
+//   local_source: true,
+//   organic_ingredients: ["milk"],
+//   harvested_by_hand: false,
+//   cruelty_free: true,
+//   expiration_date: "2024-07-10",
+//   storage_instructions: "Keep refrigerated below 4°C.",
+//   saler_email: "faizan9735@gmail.com",
+//   saler_id: "67c34c6700514eb3d60b7993",
+//   saler_name: "Md Faizan",
+//   createdAt: "2025-03-02T09:00:45.213Z",
+//   updatedAt: "2025-03-02T09:00:45.213Z",
+//   __v: 0,
+// };
 
 export default function ProductDetailsPage() {
   const [product, setProduct] = useState({});
@@ -79,6 +79,21 @@ export default function ProductDetailsPage() {
     setProduct(data);
   };
 
+  const handleCart = async (cartData) => {
+    const updatedData = {
+      ...cartData,
+      prodId: cartData._id,
+      _id: undefined,
+      _v: undefined,
+      createdAt: undefined,
+      updatedAt: undefined,
+      quantity: quantity,
+      discount_price_inr: cartData.discount_price_inr * quantity,
+      userId: getSessionData("_id"),
+      userName: getSessionData("name"),
+    };
+    await postData(`${baseUrl2}/cart`, updatedData);
+  };
   return (
     <>
       <Navbar />
@@ -146,7 +161,10 @@ export default function ProductDetailsPage() {
                   </button>
                 </div>
 
-                <button className="flex items-center justify-center px-8 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors">
+                <button
+                  onClick={() => handleCart(product)}
+                  className="flex items-center justify-center px-8 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
+                >
                   <FaShoppingCart className="mr-2" /> Add to Cart
                 </button>
 

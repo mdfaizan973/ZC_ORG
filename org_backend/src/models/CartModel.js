@@ -20,7 +20,9 @@ const ProductSchemaModelDefinition = ProductSchemaModel.schema.obj;
 const CartSchema = new mongoose.Schema(
   {
     ...ProductSchemaModelDefinition,
+    prodId: { type: String, required: true },
     userId: { type: String, required: true },
+    quantity: { type: Number, required: true },
     userName: { type: String, required: true },
   },
   { timestamps: true }
@@ -28,4 +30,3 @@ const CartSchema = new mongoose.Schema(
 
 const CartSchemaModel = mongoose.model("cartProduct", CartSchema);
 module.exports = CartSchemaModel;
-

@@ -9,7 +9,7 @@ import {
 
 import { Link as RouterLink } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import { getSessionData } from "../utils/utils";
+import { getSessionData, hasToken } from "../utils/utils";
 export default function Navbar() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [isOrgAdmin, setIsOrgAdmin] = useState(false);
@@ -109,7 +109,8 @@ export default function Navbar() {
                 </button>
               </RouterLink>
 
-              <RouterLink to="/login">
+              <RouterLink to={hasToken() ? "/user-profile" : "/login"}>
+                {" "}
                 <button
                   className="middle none center hidden rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-2 px-4 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
                   type="button"

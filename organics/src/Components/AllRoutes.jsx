@@ -4,7 +4,7 @@ import Home from "../Pages/Landing/Home";
 import Blog from "../Pages/Blog";
 import LoginPage from "../Pages/LoginPage";
 import SignupPage from "../Pages/SignupPage";
-import Cart from "../Pages/Cart";
+// import Cart from "../Pages/Cart";
 import OrganicPro from "../Pages/OrganicPro";
 // import SingleProducts from "../Pages/SingleProducts";
 import AdminDashBoard from "../Admin/AdminDashBoard";
@@ -20,7 +20,8 @@ import AdminAnalytics from "../Admin/AdminAnalytics";
 import PageNotFound from "./PageNotFound";
 import AdminProductView from "../Admin/ProductView";
 import ProductDetailsPage from "../Pages/Cards/ProdutsDetailsPage";
-
+import CartPage from "../Pages/CartPage";
+import UserProfile from "../Pages/UserProfile";
 export default function AllRoutes() {
   // const [isOrgAdmin, setisOrgAdmin] = useState(false);
 
@@ -49,7 +50,7 @@ export default function AllRoutes() {
         ></Route>
         <Route
           path="/cartpage"
-          element={<ProtectedRoute component={Cart} />}
+          element={<ProtectedRoute component={CartPage} />}
         ></Route>
         <Route
           path="/organicsproducts"
@@ -86,6 +87,10 @@ export default function AllRoutes() {
         <Route
           path="/admin-products-view/:id"
           element={<AdminProtectedRoute component={AdminProductView} />}
+        />
+        <Route
+          path="/user-profile"
+          element={<ProtectedRoute component={UserProfile} />}
         />
 
         {/* </>

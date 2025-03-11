@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
-import ProductsCarload from "./LoadingUI/ProductsCarload";
+// import ProductsCarload from "./LoadingUI/ProductsCarload";
 import OrgPro from "./Cards/OrgPro";
-import axios from "axios";
+// import axios from "axios";
 import Navbar from "../Components/Navbar";
-import { baseUrl, baseUrl2 } from "../../config/confg";
+import { baseUrl2 } from "../../config/confg";
 import { fetchData, getSessionData, postData } from "../utils/utils";
 export default function OrganicPro() {
   const [orgData, setOrgData] = useState([]);
   const [page, setPage] = useState(1);
-  const [load, setLoad] = useState(false);
+  // const [load, setLoad] = useState(false);
   const [sort, setSort] = useState("");
   const [fileter, setFilter] = useState("");
   const curdatalength = orgData.length;
-  let limit = 9;
+  // let limit = 9;
 
   // const getData = async (page, filter) => {
   //   try {
@@ -50,14 +50,17 @@ export default function OrganicPro() {
 
   const addToCart = async (cartData) => {
     // get for cart
-    console.log(cartData);
     const updatedData = {
       ...cartData,
+      prodId: cartData._id,
+      _id: undefined,
+      _v: undefined,
+      createdAt: undefined,
+      updatedAt: undefined,
       userId: getSessionData("_id"),
       userName: getSessionData("name"),
     };
-    const data = await postData(`${baseUrl2}/cart`, updatedData);
-    console.log(data);
+    await postData(`${baseUrl2}/cart`, updatedData);
     // axios
     //   .get(`${baseUrl}/orgproducts/${id}`)
     //   .then((res) => {
