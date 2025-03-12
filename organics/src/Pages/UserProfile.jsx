@@ -18,22 +18,19 @@ import {
   FiLock,
 } from "react-icons/fi";
 import { FaShoppingCart, FaBox } from "react-icons/fa";
-import { MdOutlineVerified, MdLocalShipping } from "react-icons/md";
+import {
+  MdOutlineVerified,
+  MdLocalShipping,
+  MdOutlinePendingActions,
+  MdCancel,
+} from "react-icons/md";
 import { BiPackage } from "react-icons/bi";
+import { getSessionData } from "../utils/utils";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function UserProfile() {
-  const [activeTab, setActiveTab] = useState("orders");
+  const [activeTab, setActiveTab] = useState("profile");
   const [viewMode, setViewMode] = useState("grid");
-
-  const user = {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    password: "********",
-    address: "123 Green Street, Organic City, OC 12345",
-    gender: "Male",
-    profileImage: "https://placehold.co/400x400.png",
-    memberSince: "January 2022",
-  };
 
   const orders = [
     {
@@ -66,6 +63,28 @@ export default function UserProfile() {
       originalPrice: "$10.99",
       category: "Sweeteners",
       status: "Processing",
+      date: "July 10, 2023",
+      rating: null,
+    },
+    {
+      id: 4,
+      image: "https://placehold.co/400x400.png",
+      title: "Organic Raw Honey - 16oz Jar",
+      price: "$8.50",
+      originalPrice: "$10.99",
+      category: "Sweeteners",
+      status: "Cancel",
+      date: "July 10, 2023",
+      rating: null,
+    },
+    {
+      id: 5,
+      image: "https://placehold.co/400x400.png",
+      title: "Organic Raw Honey - 16oz Jar",
+      price: "$8.50",
+      originalPrice: "$10.99",
+      category: "Sweeteners",
+      status: "Delivered",
       date: "July 10, 2023",
       rating: null,
     },
@@ -112,11 +131,21 @@ export default function UserProfile() {
     "Join our growing community of organic producers",
   ];
 
+  const handleLogOut = () => {
+    sessionStorage.removeItem("OranicSessionStorge");
+    // setIslogin(false);
+    toast.error("Logout Successful", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+    window.location.reload();
+  };
+
   return (
     <>
+      <ToastContainer />
       <Navbar />
 
-      <div className="max-w-7xl mx-auto p-4 md:p-6 bg-gray-50 min-h-screen">
+      <div className=" mx-auto p-4 md:p-6 bg-gray-50 min-h-screen">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
           <div>
@@ -127,7 +156,10 @@ export default function UserProfile() {
               Welcome back to your organic journey
             </p>
           </div>
-          <button className="mt-4 md:mt-0 flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all duration-300 hover:shadow-md">
+          <button
+            onClick={handleLogOut}
+            className="mt-4 md:mt-0 flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all duration-300 hover:shadow-md"
+          >
             <FiLogOut />
             Log Out
           </button>
@@ -170,7 +202,10 @@ export default function UserProfile() {
                   <div className="relative mb-4">
                     <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
                       <img
-                        src={user.profileImage || "/placeholder.svg"}
+                        src={
+                          getSessionData("profile_image") ||
+                          "https://placehold.co/400x400.png"
+                        }
                         alt="Profile"
                         width={100}
                         height={100}
@@ -182,11 +217,12 @@ export default function UserProfile() {
                     </button>
                   </div>
                   <h2 className="text-xl font-semibold text-green-800">
-                    {user.name}
+                    {getSessionData("name")}
                   </h2>
                   <p className="text-gray-500 flex items-center gap-1 mt-1">
                     <FiCalendar size={14} />
-                    Member since {user.memberSince}
+                    Member since{" "}
+                    {new Date(getSessionData("createdAt")).toLocaleString()}
                   </p>
 
                   <div className="mt-6 w-full">
@@ -194,7 +230,9 @@ export default function UserProfile() {
                       <FiMail className="text-green-600" size={18} />
                       <div>
                         <p className="text-xs text-gray-500">Email</p>
-                        <p className="font-medium text-sm">{user.email}</p>
+                        <p className="font-medium text-sm">
+                          {getSessionData("email")}
+                        </p>
                       </div>
                     </div>
 
@@ -202,7 +240,9 @@ export default function UserProfile() {
                       <FiMapPin className="text-green-600" size={18} />
                       <div>
                         <p className="text-xs text-gray-500">Address</p>
-                        <p className="font-medium text-sm">{user.address}</p>
+                        <p className="font-medium text-sm">
+                          {getSessionData("address")}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -222,14 +262,19 @@ export default function UserProfile() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-gray-50 p-4 rounded-xl">
                       <p className="text-sm text-gray-500 mb-1">Full Name</p>
-                      <p className="font-medium text-gray-800">{user.name}</p>
+                      <p className="font-medium text-gray-800">
+                        {getSessionData("name")}
+                      </p>
                     </div>
 
                     <div className="bg-gray-50 p-4 rounded-xl">
                       <p className="text-sm text-gray-500 mb-1">
                         Email Address
                       </p>
-                      <p className="font-medium text-gray-800">{user.email}</p>
+                      <p className="font-medium text-gray-800">
+                        {" "}
+                        {getSessionData("email")}
+                      </p>
                     </div>
 
                     <div className="bg-gray-50 p-4 rounded-xl">
@@ -241,13 +286,15 @@ export default function UserProfile() {
                       </div>
                       <p className="font-medium text-gray-800 flex items-center gap-2">
                         <FiLock size={14} />
-                        {user.password}
+                        {getSessionData("pass").slice(0, 7)}****
                       </p>
                     </div>
 
                     <div className="bg-gray-50 p-4 rounded-xl">
                       <p className="text-sm text-gray-500 mb-1">Gender</p>
-                      <p className="font-medium text-gray-800">{user.gender}</p>
+                      <p className="font-medium text-gray-800">
+                        {getSessionData("gender")}
+                      </p>
                     </div>
 
                     <div className="bg-gray-50 p-4 rounded-xl md:col-span-2">
@@ -260,7 +307,7 @@ export default function UserProfile() {
                         </button>
                       </div>
                       <p className="font-medium text-gray-800">
-                        {user.address}
+                        {getSessionData("address")}
                       </p>
                     </div>
                   </div>
@@ -614,30 +661,52 @@ function OrderCard({ order }) {
 
 function OrderListItem({ order }) {
   return (
-    <div className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
-      <img
-        src={order.image || "/placeholder.svg"}
-        alt={order.title}
-        width={80}
-        height={80}
-        className="rounded-lg object-cover"
-      />
-      <div className="flex-grow">
-        <h4 className="font-semibold mb-1">{order.title}</h4>
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <span>{order.date}</span>
-          <span>•</span>
-          <span>{order.category}</span>
+    <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow max-w-3xl mx-auto">
+      {/* Top Section */}
+      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+        {/* Image */}
+        <img
+          src={order.image || "/placeholder.svg"}
+          alt={order.title}
+          className="w-20 h-20 rounded-lg object-cover"
+        />
+
+        {/* Order Details */}
+        <div className="flex-grow text-center sm:text-left">
+          <h4 className="font-semibold text-lg text-gray-800">{order.title}</h4>
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-sm text-gray-500">
+            <span>•</span>
+            <span>{order.category}</span>
+            <OrderStatusBadge status={order.status} />
+          </div>
+          {/* Price & Status */}
+          <div className="text-left">
+            <div className="font-bold text-green-700 text-lg">
+              {order.price}
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="text-right">{order.date}</div>
+          <div className="mt-4 flex flex-col sm:flex-row items-center gap-2">
+            {order.status !== "Cancel" && order.status !== "Delivered" && (
+              <button className="flex items-center justify-center w-full sm:w-auto gap-2 bg-red-600 hover:bg-red-700 text-white text-sm py-1 px-2 rounded-lg transition">
+                <MdCancel size={18} />
+                Cancel Order
+              </button>
+            )}
+
+            <button className="flex items-center justify-center w-full sm:w-auto gap-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm py-1 px-2 rounded-lg transition">
+              <MdOutlinePendingActions size={18} />
+              Check Status
+            </button>
+            <button className="flex items-center justify-center w-full sm:w-auto gap-2 bg-green-600 hover:bg-green-700 text-white text-sm py-1 px-2 rounded-lg transition">
+              <FaShoppingCart size={16} />
+              Shop Again
+            </button>
+          </div>
         </div>
       </div>
-      <div className="text-right">
-        <div className="font-bold text-green-700">{order.price}</div>
-        <OrderStatusBadge status={order.status} />
-      </div>
-      <button className="flex items-center gap-1 bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-full transition-colors">
-        <FaShoppingCart size={14} />
-        Buy Again
-      </button>
     </div>
   );
 }
@@ -790,6 +859,10 @@ function OrderStatusBadge({ status, className = "" }) {
   } else if (status === "Processing") {
     bgColor = "bg-amber-100";
     textColor = "text-amber-700";
+    icon = <BiPackage size={14} />;
+  } else if (status === "Cancel") {
+    bgColor = "bg-red-100";
+    textColor = "text-red-700";
     icon = <BiPackage size={14} />;
   }
 

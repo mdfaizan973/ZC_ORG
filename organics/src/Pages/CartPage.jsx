@@ -148,8 +148,8 @@ export default function CartPage() {
     <>
       <Navbar />
 
-      <div className="min-h-screen ">
-        <div className="max-w-7xl mx-auto px-4 py-12">
+      <>
+        <div className=" mx-auto p-4 md:p-6 bg-gray-50 min-h-screen">
           <div className="flex items-center justify-center mb-12">
             <FaLeaf className="h-8 w-8 text-green-600 mr-2" />
             <h1 className="text-4xl font-bold text-gray-800 tracking-tight">
@@ -338,23 +338,31 @@ export default function CartPage() {
                   </div>
 
                   <div className="bg-white p-6 rounded-lg shadow-lg border border-green-100">
-                    <div className="flex items-center mb-4">
+                    <h2 className="flex items-center font-semibold text-gray-800 mb-2">
                       <FaCreditCard className="h-5 w-5 text-green-600 mr-2" />
-                      <h3 className="font-semibold text-gray-800">We Accept</h3>
-                    </div>
-                    <div className="grid grid-cols-4 gap-2">
-                      <div className="h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <div className="w-6 h-6 bg-blue-500 rounded-full"></div>
-                      </div>
-                      <div className="h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <div className="w-8 h-5 bg-red-500 rounded"></div>
-                      </div>
-                      <div className="h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <div className="w-8 h-5 bg-yellow-400 rounded"></div>
-                      </div>
-                      <div className="h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <div className="w-8 h-5 bg-green-500 rounded"></div>
-                      </div>
+                      Customer Benefits
+                    </h2>
+                    <div className="mt-2 bg-green-50 p-4 rounded-xl border border-green-100">
+                      <ul className="text-xs text-gray-600 space-y-2">
+                        <li className="flex items-start">
+                          <div className="h-4 w-4 rounded-full bg-green-200 flex items-center justify-center mt-0.5 mr-2">
+                            <div className="h-2 w-2 rounded-full bg-green-600"></div>
+                          </div>
+                          Free shipping on orders over $50
+                        </li>
+                        <li className="flex items-start">
+                          <div className="h-4 w-4 rounded-full bg-green-200 flex items-center justify-center mt-0.5 mr-2">
+                            <div className="h-2 w-2 rounded-full bg-green-600"></div>
+                          </div>
+                          30-day money-back guarantee
+                        </li>
+                        <li className="flex items-start">
+                          <div className="h-4 w-4 rounded-full bg-green-200 flex items-center justify-center mt-0.5 mr-2">
+                            <div className="h-2 w-2 rounded-full bg-green-600"></div>
+                          </div>
+                          100% organic certified products
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
@@ -437,38 +445,12 @@ export default function CartPage() {
                       <span>Eco-friendly packaging on all orders</span>
                     </p>
                   </div>
-
-                  <div className="mt-8 bg-green-50 p-4 rounded-xl border border-green-100">
-                    <h3 className="text-sm font-medium text-gray-800 mb-2">
-                      Customer Benefits
-                    </h3>
-                    <ul className="text-xs text-gray-600 space-y-2">
-                      <li className="flex items-start">
-                        <div className="h-4 w-4 rounded-full bg-green-200 flex items-center justify-center mt-0.5 mr-2">
-                          <div className="h-2 w-2 rounded-full bg-green-600"></div>
-                        </div>
-                        Free shipping on orders over $50
-                      </li>
-                      <li className="flex items-start">
-                        <div className="h-4 w-4 rounded-full bg-green-200 flex items-center justify-center mt-0.5 mr-2">
-                          <div className="h-2 w-2 rounded-full bg-green-600"></div>
-                        </div>
-                        30-day money-back guarantee
-                      </li>
-                      <li className="flex items-start">
-                        <div className="h-4 w-4 rounded-full bg-green-200 flex items-center justify-center mt-0.5 mr-2">
-                          <div className="h-2 w-2 rounded-full bg-green-600"></div>
-                        </div>
-                        100% organic certified products
-                      </li>
-                    </ul>
-                  </div>
                 </div>
               </div>
             </div>
           )}
         </div>
-      </div>
+      </>
     </>
   );
 }
