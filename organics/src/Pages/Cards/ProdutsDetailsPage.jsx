@@ -20,6 +20,7 @@ import Navbar from "../../Components/Navbar";
 import { useParams } from "react-router-dom";
 import { baseUrl2 } from "../../../config/confg";
 import { fetchData, getSessionData, postData } from "../../utils/utils";
+import ProductFeedbackAndQuestions from "./ProductFeedbackAndQuestions";
 
 // const products = {
 //   _id: "67c41e3d08ab0e184e31e163",
@@ -420,6 +421,9 @@ export default function ProductDetailsPage() {
           </div>
         </div>
       </div>
+
+      {/* FeedBack and Q&A Component */}
+      <ProductFeedbackAndQuestions product={product} />
     </>
   );
 }
