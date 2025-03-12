@@ -8,7 +8,8 @@ feedbackRouter.post("/", async (req, res) => {
     await feedback.save();
     res.status(201).json({ message: "Feedback added successfully", feedback });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error("Internal Server Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
@@ -16,9 +17,10 @@ feedbackRouter.post("/", async (req, res) => {
 feedbackRouter.get("/", async (req, res) => {
   try {
     const feedbacks = await ProductFeedBackModel.find();
-    res.status(200).json(feedbacks);
+    res.status(201).json(feedbacks);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Internal Server Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
@@ -27,11 +29,12 @@ feedbackRouter.get("/:productId", async (req, res) => {
   try {
     const feedbacks = await ProductFeedBackModel.find({ product_id: req.params.productId });
     if (!feedbacks.length) {
-      return res.status(404).json({ message: "No feedback found for this product" });
+      return res.status(201).json({ message: "No feedback found for this product" });
     }
-    res.status(200).json(feedbacks);
+    res.status(201).json(feedbacks);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Internal Server Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
@@ -40,11 +43,12 @@ feedbackRouter.delete("/:id", async (req, res) => {
   try {
     const deletedFeedback = await ProductFeedBackModel.findByIdAndDelete(req.params.id);
     if (!deletedFeedback) {
-      return res.status(404).json({ message: "Feedback not found" });
+      return res.status(201).json({ message: "Feedback not found" });
     }
-    res.status(200).json({ message: "Feedback deleted successfully" });
+    res.status(201).json({ message: "Feedback deleted successfully" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Internal Server Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
