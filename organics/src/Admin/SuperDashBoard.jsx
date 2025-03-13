@@ -16,14 +16,6 @@ export default function SuperDashBoard({ show_descrition = true }) {
       route: "/adminproducts",
     },
     {
-      title: "Users",
-      description:
-        "View and manage registered users, assign roles, deactivate accounts, and monitor user activities.",
-      image:
-        "https://i.pinimg.com/736x/88/17/52/8817525e87273d1299dafc1f5f8f1067.jpg",
-      route: "/adminusers",
-    },
-    {
       title: "Orders",
       description:
         "Monitor order statuses, approve or reject transactions, manage refunds, and resolve order disputes.",
@@ -51,16 +43,26 @@ export default function SuperDashBoard({ show_descrition = true }) {
   useEffect(() => {
     let roleId = getSessionData("role_id");
     if ([1].includes(roleId)) {
-      const newCard = {
-        title: "Sallers",
-        description:
-          "Manage all listed products, add new items, update details, and remove listings as needed.",
-        image:
-          "https://i.pinimg.com/736x/bf/5f/ae/bf5fae190185579182ecf210327e2df3.jpg",
-        route: "/adminproducts",
-      };
+      const newCard = [
+        {
+          title: "Sallers",
+          description:
+            "Manage all listed products, add new items, update details, and remove listings as needed.",
+          image:
+            "https://i.pinimg.com/736x/bf/5f/ae/bf5fae190185579182ecf210327e2df3.jpg",
+          route: "/adminproducts",
+        },
 
-      setDashboardCard([...dashboardCard, newCard]);
+        {
+          title: "Users",
+          description:
+            "View and manage registered users, assign roles, deactivate accounts, and monitor user activities.",
+          image:
+            "https://i.pinimg.com/736x/88/17/52/8817525e87273d1299dafc1f5f8f1067.jpg",
+          route: "/adminusers",
+        },
+      ];
+      setDashboardCard([...dashboardCard, ...newCard]);
     }
   }, []);
 

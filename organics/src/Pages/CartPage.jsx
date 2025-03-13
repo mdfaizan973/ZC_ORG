@@ -1,6 +1,6 @@
 import Navbar from "../Components/Navbar";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FaTrashAlt,
   FaPlus,
@@ -12,60 +12,33 @@ import {
   FaTruck,
   FaShoppingCart,
 } from "react-icons/fa";
+import { deleteData, fetchData, getSessionData } from "../utils/utils";
+import { baseUrl2 } from "../../config/confg";
+import { useNavigate } from "react-router-dom";
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      category: "Fruits",
-      name: "Organic Fresh Avocado",
-      price: 3.99,
-      quantity: 2,
-      image:
-        "https://i.pinimg.com/564x/62/57/c2/6257c298033ed1ee2c66bd652db459dc.jpg",
-      description:
-        "Crisp and hearty rye crackers, perfect for snacking with your favorite dips and spreads...",
-    },
-    {
-      id: 2,
-      category: "Vegetables",
-      name: "Organic Kale Bundle",
-      price: 2.49,
-      quantity: 1,
-      image:
-        "https://i.pinimg.com/564x/2f/d3/c2/2fd3c25d9286b9257c10119168fef080.jpg",
-      description:
-        "Fresh organic kale, perfect for healthy smoothies and salads.",
-    },
-    {
-      id: 3,
-      category: "Grains",
-      name: "Organic Honey Jar",
-      price: 8.99,
-      quantity: 1,
-      image: "https://placehold.co/400x400.png",
-      description: "Raw & unfiltered organic honey for natural sweetness.",
-    },
-    {
-      id: 4,
-      category: "Grains",
-      name: "Organic Grain Jar",
-      price: 6.99,
-      quantity: 1,
-      image: "https://placehold.co/400x400.png",
-      description: "Premium organic grains, perfect for a healthy diet.",
-    },
-    {
-      id: 5,
-      category: "Grains",
-      name: "Organic Whole Grains",
-      price: 38.99,
-      quantity: 1,
-      image: "https://placehold.co/400x400.png",
-      description: "A mix of whole organic grains for a balanced diet.",
-    },
-  ]);
+  const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
   const [shippingCharge, setShippingChnarge] = useState(5.99);
+
+  useEffect(() => {
+    loadCartProduts();
+  }, []);
+
+  const loadCartProduts = async () => {
+    const userId = getSessionData("_id");
+    const cartProd = await fetchData(`${baseUrl2}/cart`);
+
+    if (cartProd) {
+      setCartItems(cartProd);
+    }
+  };
+
+  const removeItem = async (id) => {
+    // setCartItems(cartItems.filter((item) => item.id !== id));
+    await deleteData(`${baseUrl2}/cart/${id}`);
+    loadCartProduts();
+  };
 
   const updateQuantity = (id, newQuantity) => {
     if (newQuantity < 1) return;
@@ -77,13 +50,9 @@ export default function CartPage() {
     );
   };
 
-  const removeItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
-  };
-
   const calculateSubtotal = () => {
     return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
+      (total, item) => total + item.discount_price_inr * item.quantity,
       0
     );
   };
@@ -113,11 +82,11 @@ export default function CartPage() {
   };
 
   const buyNowItem = (item) => {
-    const price = item.price * item.quantity;
-    const shipping = price < 50 ? shippingCharge : 0;
+    const discount_price_inr = item.discount_price_inr * item.quantity;
+    const shipping = discount_price_inr < 50 ? shippingCharge : 0;
     const tax = calculateTax() || 0;
 
-    const total = Number(price) + Number(tax) + Number(shipping);
+    const total = Number(discount_price_inr) + Number(tax) + Number(shipping);
     handleGoToOrder([item], total);
   };
 
@@ -166,10 +135,13 @@ export default function CartPage() {
                 Your cart is empty
               </h2>
               <p className="text-gray-500 mb-8">
-                Looks like you haven't added any organic goodness to your cart
-                yet.
+                Looks like you haven&apos;t added any organic goodness to your
+                cart yet.
               </p>
-              <button className="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl font-medium hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              <button
+                onClick={() => navigate("/organicsproducts")}
+                className="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl font-medium hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              >
                 Continue Shopping
               </button>
             </div>
@@ -195,15 +167,17 @@ export default function CartPage() {
                         <div className="flex flex-col sm:flex-row items-center gap-4 mb-2">
                           <div className="flex-shrink-0 bg-white rounded-xl p-1 shadow-md border border-green-100 overflow-hidden">
                             <img
-                              src={item.image || "/placeholder.svg"}
-                              alt={item.name}
+                              src={
+                                item.image || "https://placehold.co/400x400.png"
+                              }
+                              alt={item.title}
                               className="w-20 h-20 object-cover rounded-lg"
                             />
                           </div>
 
                           <div className="flex-grow text-center sm:text-left">
                             <h3 className="text-lg font-semibold text-gray-800">
-                              {item.name}
+                              {item.title}
                               <span className="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium ml-1">
                                 <FaLeaf className="w-3 h-3 mr-1" />
                                 {item.category}
@@ -256,10 +230,13 @@ export default function CartPage() {
 
                             <div className="flex items-center text-center">
                               <p className="text-xl font-bold text-gray-800">
-                                ${(item.price * item.quantity).toFixed(2)}
+                                $
+                                {(
+                                  item.discount_price_inr * item.quantity
+                                ).toFixed(2)}
                               </p>
                               <p className="text-sm ml-1 text-gray-500">
-                                ${item.price.toFixed(2)} each
+                                ${item.discount_price_inr.toFixed(2)} each
                               </p>
                             </div>
                           </div>
