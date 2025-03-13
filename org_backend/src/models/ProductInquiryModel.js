@@ -17,5 +17,5 @@ const questionSchema = new mongoose.Schema(
   }
 );
 
-const ProductQuestionModel = mongoose.model("ProdQuestion", questionSchema);
-module.exports = ProductQuestionModel;
+const ProductInquiryModel = mongoose.model("ProdQuestion", questionSchema);
+module.exports = ProductInquiryModel;
