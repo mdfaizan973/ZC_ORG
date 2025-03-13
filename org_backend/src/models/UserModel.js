@@ -34,6 +34,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    businessName: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );
