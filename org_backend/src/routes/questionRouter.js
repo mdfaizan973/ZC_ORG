@@ -1,11 +1,11 @@
 const express = require("express");
 const questionRouter = express.Router();
-const ProductQuestionModel = require("../models/ProductQuestionModel");
+const ProductInquiryModel = require("../models/ProductInquiryModel");
 
 // ✅ Create a new question
 questionRouter.post("/", async (req, res) => {
   try {
-    const question = new ProductQuestionModel(req.body);
+    const question = new ProductInquiryModel(req.body);
     await question.save();
     res.status(201).json({ message: "Question added successfully", question });
   } catch (error) {
@@ -17,7 +17,7 @@ questionRouter.post("/", async (req, res) => {
 // ✅ Get all questions
 questionRouter.get("/", async (req, res) => {
   try {
-    const questions = await ProductQuestionModel.find();
+    const questions = await ProductInquiryModel.find();
     res.status(200).json(questions);
   } catch (error) {
     console.error("Internal Server Error:", error);
@@ -28,7 +28,7 @@ questionRouter.get("/", async (req, res) => {
 // ✅ Get questions for a specific product
 questionRouter.get("/:productId", async (req, res) => {
   try {
-    const questions = await ProductQuestionModel.find({ product_id: req.params.productId });
+    const questions = await ProductInquiryModel.find({ product_id: req.params.productId });
     if (!questions.length) {
       return res.status(200).json({ message: "No questions found for this product" });
     }
@@ -43,7 +43,7 @@ questionRouter.get("/:productId", async (req, res) => {
 questionRouter.put("/:id", async (req, res) => {
   try {
     const { saler_reply } = req.body;
-    const updatedQuestion = await ProductQuestionModel.findByIdAndUpdate(
+    const updatedQuestion = await ProductInquiryModel.findByIdAndUpdate(
       req.params.id,
       { saler_reply },
       { new: true }
@@ -61,7 +61,7 @@ questionRouter.put("/:id", async (req, res) => {
 // ✅ Delete a question by ID
 questionRouter.delete("/:id", async (req, res) => {
   try {
-    const deletedQuestion = await ProductQuestionModel.findByIdAndDelete(req.params.id);
+    const deletedQuestion = await ProductInquiryModel.findByIdAndDelete(req.params.id);
     if (!deletedQuestion) {
       return res.status(200).json({ message: "Question not found" });
     }
