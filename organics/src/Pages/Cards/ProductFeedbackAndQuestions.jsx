@@ -7,8 +7,13 @@ import {
   FaRegCalendarAlt,
   FaAward,
 } from "react-icons/fa";
-import { useParams } from "react-router-dom";
-import { fetchData, getSessionData, postData } from "../../utils/utils";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  fetchData,
+  getSessionData,
+  hasToken,
+  postData,
+} from "../../utils/utils";
 import { baseUrl2 } from "../../../config/confg";
 import Loader from "../LoadingUI/Loader";
 
@@ -55,6 +60,7 @@ export const cardClass =
   "bg-white rounded-lg shadow-sm px-4 py-2 border border-gray-100";
 
 const ProductsReviews = ({ paramId, product }) => {
+  const navigate = useNavigate();
   // State for feedback form
   const [feedbackText, setFeedbackText] = useState("");
   const [rating, setRating] = useState(0);
@@ -62,24 +68,28 @@ const ProductsReviews = ({ paramId, product }) => {
   const [loadingReiews, setLoadingReiews] = useState(true);
   // Handle feedback submission
   const handleFeedbackSubmit = async () => {
-    if (feedbackText.trim() === "" || rating === 0) return;
+    if (hasToken()) {
+      if (feedbackText.trim() === "" || rating === 0) return;
 
-    const newFeedback = {
-      user_name: getSessionData("name"),
-      user_id: getSessionData("_id"),
-      product_id: product._id,
-      user_feedback_to_prod: feedbackText,
-      user_prod_rating: rating,
-      user_profile_img: getSessionData("profile_image"),
-      user_gender: getSessionData("gender"),
-      saler_name: product.saler_name,
-      saler_id: product.saler_id,
-    };
+      const newFeedback = {
+        user_name: getSessionData("name"),
+        user_id: getSessionData("_id"),
+        product_id: product._id,
+        user_feedback_to_prod: feedbackText,
+        user_prod_rating: rating,
+        user_profile_img: getSessionData("profile_image"),
+        user_gender: getSessionData("gender"),
+        saler_name: product.saler_name,
+        saler_id: product.saler_id,
+      };
 
-    await postData(`${baseUrl2}/product-feedback`, newFeedback);
-    loadFeedback();
-    setFeedbackText("");
-    setRating(0);
+      await postData(`${baseUrl2}/product-feedback`, newFeedback);
+      loadFeedback();
+      setFeedbackText("");
+      setRating(0);
+    } else {
+      navigate("/login");
+    }
   };
 
   useEffect(() => {
@@ -249,6 +259,7 @@ const ProductsReviews = ({ paramId, product }) => {
 };
 
 const QuestionAndAnswers = ({ paramId, product }) => {
+  const navigate = useNavigate();
   // State for question form
   const [questionText, setQuestionText] = useState("");
   const [questions, setQuestions] = useState([
@@ -280,19 +291,23 @@ const QuestionAndAnswers = ({ paramId, product }) => {
 
   // Handle question submission
   const handleQuestionSubmit = () => {
-    if (questionText.trim() === "") return;
+    if (hasToken()) {
+      if (questionText.trim() === "") return;
 
-    const newQuestion = {
-      id: questions.length + 1,
-      name: "Current User",
-      date: new Date(),
-      text: questionText,
-      answer: "You will get the answer soon.",
-      likes: 0,
-    };
+      const newQuestion = {
+        id: questions.length + 1,
+        name: "Current User",
+        date: new Date(),
+        text: questionText,
+        answer: "You will get the answer soon.",
+        likes: 0,
+      };
 
-    setQuestions([newQuestion, ...questions]);
-    setQuestionText("");
+      setQuestions([newQuestion, ...questions]);
+      setQuestionText("");
+    } else {
+      navigate("/login");
+    }
   };
   const [showAll, setShowAll] = useState(false);
   const visibleQuestions = showAll ? questions : questions.slice(0, 3);
