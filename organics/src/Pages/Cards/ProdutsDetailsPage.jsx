@@ -25,6 +25,7 @@ import ProductFeedbackAndQuestions, {
 } from "./ProductFeedbackAndQuestions";
 import Loader from "../LoadingUI/Loader";
 import DiscriptionPageLoader from "../LoadingUI/DiscriptionLoad";
+import { placeHolderImage } from "../../utils/uiUtils";
 
 // const products = {
 //   _id: "67c41e3d08ab0e184e31e163",
@@ -112,14 +113,11 @@ export default function ProductDetailsPage() {
               {/* Product Image */}
               <div className="bg-green-50 rounded-xl p-6 flex items-center justify-center">
                 <img
-                  src={
-                    product.image ||
-                    "https://i.pinimg.com/736x/c0/7b/c4/c07bc4bfd5a7bf373fd5596f13448a0e.jpg"
-                  }
+                  src={product.image || placeHolderImage}
                   alt={product.title}
                   width={400}
                   height={400}
-                  className="object-contain max-h-[400px]"
+                  className="object-contain max-h-[400px] rounded-xl"
                 />
               </div>
 

@@ -1,7 +1,7 @@
 export default function CartLoading() {
   return (
     <div>
-      <div className="mx-auto mt-10 mb-10 max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
+      <div className="mx-auto mt-10 mb-10 max-w-7xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
         <div className="rounded-lg md:w-2/3">
           {[1, 2, 3, 4].map((i) => (
             <div
@@ -43,14 +43,20 @@ export default function CartLoading() {
             <p className="text-gray-700 bg-gray-300 h-4 w-20"></p>
             <p className="text-gray-700 bg-gray-300 h-4 w-20"></p>
           </div>
+
           <hr className="my-4" />
+
           <div className="flex justify-between">
             <p className="text-lg font-bold bg-gray-300 h-6 w-24"></p>
             <div className="">
               <p className="mb-1 text-lg font-bold bg-gray-300 h-6 w-32"></p>
             </div>
           </div>
-          <button className="mt-6 w-full rounded-md bg-gray-200 py-2 font-medium text-gray-600 hover:bg-gray-300">
+          <div className="mb-2 flex justify-between">
+            <p className="text-gray-700 bg-gray-300 h-4 w-40"></p>
+            <p className="text-gray-700 bg-gray-300 h-4 w-32"></p>
+          </div>
+          <button className="mt-6 w-full h-8 rounded-md bg-gray-200 py-2 font-medium text-gray-600 hover:bg-gray-300">
             <a className="bg-gray-300 h-8 w-40"></a>
           </button>
         </div>

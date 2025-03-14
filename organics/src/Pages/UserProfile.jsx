@@ -25,7 +25,12 @@ import {
   MdCancel,
 } from "react-icons/md";
 import { BiPackage } from "react-icons/bi";
-import { deleteData, fetchData, getSessionData } from "../utils/utils";
+import {
+  deleteData,
+  fetchData,
+  getSessionData,
+  postData,
+} from "../utils/utils";
 import { ToastContainer, toast } from "react-toastify";
 import { baseUrl2 } from "../../config/confg";
 import Loader from "./LoadingUI/Loader";
@@ -35,7 +40,12 @@ import { placeHolderImage } from "../utils/uiUtils";
 export default function UserProfile() {
   const [activeTab, setActiveTab] = useState("profile");
   const [viewMode, setViewMode] = useState("grid");
-
+  const [salerInfo, setSalerInfo] = useState({
+    saler_name: "",
+    saler_email: "",
+    saler_business_name: "",
+    sell_description: "",
+  });
   const orders = [
     {
       id: 1,
@@ -144,6 +154,25 @@ export default function UserProfile() {
     window.location.reload();
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSalerInfo((prevInfo) => ({
+      ...prevInfo,
+      [name]: value,
+    }));
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    await postData(`${baseUrl2}/saler`, salerInfo);
+
+    setSalerInfo({
+      saler_name: "",
+      saler_email: "",
+      saler_business_name: "",
+      sell_description: "",
+    });
+  };
   return (
     <>
       <ToastContainer />
@@ -368,7 +397,7 @@ export default function UserProfile() {
                   <h4 className="text-lg font-medium text-green-800 mb-4">
                     Apply to Sell
                   </h4>
-                  <form className="space-y-4">
+                  <form className="space-y-4" onSubmit={handleFormSubmit}>
                     <div>
                       <label
                         htmlFor="name"
@@ -378,10 +407,13 @@ export default function UserProfile() {
                       </label>
                       <input
                         type="text"
-                        id="name"
+                        id="saler_name"
+                        name="saler_name"
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                         placeholder="Enter your full name"
                         required
+                        value={salerInfo.saler_name}
+                        onChange={handleInputChange}
                       />
                     </div>
 
@@ -394,10 +426,13 @@ export default function UserProfile() {
                       </label>
                       <input
                         type="email"
-                        id="email"
+                        id="saler_email"
+                        name="saler_email"
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                         placeholder="Enter your email address"
                         required
+                        value={salerInfo.saler_email}
+                        onChange={handleInputChange}
                       />
                       <p className="text-sm text-gray-500 mt-1">
                         Must match your login email to access selling features
@@ -413,9 +448,13 @@ export default function UserProfile() {
                       </label>
                       <input
                         type="text"
-                        id="business"
+                        id="saler_business_name"
+                        name="saler_business_name"
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                         placeholder="Enter your business name"
+                        required
+                        value={salerInfo.saler_business_name}
+                        onChange={handleInputChange}
                       />
                     </div>
 
@@ -428,9 +467,12 @@ export default function UserProfile() {
                       </label>
                       <textarea
                         id="products"
+                        name="sell_description"
                         rows={3}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                         placeholder="Briefly describe your products"
+                        value={salerInfo.sell_description}
+                        onChange={handleInputChange}
                       />
                     </div>
 
@@ -497,7 +539,12 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-2xl font-semibold text-green-800">Your Orders</h3>
+        <h3 className="text-2xl font-semibold text-green-800">
+          Your Orders{" "}
+          <span className="text-lg text-gray-400">
+            (Reflects item details at the time of purchase)
+          </span>{" "}
+        </h3>
         <div className="flex items-center gap-4">
           <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
           <button className="flex items-center gap-2 text-gray-600 hover:text-green-700 transition-colors">

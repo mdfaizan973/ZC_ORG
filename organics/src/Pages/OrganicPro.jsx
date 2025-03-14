@@ -5,6 +5,7 @@ import OrgPro from "./Cards/OrgPro";
 import Navbar from "../Components/Navbar";
 import { baseUrl2 } from "../../config/confg";
 import { fetchData, getSessionData, postData } from "../utils/utils";
+import ProductsCarload from "./LoadingUI/ProductsCarload";
 export default function OrganicPro() {
   const [orgData, setOrgData] = useState([]);
   const [page, setPage] = useState(1);
@@ -12,6 +13,7 @@ export default function OrganicPro() {
   const [sort, setSort] = useState("");
   const [fileter, setFilter] = useState("");
   const curdatalength = orgData.length;
+  const [loadProd, setLoadProd] = useState(true);
   // let limit = 9;
 
   // const getData = async (page, filter) => {
@@ -97,7 +99,9 @@ export default function OrganicPro() {
   }, []);
 
   const load_prod_data = async () => {
+    setLoadProd(true);
     const data = await fetchData(`${baseUrl2}/products`);
+    setLoadProd(false);
     setOrgData(data);
   };
 
@@ -155,23 +159,23 @@ export default function OrganicPro() {
 
       {/* Passing props */}
 
-      {/* {load ? (
+      {loadProd ? (
         <ProductsCarload />
-      ) : ( */}
-      <div className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
-        {orgData?.map((ele, i) => (
-          <OrgPro
-            key={i}
-            title={ele.title}
-            image={ele.image}
-            price={ele.price_inr}
-            id={ele._id}
-            dataItem={ele}
-            addtocart={addToCart}
-          />
-        ))}
-      </div>
-      {/* )} */}
+      ) : (
+        <div className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
+          {orgData?.map((ele, i) => (
+            <OrgPro
+              key={i}
+              title={ele.title}
+              image={ele.image}
+              price={ele.price_inr}
+              id={ele._id}
+              dataItem={ele}
+              addtocart={addToCart}
+            />
+          ))}
+        </div>
+      )}
       {/* Pagination */}
       <div className="flex flex-col items-center mt-10 mb-10">
         <div className="inline-flex mt-2 xs:mt-0">
