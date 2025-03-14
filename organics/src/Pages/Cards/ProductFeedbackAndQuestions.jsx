@@ -262,56 +262,62 @@ const QuestionAndAnswers = ({ paramId, product }) => {
   const navigate = useNavigate();
   // State for question form
   const [questionText, setQuestionText] = useState("");
+
   const [questions, setQuestions] = useState([
-    {
-      id: 1,
-      name: "Michael Johnson",
-      date: new Date(2023, 4, 20),
-      text: "Does this product come with a warranty?",
-      answer: "You will get the answer soon.",
-      likes: 15,
-    },
-    {
-      id: 2,
-      name: "Emily Wilson",
-      date: new Date(2023, 5, 10),
-      text: "Is this product compatible with Model X-200?",
-      answer: "You will get the answer soon.",
-      likes: 8,
-    },
-    {
-      id: 3,
-      name: "David Thompson",
-      date: new Date(2023, 6, 5),
-      text: "Can I use these headphones while working out? Are they sweat-resistant?",
-      answer: "You will get the answer soon.",
-      likes: 22,
-    },
+    // {
+    //   id: 1,
+    //   name: "Michael Johnson",
+    //   date: new Date(2023, 4, 20),
+    //   text: "Does this product come with a warranty?",
+    //   answer: "You will get the answer soon.",
+    //   likes: 15,
+    // },
   ]);
 
+  const [showQuestionLoading, setShowQuestioLoading] = useState(true);
+  const [showAll, setShowAll] = useState(false);
   // Handle question submission
-  const handleQuestionSubmit = () => {
+  const handleQuestionSubmit = async () => {
     if (hasToken()) {
       if (questionText.trim() === "") return;
 
       const newQuestion = {
-        id: questions.length + 1,
-        name: "Current User",
-        date: new Date(),
-        text: questionText,
-        answer: "You will get the answer soon.",
-        likes: 0,
+        user_name: getSessionData("name"),
+        user_id: getSessionData("_id"),
+        product_id: product._id,
+        user_question_to_prod: questionText,
+        saler_reply: "",
+        user_profile_img: getSessionData("profile_image"),
+        saler_name: product.saler_name,
+        saler_id: product.saler_id,
       };
 
-      setQuestions([newQuestion, ...questions]);
+      // setQuestions([newQuestion, ...questions]);
+      await postData(`${baseUrl2}/product-question`, newQuestion);
+      loadQuestions();
       setQuestionText("");
     } else {
       navigate("/login");
     }
   };
-  const [showAll, setShowAll] = useState(false);
-  const visibleQuestions = showAll ? questions : questions.slice(0, 3);
+
   const saler_name = "Faizan";
+
+  useEffect(() => {
+    loadQuestions();
+  }, []);
+
+  const loadQuestions = async () => {
+    setShowQuestioLoading(true);
+    const feedbackData = await fetchData(
+      `${baseUrl2}/product-question/${paramId}`
+    );
+    setShowQuestioLoading(false);
+    if (feedbackData) {
+      setQuestions(feedbackData);
+    }
+  };
+  // const visibleQuestions = showAll ? questions : questions?.slice(0, 3);
 
   return (
     <>
@@ -368,56 +374,67 @@ const QuestionAndAnswers = ({ paramId, product }) => {
 
         {/* Questions Display */}
         <div className="space-y-2">
-          {visibleQuestions.map((question) => (
-            <div key={question.id} className={`${cardClass}`}>
-              {/* Question */}
-              <div className="flex items-start mb-2">
-                <div className="mr-4 flex-shrink-0">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center">
-                    <FaUserCircle className="w-7 h-7 text-white" />
-                  </div>
-                </div>
-                <div className="flex-1">
-                  <div className="flex flex-wrap items-center mb-1">
-                    <h4 className="font-bold text-gray-800 mr-2">
-                      {question.name}
-                    </h4>
-                    <div className="flex ml-auto">
-                      <FaRegCalendarAlt className="w-4 h-4 text-gray-400 mr-1" />
-                      <span className="text-sm text-gray-500">
-                        {getTimeAgo(question.date)}
-                      </span>
+          {questions.length > 0 ? (
+            questions?.map((question) => (
+              <div key={question.id} className={`${cardClass}`}>
+                {/* Question */}
+                <div className="flex items-start mb-2">
+                  <div className="mr-4 flex-shrink-0">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center">
+                      <FaUserCircle className="w-7 h-7 text-white" />
                     </div>
                   </div>
+                  <div className="flex-1">
+                    <div className="flex flex-wrap items-center mb-1">
+                      <h4 className="font-bold text-gray-800 mr-2">
+                        {question.user_name}
+                      </h4>
+                      <div className="flex ml-auto">
+                        <FaRegCalendarAlt className="w-4 h-4 text-gray-400 mr-1" />
+                        <span className="text-sm text-gray-500">
+                          {/* {getTimeAgo(question.date)} */}
+                          {new Date(
+                            question.user_question_date
+                          ).toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
 
-                  <p className="text-gray-700 leading-relaxed font-medium">
-                    {question.text}
-                  </p>
+                    <p className="text-gray-700 leading-relaxed font-medium">
+                      {question.user_question_to_prod}
+                    </p>
+                  </div>
                 </div>
+
+                {/* Answer */}
+                {question.saler_reply && (
+                  <div className="ml-16 p-3  bg-green-50 rounded-xl border-l-4 border-green-500">
+                    <div className="flex items-start">
+                      <div className="mr-4 flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-green-200 flex items-center justify-center">
+                          <FaRegCommentDots className="w-5 h-5 text-green-700" />
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center">
+                          <h5 className="font-bold text-green-800 flex items-center">
+                            Seller
+                          </h5>
+                        </div>
+                        <p className="text-gray-700">{question.saler_reply}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-
-              {/* Answer */}
-              {question.answer && (
-                <div className="ml-16 p-3  bg-green-50 rounded-xl border-l-4 border-green-500">
-                  <div className="flex items-start">
-                    <div className="mr-4 flex-shrink-0">
-                      <div className="w-8 h-8 rounded-full bg-green-200 flex items-center justify-center">
-                        <FaRegCommentDots className="w-5 h-5 text-green-700" />
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center">
-                        <h5 className="font-bold text-green-800 flex items-center">
-                          Seller
-                        </h5>
-                      </div>
-                      <p className="text-gray-700">{question.answer}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
+            ))
+          ) : (
+            <div className="flex justify-center ">
+              <p className="px-6 py-3 text-2xl font-bold bg-white text-gray-400 rounded-lg">
+                No Questions Found
+              </p>
             </div>
-          ))}
+          )}
         </div>
 
         {questions.length > 3 && (
