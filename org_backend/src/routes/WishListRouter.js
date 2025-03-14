@@ -29,9 +29,7 @@ wishListRouter.post("/", async (req, res) => {
   try {
     const wishlistProd = new WishListSchemaModel(req.body);
     await wishlistProd.save();
-    res
-      .status(201)
-      .json({ message: "Wish list added successfully", wishlistProd });
+    res.status(201).json({ message: "WishList Added", wishlistProd });
   } catch (error) {
     console.error("Internal Server Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -44,9 +42,7 @@ wishListRouter.delete("/:id", async (req, res) => {
       req.params.id
     );
 
-    res
-      .status(201)
-      .json({ message: "Feedback deleted successfully", deletedWishList });
+    res.status(201).json({ message: "WishList Removed", deletedWishList });
   } catch (error) {
     console.error("Internal Server Error:", error);
     res.status(500).json({ message: "Internal Server Error" });

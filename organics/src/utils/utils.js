@@ -82,7 +82,7 @@ export const postData = async (url, data, method = "POST", token = null) => {
 };
 
 export const deleteData = async (url, token = null) => {
-  const toastId = toast.loading("Deleting... ⏳", {
+  const toastId = toast.loading("Removing... ⏳", {
     position: toast.POSITION.TOP_CENTER,
   });
 

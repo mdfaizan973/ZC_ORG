@@ -1,5 +1,6 @@
 import { getSessionData } from "./utils";
 
+export const placeHolderImage = "https://placehold.co/400x400";
 export const prepare_wishlist = (wishlistProd) => {
   console.log(wishlistProd);
   const wishListData = {

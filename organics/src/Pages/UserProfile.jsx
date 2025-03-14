@@ -30,6 +30,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { baseUrl2 } from "../../config/confg";
 import Loader from "./LoadingUI/Loader";
 import { useNavigate } from "react-router-dom";
+import { placeHolderImage } from "../utils/uiUtils";
 
 export default function UserProfile() {
   const [activeTab, setActiveTab] = useState("profile");
@@ -206,8 +207,7 @@ export default function UserProfile() {
                     <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
                       <img
                         src={
-                          getSessionData("profile_image") ||
-                          "https://placehold.co/400x400.png"
+                          getSessionData("profile_image") || placeHolderImage
                         }
                         alt="Profile"
                         width={100}
@@ -623,6 +623,13 @@ function WishlistTab({ viewMode, setViewMode }) {
         <div className="flex items-center justify-center w-full h-[400px]">
           <Loader />
         </div>
+      ) : emptyWishList ? (
+        <EmptyState
+          icon={<FiHeart size={48} className="text-gray-400" />}
+          title="Your Wishlist is Empty"
+          description="Save items you like to your wishlist and come back to them anytime."
+          actionLabel="Explore Products"
+        />
       ) : (
         <div
           className={`${
@@ -631,30 +638,21 @@ function WishlistTab({ viewMode, setViewMode }) {
               : "space-y-6"
           }`}
         >
-          {emptyWishList ? (
-            <EmptyState
-              icon={<FiHeart size={48} className="text-gray-400" />}
-              title="Your Wishlist is Empty"
-              description="Save items you like to your wishlist and come back to them anytime."
-              actionLabel="Explore Products"
-            />
-          ) : (
-            wishListData?.map((item) =>
-              viewMode === "grid" ? (
-                <WishlistCard
-                  key={item.id}
-                  item={item}
-                  removeItemFromWishList={removeItemFromWishList}
-                  goToDetailsPage={goToDetailsPage}
-                />
-              ) : (
-                <WishlistListItem
-                  key={item.id}
-                  item={item}
-                  removeItemFromWishList={removeItemFromWishList}
-                  goToDetailsPage={goToDetailsPage}
-                />
-              )
+          {wishListData?.map((item) =>
+            viewMode === "grid" ? (
+              <WishlistCard
+                key={item.id}
+                item={item}
+                removeItemFromWishList={removeItemFromWishList}
+                goToDetailsPage={goToDetailsPage}
+              />
+            ) : (
+              <WishlistListItem
+                key={item.id}
+                item={item}
+                removeItemFromWishList={removeItemFromWishList}
+                goToDetailsPage={goToDetailsPage}
+              />
             )
           )}
         </div>
@@ -673,7 +671,7 @@ function OrderCard({ order }) {
         <div className="relative">
           <div className="flex justify-center items-center bg-gray-50 p-2">
             <img
-              src={order.image || "/placeholder.svg"}
+              src={order.image || placeHolderImage}
               alt={order.title}
               width={100}
               height={100}
@@ -718,7 +716,7 @@ function OrderListItem({ order }) {
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
         {/* Image */}
         <img
-          src={order.image || "/placeholder.svg"}
+          src={order.image || placeHolderImage}
           alt={order.title}
           className="w-20 h-20 rounded-lg object-cover"
         />
@@ -781,7 +779,7 @@ function WishlistCard({ item, removeItemFromWishList, goToDetailsPage }) {
           onClick={() => goToDetailsPage(item.product_id)}
         >
           <img
-            src={item.product_img || "https://placehold.co/400x400"}
+            src={item.product_img || placeHolderImage}
             alt={item.product_title}
             width={100}
             height={100}
@@ -835,7 +833,7 @@ function WishlistListItem({ item }) {
   return (
     <div className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
       <img
-        src={item.product_img || "https://placehold.co/600x400"}
+        src={item.product_img || placeHolderImage}
         alt={item.product_title}
         width={80}
         height={80}
@@ -924,12 +922,16 @@ function OrderStatusBadge({ status, className = "" }) {
 }
 
 function EmptyState({ icon, title, description, actionLabel }) {
+  const navigate = useNavigate();
   return (
     <div className="text-center py-12 bg-gray-50 rounded-xl">
       <div className="mx-auto text-gray-400 mb-4">{icon}</div>
       <h4 className="text-xl font-medium text-gray-800 mb-2">{title}</h4>
       <p className="text-gray-500 mb-6 max-w-md mx-auto">{description}</p>
-      <button className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg transition-colors">
+      <button
+        onClick={() => navigate("/organicsproducts")}
+        className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg transition-colors"
+      >
         {actionLabel}
       </button>
     </div>
