@@ -15,22 +15,29 @@ import {
 import { deleteData, fetchData, getSessionData } from "../utils/utils";
 import { baseUrl2 } from "../../config/confg";
 import { useNavigate } from "react-router-dom";
+import CartLoading from "./LoadingUI/CartLoading";
 
 export default function CartPage() {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([]);
   const [shippingCharge, setShippingChnarge] = useState(50);
+  const [cartItems, setCartItems] = useState([]);
+  const [cartLoading, setCartLoading] = useState(true);
+  const [showEmptyCart, setShowEmptyCart] = useState(false);
 
   useEffect(() => {
     loadCartProduts();
   }, []);
 
   const loadCartProduts = async () => {
+    setCartLoading(true);
+    setShowEmptyCart(false);
     const userId = getSessionData("_id");
     const cartProd = await fetchData(`${baseUrl2}/cart`);
-
-    if (cartProd) {
+    setCartLoading(false);
+    if (cartProd.length > 0) {
       setCartItems(cartProd);
+    } else {
+      setShowEmptyCart(true);
     }
   };
 
@@ -105,7 +112,6 @@ export default function CartPage() {
   return (
     <>
       <Navbar />
-
       <>
         <div className=" mx-auto p-4 md:p-6 bg-gray-50 min-h-screen">
           <div className="flex items-center justify-center mb-12">
@@ -115,25 +121,10 @@ export default function CartPage() {
             </h1>
           </div>
 
-          {cartItems.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-xl p-12 text-center max-w-2xl mx-auto border border-green-100">
-              <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                <FaShoppingBag className="h-12 w-12 text-green-500" />
-              </div>
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Your cart is empty
-              </h2>
-              <p className="text-gray-500 mb-8">
-                Looks like you haven&apos;t added any organic goodness to your
-                cart yet.
-              </p>
-              <button
-                onClick={() => navigate("/organicsproducts")}
-                className="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl font-medium hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-              >
-                Continue Shopping
-              </button>
-            </div>
+          {cartLoading ? (
+            <CartLoading />
+          ) : showEmptyCart ? (
+            <EmptyCart />
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <div className="lg:col-span-8">
@@ -148,7 +139,7 @@ export default function CartPage() {
                   </div>
 
                   <ul className="">
-                    {cartItems.map((item) => (
+                    {cartItems?.map((item) => (
                       <li
                         key={item.id}
                         className="border-y border-green-200 py-2 px-4 hover:bg-green-50 transition-colors duration-200 "
@@ -423,3 +414,30 @@ export default function CartPage() {
     </>
   );
 }
+
+const EmptyCart = () => {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <div className="bg-white rounded-2xl shadow-xl p-12 text-center max-w-2xl mx-auto border border-green-100">
+        <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+          <FaShoppingBag className="h-12 w-12 text-green-500" />
+        </div>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          Your cart is empty
+        </h2>
+        <p className="text-gray-500 mb-8">
+          Looks like you haven&apos;t added any organic goodness to your cart
+          yet.
+        </p>
+        <button
+          onClick={() => navigate("/organicsproducts")}
+          className="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl font-medium hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+        >
+          Continue Shopping
+        </button>
+      </div>
+    </>
+  );
+};
