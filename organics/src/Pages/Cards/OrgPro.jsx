@@ -6,6 +6,10 @@ import { FiShare2 } from "react-icons/fi";
 import { Link as RouterLink } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getSessionData, postData } from "../../utils/utils";
+import { prepare_wishlist } from "../../utils/uiUtils";
+import { baseUrl2 } from "../../../config/confg";
+
 export default function OrgPro(props) {
   const { image, price, title, addtocart, id, dataItem } = props;
   // image , price ,title
@@ -21,9 +25,12 @@ export default function OrgPro(props) {
     });
   };
 
-  const handleWishlist = () => {
+  const handleWishlist = async (dataItem) => {
     setShowWishlist(true);
     setTimeout(() => setShowWishlist(false), 1000);
+
+    const wl_data = prepare_wishlist(dataItem);
+    await postData(`${baseUrl2}/product-wishlist`, wl_data);
   };
 
   return (
@@ -54,13 +61,13 @@ export default function OrgPro(props) {
             <div>
               <button
                 className="text-red-500 hover:text-red-600 text-xl"
-                onClick={handleWishlist}
+                onClick={() => handleWishlist(dataItem)}
               >
                 <AiOutlineHeart />
               </button>
               {showWishlist && (
                 <div className="absolute whitespace-nowrap bg-red-800 text-white text-xs font-semibold py-1 px-2 rounded-md shadow-md">
-                  Work in progres!
+                  Added to Wish List!
                 </div>
               )}
 
