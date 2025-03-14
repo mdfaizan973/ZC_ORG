@@ -27,7 +27,6 @@ app.use("/api/products", ProductsRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/product-feedback", feedbackRouter);
 app.use("/api/product-question", questionRouter);
-s;
 
 const PORT = 5000;
 app.listen(PORT, () => {
