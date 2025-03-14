@@ -6,6 +6,7 @@ const ProductsRouter = require("./routes/ProductRouter");
 const cartRouter = require("./routes/CartRouter");
 const feedbackRouter = require("./routes/FeedBackRouter");
 const questionRouter = require("./routes/questionRouter");
+const wishListRouter = require("./routes/WishListRouter");
 const app = express();
 
 app.use(express.json());
@@ -27,6 +28,7 @@ app.use("/api/products", ProductsRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/product-feedback", feedbackRouter);
 app.use("/api/product-question", questionRouter);
+app.use("/api/product-wishlist", wishListRouter);
 
 const PORT = 5000;
 app.listen(PORT, () => {
