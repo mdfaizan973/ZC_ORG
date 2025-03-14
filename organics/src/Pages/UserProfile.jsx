@@ -25,8 +25,11 @@ import {
   MdCancel,
 } from "react-icons/md";
 import { BiPackage } from "react-icons/bi";
-import { getSessionData } from "../utils/utils";
+import { deleteData, fetchData, getSessionData } from "../utils/utils";
 import { ToastContainer, toast } from "react-toastify";
+import { baseUrl2 } from "../../config/confg";
+import Loader from "./LoadingUI/Loader";
+import { useNavigate } from "react-router-dom";
 
 export default function UserProfile() {
   const [activeTab, setActiveTab] = useState("profile");
@@ -562,23 +565,43 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
   );
 }
 
-function WishlistTab({ wishlist, viewMode, setViewMode }) {
+function WishlistTab({ viewMode, setViewMode }) {
   const [wishListData, setWishListData] = useState([]);
   const [loadingWishList, setLoadingWishList] = useState(true);
-
+  const [emptyWishList, setEmptyWishList] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     loadWistListData();
   }, []);
 
-  const loadWistListData = async () => {};
+  const loadWistListData = async () => {
+    setLoadingWishList(true);
+    const wisthList = await fetchData(`${baseUrl2}/product-wishlist`);
+    setLoadingWishList(false);
 
+    if (wisthList.length > 0) {
+      setWishListData(wisthList);
+      setLoadingWishList(false);
+    } else {
+      setEmptyWishList(true);
+    }
+    console.log(wisthList);
+  };
+  const goToDetailsPage = (id) => {
+    navigate(`/productdiscription/${id}`);
+  };
+
+  const removeItemFromWishList = async (id) => {
+    await deleteData(`${baseUrl2}/product-wishlist/${id}`);
+    loadWistListData();
+  };
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-2xl font-semibold text-green-800">
           Your Wishlist{" "}
           <span className="text-lg text-gray-400">
-            ( The data is showing when you have added )
+            (Reflects item details at the time of adding)
           </span>{" "}
         </h3>
         <div className="flex items-center gap-4">
@@ -596,8 +619,11 @@ function WishlistTab({ wishlist, viewMode, setViewMode }) {
           </div>
         </div>
       </div>
-
-      {wishlist.length > 0 ? (
+      {loadingWishList ? (
+        <div className="flex items-center justify-center w-full h-[400px]">
+          <Loader />
+        </div>
+      ) : (
         <div
           className={`${
             viewMode === "grid"
@@ -605,21 +631,33 @@ function WishlistTab({ wishlist, viewMode, setViewMode }) {
               : "space-y-6"
           }`}
         >
-          {wishlist.map((item) =>
-            viewMode === "grid" ? (
-              <WishlistCard key={item.id} item={item} />
-            ) : (
-              <WishlistListItem key={item.id} item={item} />
+          {emptyWishList ? (
+            <EmptyState
+              icon={<FiHeart size={48} className="text-gray-400" />}
+              title="Your Wishlist is Empty"
+              description="Save items you like to your wishlist and come back to them anytime."
+              actionLabel="Explore Products"
+            />
+          ) : (
+            wishListData?.map((item) =>
+              viewMode === "grid" ? (
+                <WishlistCard
+                  key={item.id}
+                  item={item}
+                  removeItemFromWishList={removeItemFromWishList}
+                  goToDetailsPage={goToDetailsPage}
+                />
+              ) : (
+                <WishlistListItem
+                  key={item.id}
+                  item={item}
+                  removeItemFromWishList={removeItemFromWishList}
+                  goToDetailsPage={goToDetailsPage}
+                />
+              )
             )
           )}
         </div>
-      ) : (
-        <EmptyState
-          icon={<FiHeart size={48} className="text-gray-400" />}
-          title="Your Wishlist is Empty"
-          description="Save items you like to your wishlist and come back to them anytime."
-          actionLabel="Explore Products"
-        />
       )}
     </div>
   );
@@ -725,51 +763,62 @@ function OrderListItem({ order }) {
   );
 }
 
-function WishlistCard({ item }) {
+function WishlistCard({ item, removeItemFromWishList, goToDetailsPage }) {
   return (
     <>
       <div
-        key={item.id}
+        key={item._id}
         className="bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow relative group"
       >
-        {item.discount && (
+        {item.product_discount_percentage && (
           <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-            {item.discount} OFF
+            {item.product_discount_percentage}% OFF
           </div>
         )}
 
-        <div className="flex justify-center items-center bg-gray-50 p-2">
+        <div
+          className="flex justify-center items-center bg-gray-50 p-2"
+          onClick={() => goToDetailsPage(item.product_id)}
+        >
           <img
-            src={item.image || "/placeholder.svg"}
-            alt={item.title}
+            src={item.product_img || "https://placehold.co/400x400"}
+            alt={item.product_title}
             width={100}
             height={100}
-            className="object-contain h-30 w-30 rounded-full"
+            className="object-contain h-30 w-30 rounded-full cursor-pointer"
           />
         </div>
 
         <div className="p-4">
-          <p className="text-xs text-gray-500 mb-1">{item.category}</p>
+          <p className="text-xs text-gray-500 mb-1">{item.product_category}</p>
           <h4 className="font-medium text-gray-800 mb-2 line-clamp-2">
-            {item.title?.substring(0, 20)}..
+            {item.product_title?.substring(0, 20)}..
           </h4>
 
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
-              <p className="font-semibold text-green-800">{item.price}</p>
+              <p className="font-semibold text-green-800">
+                ₹{item.product_discount_price_inr}
+              </p>
             </div>
             <div className="flex items-center gap-1 text-sm">
               <FiCalendar size={14} className="text-gray-400" />
-              <span className="text-gray-600">{item.date}</span>
+              <span className="text-gray-600">
+                {new Date(item.wishlist_date).toLocaleString().split(",")[0]}
+              </span>
             </div>
           </div>
 
           <div className="flex items-center justify-between">
-            <button className="text-green-600 hover:text-green-800">
-              <FiHeart size={18} />
+            <button
+              className="text-red-600 hover:fill-red-800 transition-colors duration-200"
+              onClick={() => removeItemFromWishList(item._id)}
+            >
+              <FiHeart className="fill-red-600 rounded-full" size={20} />
             </button>
 
             <button
+              onClick={() => goToDetailsPage(item.product_id)}
               className={`w-lg flex items-center justify-center gap-2 py-1 px-2 text-sm rounded-lg transition-colors bg-green-600 hover:bg-green-700 text-white`}
             >
               <FaShoppingCart size={12} />
@@ -786,39 +835,23 @@ function WishlistListItem({ item }) {
   return (
     <div className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
       <img
-        src={item.image || "/placeholder.svg"}
-        alt={item.title}
+        src={item.product_img || "https://placehold.co/600x400"}
+        alt={item.product_title}
         width={80}
         height={80}
         className="rounded-lg object-cover"
       />
       <div className="flex-grow">
-        <h4 className="font-semibold mb-1">{item.title}</h4>
-        <div className="text-sm text-gray-500">{item.category}</div>
+        <h4 className="font-semibold mb-1">{item.product_title}</h4>
+        <div className="text-sm text-gray-500">{item.product_category}</div>
         <div className="mt-1">
-          <span className="text-green-700 font-bold">{item.price}</span>
-          <span className="text-sm text-gray-500 line-through ml-2">
-            {item.originalPrice}
+          <span className="text-green-700 font-bold">
+            {item.product_discount_percentage}%
+          </span>
+          <span className="text-sm text-gray-500 ml-2">
+            ₹{item.product_discount_price_inr}
           </span>
         </div>
-      </div>
-      <div className="flex flex-col items-end gap-2">
-        {item.inStock ? (
-          <span className="text-green-600 font-medium">In Stock</span>
-        ) : (
-          <span className="text-red-500 font-medium">Out of Stock</span>
-        )}
-        <button
-          className={`flex items-center gap-1 px-3 py-1 rounded-full transition-colors ${
-            item.inStock
-              ? "bg-green-600 hover:bg-green-700 text-white"
-              : "bg-gray-200 text-gray-500 cursor-not-allowed"
-          }`}
-          disabled={!item.inStock}
-        >
-          <FaShoppingCart size={14} />
-          {item.inStock ? "Add to Cart" : "Notify Me"}
-        </button>
       </div>
     </div>
   );

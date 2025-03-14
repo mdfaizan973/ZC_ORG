@@ -1,6 +1,7 @@
 import { getSessionData } from "./utils";
 
 export const prepare_wishlist = (wishlistProd) => {
+  console.log(wishlistProd);
   const wishListData = {
     product_img: wishlistProd.image,
     product_category: wishlistProd.category,
