@@ -26,4 +26,19 @@ cartRouter.post("/", async (req, res) => {
   }
 });
 
+cartRouter.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const data = await CartSchemaModel.findById(id);
+
+    await CartSchemaModel.findByIdAndDelete(id);
+
+    res.status(201).json({ message: "Cart Deleted Successfully!", data });
+  } catch (error) {
+    console.error("Internal Server Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 module.exports = cartRouter;

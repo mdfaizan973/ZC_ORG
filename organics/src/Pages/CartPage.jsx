@@ -35,9 +35,9 @@ export default function CartPage() {
   };
 
   const removeItem = async (id) => {
-    // setCartItems(cartItems.filter((item) => item.id !== id));
     await deleteData(`${baseUrl2}/cart/${id}`);
-    loadCartProduts();
+    setCartItems(cartItems.filter((item) => item.id !== id));
+    // loadCartProduts();
   };
 
   const updateQuantity = (id, newQuantity) => {
@@ -45,7 +45,7 @@ export default function CartPage() {
 
     setCartItems(
       cartItems.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
+        item._id === id ? { ...item, quantity: newQuantity } : item
       )
     );
   };
@@ -95,7 +95,7 @@ export default function CartPage() {
     prepare_data["list_of_items"] = cartData;
     prepare_data["delivery_options"] = getDeliveryOption(shippingCharge);
     prepare_data["total_rupees"] = totalPrice;
-    prepare_data["user_id"] = getUserInfo("user_id");
+    prepare_data["user_id"] = getSessionData("_id");
     prepare_data["delivery_date"] = getFutureDate(
       getDeliveryOption(shippingCharge) == "standard" ? 4 : 1
     );
@@ -112,7 +112,7 @@ export default function CartPage() {
   const getDeliveryOption = (shipStatus) => {
     return shipStatus == "5.99" ? "standard" : "express";
   };
-
+  console.log(115, cartItems);
   return (
     <>
       <Navbar />
@@ -188,7 +188,7 @@ export default function CartPage() {
                             </p>
                             <div className="flex items-center gap-4">
                               <button
-                                onClick={() => removeItem(item.id)}
+                                onClick={() => removeItem(item._id)}
                                 className="text-sm text-red-500 flex items-center hover:text-red-700 transition-colors"
                               >
                                 <FaTrashAlt className="w-4 h-4 mr-1" />
@@ -209,7 +209,7 @@ export default function CartPage() {
                             <div className="flex items-center bg-white border-2 border-green-200 rounded-md overflow-hidden shadow-sm">
                               <button
                                 onClick={() =>
-                                  updateQuantity(item.id, item.quantity - 1)
+                                  updateQuantity(item._id, item.quantity - 1)
                                 }
                                 className="px-3 py-2 text-green-600 hover:bg-green-50 transition-colors"
                               >
@@ -220,7 +220,7 @@ export default function CartPage() {
                               </span>
                               <button
                                 onClick={() =>
-                                  updateQuantity(item.id, item.quantity + 1)
+                                  updateQuantity(item._id, item.quantity + 1)
                                 }
                                 className="px-3 py-2 text-green-600 hover:bg-green-50 transition-colors"
                               >
@@ -230,13 +230,10 @@ export default function CartPage() {
 
                             <div className="flex items-center text-center">
                               <p className="text-xl font-bold text-gray-800">
-                                $
-                                {(
-                                  item.discount_price_inr * item.quantity
-                                ).toFixed(2)}
+                                ${item.discount_price_inr * item.quantity}
                               </p>
                               <p className="text-sm ml-1 text-gray-500">
-                                ${item.discount_price_inr.toFixed(2)} each
+                                ${item.discount_price_inr} each
                               </p>
                             </div>
                           </div>
@@ -254,7 +251,7 @@ export default function CartPage() {
                       <div className="text-gray-600">
                         Subtotal:{" "}
                         <span className="font-bold text-gray-800">
-                          ${calculateSubtotal().toFixed(2)}
+                          ${calculateSubtotal()}
                         </span>
                       </div>
                     </div>
@@ -362,7 +359,7 @@ export default function CartPage() {
                         items)
                       </span>
                       <span className="text-gray-800 font-medium">
-                        ${calculateSubtotal().toFixed(2)}
+                        ${calculateSubtotal()}
                       </span>
                     </div>
 
@@ -376,7 +373,7 @@ export default function CartPage() {
                     <div className="flex justify-between">
                       <span className="text-gray-600">Tax ( 7% )</span>
                       <span className="text-gray-800 font-medium">
-                        ${calculateTax().toFixed(2)}
+                        ${calculateTax()}
                       </span>
                     </div>
 
@@ -399,7 +396,7 @@ export default function CartPage() {
                           Total
                         </span>
                         <span className="text-2xl font-bold text-green-600">
-                          ${calculateTotal().toFixed(2)}
+                          ${calculateTotal()}
                         </span>
                       </div>
                       <p className="text-xs text-gray-500 mt-1">
