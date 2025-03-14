@@ -10,6 +10,7 @@ import {
 import { useParams } from "react-router-dom";
 import { fetchData, getSessionData, postData } from "../../utils/utils";
 import { baseUrl2 } from "../../../config/confg";
+import Loader from "../LoadingUI/Loader";
 
 export default function ProductFeedbackAndQuestions({ product }) {
   const { id } = useParams();
@@ -50,7 +51,7 @@ export default function ProductFeedbackAndQuestions({ product }) {
   );
 }
 
-const cardClass =
+export const cardClass =
   "bg-white rounded-lg shadow-sm px-4 py-2 border border-gray-100";
 
 const ProductsReviews = ({ paramId, product }) => {
@@ -58,7 +59,7 @@ const ProductsReviews = ({ paramId, product }) => {
   const [feedbackText, setFeedbackText] = useState("");
   const [rating, setRating] = useState(0);
   const [feedbacks, setFeedbacks] = useState([]);
-  console.log(paramId);
+  const [loadingReiews, setLoadingReiews] = useState(true);
   // Handle feedback submission
   const handleFeedbackSubmit = async () => {
     if (feedbackText.trim() === "" || rating === 0) return;
@@ -86,13 +87,16 @@ const ProductsReviews = ({ paramId, product }) => {
   }, []);
 
   const loadFeedback = async () => {
+    setLoadingReiews(true);
     const feedbackData = await fetchData(
       `${baseUrl2}/product-feedback/${paramId}`
     );
-
-    setFeedbacks(feedbackData);
+    setLoadingReiews(false);
+    if (feedbackData) {
+      setFeedbacks(feedbackData);
+    }
   };
-  console.log("================================", product);
+
   return (
     <>
       <div className="mb-12">
@@ -154,67 +158,83 @@ const ProductsReviews = ({ paramId, product }) => {
             </div>
           </div>
 
-          <button
-            onClick={handleFeedbackSubmit}
-            disabled={feedbackText.trim() === "" || rating === 0}
-            className={`px-2 py-2 rounded-lg font-medium flex items-center justify-center transition-all duration-300 ${
-              feedbackText.trim() === "" || rating === 0
-                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                : "bg-gradient-to-r from-green-500 to-green-600 text-white hover:shadow-md hover:from-green-600 hover:to-green-700"
-            }`}
-          >
-            <FaPaperPlane className="w-4 h-4 mr-2" />
-            Submit Review
-          </button>
+          {!loadingReiews && (
+            <button
+              onClick={handleFeedbackSubmit}
+              disabled={feedbackText.trim() === "" || rating === 0}
+              className={`px-2 py-2 rounded-lg font-medium flex items-center justify-center transition-all duration-300 ${
+                feedbackText.trim() === "" || rating === 0
+                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-green-500 to-green-600 text-white hover:shadow-md hover:from-green-600 hover:to-green-700"
+              }`}
+            >
+              <FaPaperPlane className="w-4 h-4 mr-2" />
+              Submit Review
+            </button>
+          )}
         </div>
 
         {/* Feedback Display */}
-        <div className="space-y-2">
-          {feedbacks.map((feedback) => (
-            <div
-              key={feedback._id}
-              className={`${cardClass} transform transition-all duration-200 hover:shadow-md`}
-            >
-              <div className="flex items-start">
-                <div className="mr-4 flex-shrink-0">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center">
-                    <FaUserCircle className="w-7 h-7 text-white" />
-                  </div>
-                </div>
-                <div className="flex-1">
-                  <div className="flex flex-wrap items-center mb-1">
-                    <h4 className="font-bold text-gray-800 mr-2">
-                      {feedback.user_name}
-                    </h4>
-                    <div className="flex ml-auto">
-                      <FaRegCalendarAlt className="w-4 h-4 text-gray-400 mr-1" />
-                      <span className="text-sm text-gray-500">
-                        {new Date(feedback.user_feedback_date).toLocaleString()}
-                      </span>
+        {!loadingReiews ? (
+          <div className="space-y-2">
+            {feedbacks.length > 0 ? (
+              feedbacks.map((feedback) => (
+                <div
+                  key={feedback._id}
+                  className={`${cardClass} transform transition-all duration-200 hover:shadow-md`}
+                >
+                  <div className="flex items-start">
+                    <div className="mr-4 flex-shrink-0">
+                      <div className="w-14 h-14 rounded-full bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center">
+                        <FaUserCircle className="w-7 h-7 text-white" />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex flex-wrap items-center mb-1">
+                        <h4 className="font-bold text-gray-800 mr-2">
+                          {feedback.user_name}
+                        </h4>
+                        <div className="flex ml-auto">
+                          <FaRegCalendarAlt className="w-4 h-4 text-gray-400 mr-1" />
+                          <span className="text-sm text-gray-500">
+                            {new Date(
+                              feedback.user_feedback_date
+                            ).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex mb-2">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <FaStar
+                            key={i}
+                            className={`w-5 h-5 ${
+                              i < feedback.user_prod_rating
+                                ? "text-yellow-500 fill-yellow-500"
+                                : "text-gray-300"
+                            }`}
+                          />
+                        ))}
+                      </div>
+
+                      <p className="text-gray-700 mb-1 leading-relaxed">
+                        {feedback.user_feedback_to_prod}
+                      </p>
                     </div>
                   </div>
-
-                  <div className="flex mb-2">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <FaStar
-                        key={i}
-                        className={`w-5 h-5 ${
-                          i < feedback.user_prod_rating
-                            ? "text-yellow-500 fill-yellow-500"
-                            : "text-gray-300"
-                        }`}
-                      />
-                    ))}
-                  </div>
-
-                  <p className="text-gray-700 mb-1 leading-relaxed">
-                    {feedback.user_feedback_to_prod}
-                  </p>
                 </div>
+              ))
+            ) : (
+              <div className="flex justify-center ">
+                <p className="px-6 py-3 text-2xl font-bold bg-white text-gray-400 rounded-lg">
+                  No Feedback Found
+                </p>
               </div>
-            </div>
-          ))}
-        </div>
+            )}
+          </div>
+        ) : (
+          <Loader />
+        )}
 
         {feedbacks.length > 3 && (
           <div className="mt-8 text-center">
