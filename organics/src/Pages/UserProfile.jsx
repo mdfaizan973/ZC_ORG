@@ -1,6 +1,6 @@
 import Navbar from "../Components/Navbar";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FiUser,
   FiShoppingBag,
@@ -563,10 +563,24 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
 }
 
 function WishlistTab({ wishlist, viewMode, setViewMode }) {
+  const [wishListData, setWishListData] = useState([]);
+  const [loadingWishList, setLoadingWishList] = useState(true);
+
+  useEffect(() => {
+    loadWistListData();
+  }, []);
+
+  const loadWistListData = async () => {};
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-2xl font-semibold text-green-800">Your Wishlist</h3>
+        <h3 className="text-2xl font-semibold text-green-800">
+          Your Wishlist{" "}
+          <span className="text-lg text-gray-400">
+            ( The data is showing when you have added )
+          </span>{" "}
+        </h3>
         <div className="flex items-center gap-4">
           <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
           <div className="relative">
