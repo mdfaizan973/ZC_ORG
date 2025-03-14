@@ -35,7 +35,7 @@ const ProductSchema = new mongoose.Schema(
     saler_id: { type: String, required: true },
     saler_name: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 const ProductSchemaModel = mongoose.model("Products", ProductSchema);

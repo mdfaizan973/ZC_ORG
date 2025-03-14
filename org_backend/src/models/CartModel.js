@@ -25,7 +25,7 @@ const CartSchema = new mongoose.Schema(
     quantity: { type: Number, required: true },
     userName: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 const CartSchemaModel = mongoose.model("cartProduct", CartSchema);

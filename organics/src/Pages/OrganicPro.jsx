@@ -57,6 +57,7 @@ export default function OrganicPro() {
       _v: undefined,
       createdAt: undefined,
       updatedAt: undefined,
+      quantity: 1,
       userId: getSessionData("_id"),
       userName: getSessionData("name"),
     };

@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 export default function CartPage() {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
-  const [shippingCharge, setShippingChnarge] = useState(5.99);
+  const [shippingCharge, setShippingChnarge] = useState(50);
 
   useEffect(() => {
     loadCartProduts();
@@ -36,7 +36,7 @@ export default function CartPage() {
 
   const removeItem = async (id) => {
     await deleteData(`${baseUrl2}/cart/${id}`);
-    setCartItems(cartItems.filter((item) => item.id !== id));
+    setCartItems(cartItems.filter((item) => item._id !== id));
     // loadCartProduts();
   };
 
@@ -64,27 +64,16 @@ export default function CartPage() {
   const calculateTotal = () => {
     const subtotal = calculateSubtotal() || 0; // Ensure subtotal is a number
     const tax = calculateTax() || 0; // Ensure tax is a number
-    const shipping = subtotal < 50 ? shippingCharge : 0; // Ensure shipping is a number
+    const shipping = subtotal < 500 ? shippingCharge : 0; // Ensure shipping is a number
 
     return Number(subtotal) + Number(tax) + Number(shipping); // Convert to number just in case
   };
 
-  const getUserInfo = (param) => {
-    const userData = {
-      user_name: "John Doe",
-      user_id: "23423sdfsdfs",
-      user_email: "john@example.com",
-      user_address: "123 Main Street, NY",
-      user_phone_no: "+1-234-567-8901",
-    };
-
-    return userData[param] || null;
-  };
-
   const buyNowItem = (item) => {
     const discount_price_inr = item.discount_price_inr * item.quantity;
-    const shipping = discount_price_inr < 50 ? shippingCharge : 0;
-    const tax = calculateTax() || 0;
+    const shipping = discount_price_inr < 500 ? shippingCharge : 0;
+    console.log(discount_price_inr);
+    const tax = 0.07 * discount_price_inr || 0;
 
     const total = Number(discount_price_inr) + Number(tax) + Number(shipping);
     handleGoToOrder([item], total);
@@ -110,9 +99,9 @@ export default function CartPage() {
   };
 
   const getDeliveryOption = (shipStatus) => {
-    return shipStatus == "5.99" ? "standard" : "express";
+    return shipStatus == "50" ? "standard" : "express";
   };
-  console.log(115, cartItems);
+
   return (
     <>
       <Navbar />
@@ -184,7 +173,7 @@ export default function CartPage() {
                               </span>
                             </h3>
                             <p className="text-sm text-gray-500 mb-1">
-                              {item.description}
+                              {item?.description}
                             </p>
                             <div className="flex items-center gap-4">
                               <button
@@ -230,10 +219,13 @@ export default function CartPage() {
 
                             <div className="flex items-center text-center">
                               <p className="text-xl font-bold text-gray-800">
-                                ${item.discount_price_inr * item.quantity}
+                                ₹
+                                {(
+                                  item.discount_price_inr * item.quantity
+                                )?.toFixed(2)}
                               </p>
                               <p className="text-sm ml-1 text-gray-500">
-                                ${item.discount_price_inr} each
+                                ₹{item.discount_price_inr?.toFixed(2)} each
                               </p>
                             </div>
                           </div>
@@ -244,14 +236,17 @@ export default function CartPage() {
 
                   <div className="p-6 bg-green-50 border-t border-green-100">
                     <div className="flex justify-between items-center">
-                      <button className="text-green-600 font-medium hover:text-green-800 transition-colors flex items-center">
+                      <button
+                        onClick={() => navigate("/organicsproducts")}
+                        className="text-green-600 font-medium hover:text-green-800 transition-colors flex items-center"
+                      >
                         <FaArrowRight className="w-4 h-4 mr-1 transform rotate-180" />
                         Continue Shopping
                       </button>
                       <div className="text-gray-600">
                         Subtotal:{" "}
                         <span className="font-bold text-gray-800">
-                          ${calculateSubtotal()}
+                          ₹{calculateSubtotal()?.toFixed(2)}
                         </span>
                       </div>
                     </div>
@@ -273,7 +268,7 @@ export default function CartPage() {
                           name="delivery"
                           className="form-radio text-green-600 h-4 w-4"
                           defaultChecked
-                          value={5.99}
+                          value={50}
                           onChange={(e) => setShippingChnarge(e.target.value)}
                         />
                         <span className="ml-2">
@@ -285,7 +280,7 @@ export default function CartPage() {
                           </span>
                         </span>
                         <span className="ml-auto font-medium text-gray-800">
-                          $5.99
+                          ₹50
                         </span>
                       </label>
                       <label className="flex items-center p-3 border border-green-200 rounded-xl cursor-pointer hover:bg-green-50 transition-colors">
@@ -293,7 +288,7 @@ export default function CartPage() {
                           type="radio"
                           name="delivery"
                           className="form-radio text-green-600 h-4 w-4"
-                          value={12.99}
+                          value={70}
                           onChange={(e) => setShippingChnarge(e.target.value)}
                         />
                         <span className="ml-2">
@@ -305,7 +300,7 @@ export default function CartPage() {
                           </span>
                         </span>
                         <span className="ml-auto font-medium text-gray-800">
-                          $12.99
+                          ₹70
                         </span>
                       </label>
                     </div>
@@ -322,7 +317,8 @@ export default function CartPage() {
                           <div className="h-4 w-4 rounded-full bg-green-200 flex items-center justify-center mt-0.5 mr-2">
                             <div className="h-2 w-2 rounded-full bg-green-600"></div>
                           </div>
-                          Free shipping on orders over $50
+                          Free shipping on orders over only for Standard
+                          Delivery ₹500
                         </li>
                         <li className="flex items-start">
                           <div className="h-4 w-4 rounded-full bg-green-200 flex items-center justify-center mt-0.5 mr-2">
@@ -352,28 +348,27 @@ export default function CartPage() {
                     <div className="flex justify-between">
                       <span className="text-gray-600">
                         Subtotal (
-                        {cartItems.reduce(
-                          (acc, item) => acc + item.quantity,
-                          0
-                        )}{" "}
+                        {cartItems
+                          .reduce((acc, item) => acc + item.quantity, 0)
+                          ?.toFixed(2)}{" "}
                         items)
                       </span>
                       <span className="text-gray-800 font-medium">
-                        ${calculateSubtotal()}
+                        ₹{calculateSubtotal()?.toFixed(2)}
                       </span>
                     </div>
 
                     <div className="flex justify-between">
                       <span className="text-gray-600">Shipping</span>
                       <span className="text-gray-800 font-medium">
-                        ${shippingCharge}
+                        ₹{shippingCharge}
                       </span>
                     </div>
 
                     <div className="flex justify-between">
                       <span className="text-gray-600">Tax ( 7% )</span>
                       <span className="text-gray-800 font-medium">
-                        ${calculateTax()}
+                        ₹{calculateTax()?.toFixed(2)}
                       </span>
                     </div>
 
@@ -396,7 +391,7 @@ export default function CartPage() {
                           Total
                         </span>
                         <span className="text-2xl font-bold text-green-600">
-                          ${calculateTotal()}
+                          ₹{calculateTotal().toFixed(2)}
                         </span>
                       </div>
                       <p className="text-xs text-gray-500 mt-1">
