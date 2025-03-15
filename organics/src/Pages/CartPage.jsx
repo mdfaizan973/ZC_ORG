@@ -80,7 +80,6 @@ export default function CartPage() {
   const buyNowItem = (item) => {
     const discount_price_inr = item.discount_price_inr * item.quantity;
     const shipping = discount_price_inr < 500 ? shippingCharge : 0;
-    console.log(discount_price_inr);
     const tax = 0.07 * discount_price_inr || 0;
 
     const total = Number(discount_price_inr) + Number(tax) + Number(shipping);
@@ -98,6 +97,7 @@ export default function CartPage() {
     );
 
     console.log(120, prepare_data);
+    navigate("/order-review", { state: { cartReview: prepare_data } });
   };
 
   const getFutureDate = (daysAhead) => {

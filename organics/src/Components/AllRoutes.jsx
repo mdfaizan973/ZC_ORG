@@ -22,6 +22,7 @@ import AdminProductView from "../Admin/ProductView";
 import ProductDetailsPage from "../Pages/Cards/ProdutsDetailsPage";
 import CartPage from "../Pages/CartPage";
 import UserProfile from "../Pages/UserProfile";
+import OrderReview from "../Pages/OrderComponents/OrderReview";
 export default function AllRoutes() {
   // const [isOrgAdmin, setisOrgAdmin] = useState(false);
 
@@ -91,6 +92,10 @@ export default function AllRoutes() {
         <Route
           path="/user-profile"
           element={<ProtectedRoute component={UserProfile} />}
+        />
+        <Route
+          path="/order-review"
+          element={<ProtectedRoute component={OrderReview} />}
         />
 
         {/* </>
