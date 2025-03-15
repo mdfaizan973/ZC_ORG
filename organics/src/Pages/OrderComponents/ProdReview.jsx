@@ -21,7 +21,7 @@ export default function ProdReview() {
 
   return (
     <div className="min-h-screen mt-4">
-      <div className="max-w-6xl mx-auto p-4 md:p-6">
+      <div className="max-w-5xl mx-auto p-4 md:p-6">
         {reviewData?.length > 0 ? (
           <div className="md:flex md:gap-2">
             {/* Product List - Takes more width on desktop */}
@@ -68,7 +68,6 @@ export default function ProdReview() {
               <h2 className="text-xl font-semibold text-green-700 mb-4">
                 Order Summary
               </h2>
-
               {/* Delivery Charge */}
               <div className="flex justify-between items-center py-3 border-b">
                 <span className="font-medium">Delivery Charge</span>
@@ -81,7 +80,6 @@ export default function ProdReview() {
                   ₹ 100
                 </span>
               </div>
-
               {/* Price Details */}
               <div className="py-3 border-b">
                 <button
@@ -135,17 +133,15 @@ export default function ProdReview() {
                   </div>
                 )}
               </div>
-
               {/* Total */}
-              <div className="flex justify-between items-center py-4 font-bold text-lg">
+              <div className="hidden sm:flex justify-between items-center py-4 font-bold text-lg">
                 <span>Total</span>
                 <span className="text-green-700">
                   ₹{orderSummary.total_rupees?.toFixed(2)}
                 </span>
               </div>
 
-              {/* Continue Button */}
-              <button className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-md transition duration-200 mt-4">
+              <button className="hidden sm:flex w-full justify-center items-center bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-md transition duration-200 mt-4">
                 Continue
               </button>
             </div>
@@ -153,7 +149,7 @@ export default function ProdReview() {
         ) : (
           <div className="flex flex-col justify-center items-center">
             <p className="text-gray-600 text-xl">
-              You have not shoped any thing please shop!
+              You haven’t shopped for anything yet. Start shopping now!
             </p>
             <button
               onClick={() => navigate("/organicsproducts")}
@@ -166,7 +162,7 @@ export default function ProdReview() {
       </div>
 
       {/* Mobile-only Continue Button - Fixed at bottom */}
-      {/* <div className="md:hidden sticky bottom-0 p-4 bg-white border-t shadow-md">
+      <div className="md:hidden sticky bottom-0 p-2 bg-white border-t shadow-md">
         <div className="flex justify-between items-center mb-2">
           <span className="font-bold">Total:</span>
           <span className="font-bold text-green-700 text-xl">
@@ -176,7 +172,7 @@ export default function ProdReview() {
         <button className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-md transition duration-200">
           Continue
         </button>
-      </div> */}
+      </div>
     </div>
   );
 }
