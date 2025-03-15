@@ -106,39 +106,6 @@ export default function UserProfile() {
     },
   ];
 
-  const wishlist = [
-    {
-      id: 1,
-      image: "https://placehold.co/400x400.png",
-      title: "Organic Blueberries - Premium Pack",
-      price: "$6.99",
-      originalPrice: "$8.99",
-      category: "Fruits",
-      inStock: true,
-      discount: "22%",
-    },
-    {
-      id: 2,
-      image: "https://placehold.co/400x400.png",
-      title: "Almond Milk - Unsweetened",
-      price: "$3.99",
-      originalPrice: "$4.99",
-      category: "Dairy Alternatives",
-      inStock: true,
-      discount: "20%",
-    },
-    {
-      id: 3,
-      image: "https://placehold.co/400x400.png",
-      title: "Organic Quinoa - 2lb Bag",
-      price: "$7.49",
-      originalPrice: "$9.99",
-      category: "Grains",
-      inStock: false,
-      discount: "25%",
-    },
-  ];
-
   const sellingPoints = [
     "Reach thousands of health-conscious customers",
     "Zero listing fees for organic products",
@@ -246,9 +213,9 @@ export default function UserProfile() {
                         className="object-cover w-full h-full"
                       />
                     </div>
-                    <button className="absolute bottom-0 right-0 bg-green-500 text-white p-2 rounded-full shadow-lg hover:bg-green-600 transition-colors">
+                    {/* <button className="absolute bottom-0 right-0 bg-green-500 text-white p-2 rounded-full shadow-lg hover:bg-green-600 transition-colors">
                       <FiEdit2 size={14} />
-                    </button>
+                    </button> */}
                   </div>
                   <h2 className="text-xl font-semibold text-green-800">
                     {getSessionData("name")}
@@ -279,6 +246,18 @@ export default function UserProfile() {
                         </p>
                       </div>
                     </div>
+
+                    {getSessionData("business") && (
+                      <div className="flex items-center gap-3 mb-3 p-3 bg-white rounded-lg">
+                        <FiMapPin className="text-green-600" size={18} />
+                        <div>
+                          <p className="text-xs text-gray-500">Business Name</p>
+                          <p className="font-medium text-sm">
+                            {getSessionData("business")}
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -287,10 +266,10 @@ export default function UserProfile() {
                     <h3 className="text-xl font-semibold text-green-800">
                       Personal Information
                     </h3>
-                    <button className="flex items-center gap-1 text-green-600 hover:text-green-700 bg-green-50 px-4 py-2 rounded-lg hover:shadow-md transition-all">
+                    {/* <button className="flex items-center gap-1 text-green-600 hover:text-green-700 bg-green-50 px-4 py-2 rounded-lg hover:shadow-md transition-all">
                       <FiEdit2 size={16} />
                       Edit Profile
-                    </button>
+                    </button> */}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -382,7 +361,7 @@ export default function UserProfile() {
 
           {activeTab === "wishlist" && (
             <WishlistTab
-              wishlist={wishlist}
+              // wishlist={wishlist}
               viewMode={viewMode}
               setViewMode={setViewMode}
             />
