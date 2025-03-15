@@ -10,7 +10,7 @@ import OrganicPro from "../Pages/OrganicPro";
 import AdminDashBoard from "../Admin/AdminDashBoard";
 import ProtectedRoute, { AdminProtectedRoute } from "./ProtectedRoute";
 import AdminUsers from "../Admin/AdminUsers";
-import ChakOutPage from "../Pages/ChakOutPage";
+// import ChakOutPage from "../Pages/ChakOutPage";
 import ShpoingDone from "../Pages/ShpoingDone";
 import UpCaoming from "../Pages/UpCaoming";
 import Orders from "../Admin/Orders";
@@ -23,6 +23,7 @@ import ProductDetailsPage from "../Pages/Cards/ProdutsDetailsPage";
 import CartPage from "../Pages/CartPage";
 import UserProfile from "../Pages/UserProfile";
 import OrderReview from "../Pages/OrderComponents/OrderReview";
+import CheckoutPage from "../Pages/OrderComponents/CheckoutPage";
 export default function AllRoutes() {
   // const [isOrgAdmin, setisOrgAdmin] = useState(false);
 
@@ -47,7 +48,7 @@ export default function AllRoutes() {
         ></Route>
         <Route
           path="/checkout"
-          element={<ProtectedRoute component={ChakOutPage} />}
+          element={<ProtectedRoute component={CheckoutPage} />}
         ></Route>
         <Route
           path="/cartpage"

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../Components/Navbar";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { baseUrl } from "../../config/confg";
@@ -99,6 +99,19 @@ export default function ChakOutPage() {
   const totalPrice = parseFloat(pricetopay);
   // console.log("Total Price:", totalPrice);
 
+  const [reviewData, setReviewData] = useState([]);
+  const [orderSummary, setOrderSummary] = useState({});
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location?.state?.dataForOrder) {
+      setReviewData(location?.state?.dataForOrder?.list_of_items);
+      setOrderSummary(location?.state?.dataForOrder);
+    }
+  }, [location]);
+
+  console.log(reviewData);
+  console.log(orderSummary);
   return (
     <>
       <ToastContainer />
@@ -118,7 +131,7 @@ export default function ChakOutPage() {
             <div className="relative px-4 sm:px-6 lg:px-8 pb-8 max-w-lg mx-auto">
               <div className="bg-white px-8 pb-6 rounded-b shadow-lg">
                 <div className="text-center mb-6">
-                  <div className="mb-2">
+                  <div className="mb-1">
                     <img
                       className="-mt-8 inline-flex rounded-full"
                       src="https://naturelandorganics.com/cdn/shop/files/xclusive.png?v=1654978150"
@@ -128,29 +141,24 @@ export default function ChakOutPage() {
                     />
                   </div>
                 </div>
-                <div className="flex justify-center mb-6">
+                <div className="flex justify-center items-center mb-4">
                   <div className="relative flex w-full p-1 bg-gray-50 rounded">
-                    <button
-                      className="relative flex-1 text-sm font-medium p-1 transition duration-150 ease-in-out focus:outline-none >Pay With Card</button>
-                            <button className="
-                    >
+                    <button className="relative flex-1 text-sm font-medium p-1 transition duration-150 ease-in-out focus:outline-none">
                       Pay With PayPal
                     </button>
                   </div>
-                </div>
-                <div className="flex justify-center mb-6">
                   <div className="relative flex w-full p-1 bg-gray-50 rounded">
                     <button
                       onClick={() =>
                         document.getElementById("my_modal_1").showModal()
                       }
-                      className="relative flex-1 text-sm font-medium p-1 transition duration-150 ease-in-out focus:outline-none >Pay With Card</button>
-                            <button className="
+                      className="relative flex-1 text-sm font-medium p-1 transition duration-150 ease-in-out focus:outline-none"
                     >
                       Cash On Delivery
                     </button>
                   </div>
                 </div>
+
                 <div>
                   <div className="space-y-4">
                     <div>

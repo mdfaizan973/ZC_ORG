@@ -17,8 +17,11 @@ export default function ProdReview() {
       setOrderSummary(location?.state?.cartReview);
     }
   }, [location]);
-  console.log(orderSummary);
   const navigate = useNavigate();
+
+  const handleOrderItems = () => {
+    navigate("/checkout", { state: { dataForOrder: orderSummary } });
+  };
 
   return (
     <div className="min-h-screen mt-4">
@@ -150,7 +153,10 @@ export default function ProdReview() {
                 </span>
               </div>
 
-              <button className="hidden sm:flex w-full justify-center items-center bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-md transition duration-200 mt-4">
+              <button
+                onClick={() => handleOrderItems()}
+                className="hidden sm:flex w-full justify-center items-center bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-md transition duration-200 mt-4"
+              >
                 Continue
               </button>
             </div>
@@ -178,7 +184,10 @@ export default function ProdReview() {
             ₹{orderSummary.total_rupees?.toFixed(2)}
           </span>
         </div>
-        <button className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-md transition duration-200">
+        <button
+          onClick={() => handleOrderItems()}
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-md transition duration-200"
+        >
           Continue
         </button>
       </div>
