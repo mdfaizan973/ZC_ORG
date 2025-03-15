@@ -3,7 +3,9 @@ import Navbar from "../../Components/Navbar";
 import { getSessionData } from "../../utils/utils";
 import BackButton from "../Cards/BackButton";
 import { useLocation } from "react-router-dom";
-
+import { placeHolderImage } from "../../utils/uiUtils";
+import { FaArrowLeft } from "react-icons/fa";
+import { BiX } from "react-icons/bi";
 export default function CheckoutPage() {
   const [formData, setFormData] = useState({
     user_name: getSessionData("name"),
@@ -15,6 +17,9 @@ export default function CheckoutPage() {
   });
 
   const [orderSummary, setOrderSummary] = useState({});
+  const [onlineOrderData, setOnlineOrderData] = useState({});
+  const [showPaymentQR, setShowPaymentQR] = useState(false);
+
   const location = useLocation();
 
   useEffect(() => {
@@ -51,16 +56,21 @@ export default function CheckoutPage() {
       order_status: "Processing", // Processing -> shipped -> Out For Delivery -> Delivered
     };
     // and order_date from the backed
-    console.log("Form Data:", updatedData);
+    if (formData.payment_method == "online") {
+      setShowPaymentQR(true);
+    } else {
+      console.log("Form Data:", updatedData);
+    }
   };
 
   return (
     <>
       <Navbar />
+
       <div className="border-b p-2">
         <BackButton header="Complete Your Order" />
       </div>
-      <div className="min-h-screen">
+      <div className="mb-2">
         {/* Checkout Progress */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="">
@@ -318,6 +328,7 @@ export default function CheckoutPage() {
                     </button>
                   </div>
                 </form>
+
                 <div className="bg-gray-50 py-4 px-8 border-t border-gray-100">
                   <div className="flex flex-col sm:flex-row sm:justify-between text-sm text-gray-500 gap-2">
                     <div className="flex items-center">
@@ -373,11 +384,101 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                 </div>
+                {/*  */}
               </div>
             </div>
           </div>
         </div>
       </div>
+      {showPaymentQR && <OnlineOrder setShowPaymentQR={setShowPaymentQR} />}
     </>
   );
 }
+
+const steps = ["QR Code", "Pay Proof", "Done"];
+const OnlineOrder = ({ setShowPaymentQR }) => {
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const handleNext = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentStep < steps.length + 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  return (
+    <>
+      <div className="fixed inset-0 z-40 flex items-center justify-center">
+        <div className="flex flex-col bg-white rounded-lg w-[400px] shadow-md p-6">
+          {/* Step Bar */}
+          <div className="flex justify-between">
+            <button
+              onClick={handlePrev}
+              disabled={currentStep === 0}
+              className="p-2 rounded-full hover:bg-blue-50 text-blue-700"
+            >
+              <FaArrowLeft />
+            </button>
+            <button
+              onClick={() => setShowPaymentQR(false)}
+              className="text-xl rounded-full hover:bg-red-50 text-red-700"
+            >
+              <BiX />
+            </button>
+          </div>
+          {/* Step Labels */}
+          <div className="flex  justify-between items-center w-full mt-2">
+            {steps.map((step, index) => (
+              <span
+                key={index}
+                className={`text-sm font-medium ${
+                  index <= currentStep ? "text-blue-500" : "text-gray-500"
+                }`}
+              >
+                {step}
+              </span>
+            ))}
+          </div>
+          <div className="flex justify-between items-center">
+            {steps.map((step, index) => (
+              <div key={index} className="flex  justify-between items-center">
+                <div
+                  className={`w-10 h-10 flex items-center justify-center rounded-full text-white font-bold ${
+                    index <= currentStep ? "bg-blue-500" : "bg-gray-300"
+                  }`}
+                >
+                  {index + 1}
+                </div>
+                {index < steps.length - 1 && (
+                  <div
+                    className={`flex-1 h-1 ${
+                      index < currentStep ? "bg-blue-500" : "bg-gray-300"
+                    }`}
+                  ></div>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="p-2">
+            <img src={placeHolderImage} />
+          </div>
+          {/* Next Button */}
+          {/* <div className="flex justify-between"> */}
+          <button
+            onClick={handleNext}
+            className="mt-6 px-6 py-2 bg-blue-500 text-white font-bold rounded-lg disabled:bg-gray-400"
+            disabled={currentStep === steps.length - 1}
+          >
+            Continue
+          </button>
+          {/* </div> */}
+        </div>
+      </div>
+    </>
+  );
+};
