@@ -10,12 +10,10 @@ export const fetchData = async (url, token = null) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
-
-    let errorMessage =
-      "Oops! Something went wrong. Sorry for the turbulence! 💨";
+    let errorMessage = "Oops! Sorry for the turbulence💨";
 
     toast.error(errorMessage, {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_RIGHT,
     });
 
     throw error;
@@ -38,7 +36,7 @@ export const fetchData = async (url, token = null) => {
 //     let errorMessage = "Oops! Something went wrong while sending data. 🚀";
 
 //     toast.error(errorMessage, {
-//       position: toast.POSITION.TOP_CENTER,
+//       position: toast.POSITION.TOP_RIGHT,
 //     });
 
 //     throw error;
@@ -47,7 +45,7 @@ export const fetchData = async (url, token = null) => {
 
 export const postData = async (url, data, method = "POST", token = null) => {
   const toastId = toast.loading("We are processing... 🚀", {
-    position: toast.POSITION.TOP_CENTER,
+    position: toast.POSITION.TOP_RIGHT,
   });
 
   try {
@@ -63,16 +61,16 @@ export const postData = async (url, data, method = "POST", token = null) => {
       headers,
     });
     toast.success(response?.data?.message, {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_RIGHT,
     });
     toast.dismiss(toastId); // Remove loading toast on success
     return response.data;
   } catch (error) {
     console.error("Error sending data:", error);
 
-    let errorMessage = "Oops! Something went wrong.🚀";
+    let errorMessage = "Oops! Sorry for the turbulence.🚀";
     toast.error(errorMessage, {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_RIGHT,
     });
 
     throw error;
@@ -83,7 +81,7 @@ export const postData = async (url, data, method = "POST", token = null) => {
 
 export const deleteData = async (url, token = null) => {
   const toastId = toast.loading("Removing... ⏳", {
-    position: toast.POSITION.TOP_CENTER,
+    position: toast.POSITION.TOP_RIGHT,
   });
 
   try {
@@ -96,7 +94,7 @@ export const deleteData = async (url, token = null) => {
 
     toast.dismiss(toastId); // Remove the loading toast on success
     toast.success(response?.data?.message, {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_RIGHT,
     });
 
     return response.data;
@@ -104,9 +102,9 @@ export const deleteData = async (url, token = null) => {
     console.error("Error deleting data:", error);
 
     toast.dismiss(toastId);
-    let errorMessage = "Oops! Something went wrong.🚀";
+    let errorMessage = "Oops! Sorry for the turbulence.🚀";
     toast.error(errorMessage, {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_RIGHT,
     });
 
     throw error;
@@ -115,7 +113,7 @@ export const deleteData = async (url, token = null) => {
 
 export const postDataa = async (url, data, token = null) => {
   const toastId = toast.loading("We are processing... 🚀", {
-    position: toast.POSITION.TOP_CENTER,
+    position: toast.POSITION.TOP_RIGHT,
   });
 
   console.log("Data being sent:", data);
@@ -123,7 +121,7 @@ export const postDataa = async (url, data, token = null) => {
   if (!data || Object.keys(data).length === 0) {
     toast.dismiss(toastId);
     toast.error("No data provided for the request!", {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_RIGHT,
     });
     return;
   }
@@ -151,7 +149,7 @@ export const postDataa = async (url, data, token = null) => {
     }
 
     toast.error(errorMessage, {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_RIGHT,
     });
 
     throw error;
