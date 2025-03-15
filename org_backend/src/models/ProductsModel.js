@@ -35,7 +35,13 @@ const ProductSchema = new mongoose.Schema(
     saler_id: { type: String, required: true },
     saler_name: { type: String, required: true },
   },
-  { timestamps: true, versionKey: false }
+  {
+    timestamps: {
+      createdAt: "product_create_date",
+      updatedAt: "product_update_date",
+    },
+    versionKey: false,
+  }
 );
 
 const ProductSchemaModel = mongoose.model("Products", ProductSchema);

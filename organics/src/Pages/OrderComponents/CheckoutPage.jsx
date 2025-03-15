@@ -1,16 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
+import { getSessionData } from "../../utils/utils";
+import BackButton from "../Cards/BackButton";
+import { useLocation } from "react-router-dom";
 
 export default function CheckoutPage() {
   const [formData, setFormData] = useState({
-    user_name: "",
-    user_email: "",
-    user_address: "",
+    user_name: getSessionData("name"),
+    user_email: getSessionData("email"),
+    user_address: getSessionData("address"),
     user_pinCode: "",
     user_phone_no: "",
     payment_method: "cod",
   });
 
+  const [reviewData, setReviewData] = useState([]);
+  const [orderSummary, setOrderSummary] = useState({});
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location?.state?.dataForOrder) {
+      setReviewData(location?.state?.dataForOrder?.list_of_items);
+      setOrderSummary(location?.state?.dataForOrder);
+    }
+  }, [location]);
+
+  console.log(orderSummary);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -21,12 +36,19 @@ export default function CheckoutPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
+    const updatedData = {
+      ...formData,
+      ...orderSummary,
+    };
+    // add payment_status and order_status
+    // and order_date from the backed
+    console.log("Form Data:", updatedData);
   };
 
   return (
     <>
       <Navbar />
+      <BackButton />
       <div className="min-h-screen bg-gray-50">
         {/* Checkout Progress */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -269,8 +291,8 @@ export default function CheckoutPage() {
                               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                             />
                           </svg>
-                          You'll be redirected to our secure payment gateway
-                          after clicking "Place Order"
+                          You&apos;ll be redirected to our secure payment
+                          gateway after clicking &quot;Place Order&quot;
                         </p>
                       </div>
                     )}
@@ -285,6 +307,61 @@ export default function CheckoutPage() {
                     </button>
                   </div>
                 </form>
+                <div className="bg-gray-50 py-4 px-8 border-t border-gray-100">
+                  <div className="flex flex-col sm:flex-row sm:justify-between text-sm text-gray-500 gap-2">
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 mr-1 text-green-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                        />
+                      </svg>
+                      Secure Checkout
+                    </div>
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 mr-1 text-blue-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                      Fast Delivery
+                    </div>
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 mr-1 text-purple-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                        />
+                      </svg>
+                      Easy Returns
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
