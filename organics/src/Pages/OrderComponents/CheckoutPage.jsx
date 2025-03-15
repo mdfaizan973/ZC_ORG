@@ -14,18 +14,15 @@ export default function CheckoutPage() {
     payment_method: "cod",
   });
 
-  const [reviewData, setReviewData] = useState([]);
   const [orderSummary, setOrderSummary] = useState({});
   const location = useLocation();
 
   useEffect(() => {
     if (location?.state?.dataForOrder) {
-      setReviewData(location?.state?.dataForOrder?.list_of_items);
       setOrderSummary(location?.state?.dataForOrder);
     }
   }, [location]);
 
-  console.log(orderSummary);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -36,11 +33,23 @@ export default function CheckoutPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const listItems = orderSummary?.list_of_items?.map((ele) => ({
+      prod_name: ele.title,
+      prod_image: ele.image,
+      prod_price: ele.discount_price_inr,
+      prod_id: ele._id,
+      prod_qty: 10,
+      saler_name: ele.saler_name,
+      saler_id: ele.saler_id,
+    }));
+
     const updatedData = {
       ...formData,
       ...orderSummary,
+      list_of_items: listItems,
+      payment_status: formData.payment_method == "cod" ? "" : "paid",
+      order_status: "Processing", // Processing -> shipped -> Out For Delivery -> Delivered
     };
-    // add payment_status and order_status
     // and order_date from the backed
     console.log("Form Data:", updatedData);
   };
@@ -48,8 +57,10 @@ export default function CheckoutPage() {
   return (
     <>
       <Navbar />
-      <BackButton />
-      <div className="min-h-screen bg-gray-50">
+      <div className="border-b p-2">
+        <BackButton header="Complete Your Order" />
+      </div>
+      <div className="min-h-screen">
         {/* Checkout Progress */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="">
