@@ -14,6 +14,21 @@ cartRouter.get("/", async (req, res) => {
   }
 });
 
+cartRouter.get("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const produtData = await CartSchemaModel.find({
+      userId: id,
+    });
+
+    res.status(200).json(produtData);
+  } catch (error) {
+    console.error("Internal Server Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 cartRouter.post("/", async (req, res) => {
   try {
     const product = new CartSchemaModel(req.body);

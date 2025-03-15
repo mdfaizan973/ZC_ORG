@@ -16,6 +16,7 @@ import { deleteData, fetchData, getSessionData } from "../utils/utils";
 import { baseUrl2 } from "../../config/confg";
 import { useNavigate } from "react-router-dom";
 import CartLoading from "./LoadingUI/CartLoading";
+import { placeHolderImage } from "../utils/uiUtils";
 
 export default function CartPage() {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ export default function CartPage() {
     setCartLoading(true);
     setShowEmptyCart(false);
     const userId = getSessionData("_id");
-    const cartProd = await fetchData(`${baseUrl2}/cart`);
+    const cartProd = await fetchData(`${baseUrl2}/cart/${userId}`);
     setCartLoading(false);
     if (cartProd.length > 0) {
       setCartItems(cartProd);
@@ -147,9 +148,7 @@ export default function CartPage() {
                         <div className="flex flex-col sm:flex-row items-center gap-4 mb-2">
                           <div className="flex-shrink-0 bg-white rounded-xl p-1 shadow-md border border-green-100 overflow-hidden">
                             <img
-                              src={
-                                item.image || "https://placehold.co/400x400.png"
-                              }
+                              src={item.image || placeHolderImage}
                               alt={item.title}
                               className="w-20 h-20 object-cover rounded-lg"
                             />
