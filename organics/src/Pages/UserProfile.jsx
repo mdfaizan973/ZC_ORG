@@ -40,6 +40,8 @@ import { placeHolderImage } from "../utils/uiUtils";
 export default function UserProfile() {
   const [activeTab, setActiveTab] = useState("profile");
   const [viewMode, setViewMode] = useState("grid");
+  const navigate = useNavigate();
+
   const [salerInfo, setSalerInfo] = useState({
     saler_name: "",
     saler_email: "",
@@ -318,7 +320,7 @@ export default function UserProfile() {
                       </div>
                       <p className="font-medium text-gray-800 flex items-center gap-2">
                         <FiLock size={14} />
-                        {getSessionData("pass").slice(0, 7)}****
+                        {getSessionData("pass")?.slice(0, 7)}****
                       </p>
                     </div>
 

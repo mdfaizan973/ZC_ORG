@@ -12,7 +12,7 @@ var jwt = require("jsonwebtoken");
 UserRouter.post("/register", async (req, res) => {
   try {
     const { pass, ...otherData } = req.body; // Extract password separately
-    const { email } = req.body;
+    const { email, businessName } = req.body;
 
     const isUserPresent = await UserModel.findOne({ email });
     if (isUserPresent) {
@@ -28,7 +28,11 @@ UserRouter.post("/register", async (req, res) => {
 
       try {
         // Create a new user object with hashed password
-        const updatedUser = { ...otherData, pass: hash };
+        const updatedUser = {
+          ...otherData,
+          pass: hash,
+          businessName: businessName || "",
+        };
         const user = new UserModel(updatedUser);
 
         // Save the new user to the database
