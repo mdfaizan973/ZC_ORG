@@ -623,7 +623,11 @@ function WishlistTab({ viewMode, setViewMode }) {
 
   const loadWistListData = async () => {
     setLoadingWishList(true);
-    const wisthList = await fetchData(`${baseUrl2}/product-wishlist`);
+    const _user_id = getSessionData("_id");
+    const wisthList = await fetchData(
+      `${baseUrl2}/product-wishlist/${_user_id}`
+    );
+    console.log(wisthList);
     setLoadingWishList(false);
 
     if (wisthList.length > 0) {

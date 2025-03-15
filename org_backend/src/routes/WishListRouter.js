@@ -12,10 +12,11 @@ wishListRouter.get("/", async (req, res) => {
   }
 });
 
-wishListRouter.get("/:prodId", async (req, res) => {
+wishListRouter.get("/:id", async (req, res) => {
+  const { id } = req.params;
   try {
     const wishlistProd = await WishListSchemaModel.find({
-      product_id: req.params.product_id,
+      user_id: id,
     });
 
     res.status(201).json(wishlistProd);
