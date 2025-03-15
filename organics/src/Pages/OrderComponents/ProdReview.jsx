@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { FiChevronRight, FiChevronDown, FiAirplay } from "react-icons/fi";
+import { FiChevronRight, FiChevronDown } from "react-icons/fi";
 import { FiShoppingBag } from "react-icons/fi";
 import { placeHolderImage } from "../../utils/uiUtils";
 import { useLocation, useNavigate } from "react-router-dom";
+import { BiSolidBabyCarriage } from "react-icons/bi";
 
 export default function ProdReview() {
   const [showPriceDetails, setShowPriceDetails] = useState(false);
@@ -63,7 +64,7 @@ export default function ProdReview() {
               </div>
               <h2 className="text-lg font-semibold text-black-700 mb-4 flex justify-between items-center">
                 <span className="flex items-center">
-                  <FiAirplay className="mr-2" /> Delivery by
+                  <BiSolidBabyCarriage className="mr-2" /> Delivery by
                 </span>
                 <span>
                   ({new Date(orderSummary?.delivery_date)?.toDateString()})
