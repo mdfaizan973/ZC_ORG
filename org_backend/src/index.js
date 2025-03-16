@@ -9,6 +9,7 @@ const questionRouter = require("./routes/questionRouter");
 const wishListRouter = require("./routes/WishListRouter");
 const salerRouter = require("./routes/SalerRouter");
 const invoiceDownloadRouter = require("./routes/InvoiceDownloadRouter");
+const orderRouter = require("./routes/OrderRouter");
 const app = express();
 
 app.use(express.json());
@@ -33,6 +34,7 @@ app.use("/api/product-question", questionRouter);
 app.use("/api/product-wishlist", wishListRouter);
 app.use("/api/saler", salerRouter);
 app.use("/api/invoices", invoiceDownloadRouter);
+app.use("/api/orders", orderRouter);
 
 const PORT = 5000;
 app.listen(PORT, () => {
