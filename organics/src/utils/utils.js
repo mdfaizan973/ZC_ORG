@@ -79,10 +79,18 @@ export const postData = async (url, data, method = "POST", token = null) => {
   }
 };
 
-export const deleteData = async (url, token = null) => {
-  const toastId = toast.loading("Removing... ⏳", {
-    position: toast.POSITION.TOP_RIGHT,
-  });
+export const deleteData = async (
+  url,
+  showNotification = true,
+  token = null
+) => {
+  let toastId = null;
+
+  if (showNotification) {
+    toastId = toast.loading("Removing... ⏳", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  }
 
   try {
     const headers = {
@@ -92,20 +100,23 @@ export const deleteData = async (url, token = null) => {
 
     const response = await axios.delete(url, { headers });
 
-    toast.dismiss(toastId); // Remove the loading toast on success
-    toast.success(response?.data?.message, {
-      position: toast.POSITION.TOP_RIGHT,
-    });
+    if (showNotification) {
+      toast.dismiss(toastId);
+      toast.success(response?.data?.message || "Deleted successfully!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
 
     return response.data;
   } catch (error) {
     console.error("Error deleting data:", error);
 
-    toast.dismiss(toastId);
-    let errorMessage = "Oops! Sorry for the turbulence.🚀";
-    toast.error(errorMessage, {
-      position: toast.POSITION.TOP_RIGHT,
-    });
+    if (showNotification) {
+      toast.dismiss(toastId);
+      toast.error("Oops! Sorry for the turbulence.🚀", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
 
     throw error;
   }
