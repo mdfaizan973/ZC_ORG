@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
-import { getSessionData } from "../../utils/utils";
+import { getSessionData, postData } from "../../utils/utils";
 import BackButton from "../Cards/BackButton";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { placeHolderImage } from "../../utils/uiUtils";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaCheck } from "react-icons/fa";
 import { BiX } from "react-icons/bi";
-import axios from "axios";
+import { QRCodeSVG } from "qrcode.react";
+import { baseUrl2 } from "../../../config/confg";
 export default function CheckoutPage() {
   const [formData, setFormData] = useState({
     user_name: getSessionData("name"),
@@ -22,6 +23,7 @@ export default function CheckoutPage() {
   const [showPaymentQR, setShowPaymentQR] = useState(false);
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (location?.state?.dataForOrder) {
@@ -56,29 +58,40 @@ export default function CheckoutPage() {
       payment_status: formData.payment_method == "cod" ? "" : "paid",
       order_status: "Processing", // Processing -> shipped -> Out For Delivery -> Delivered
     };
+
     // and order_date from the backed
     if (formData.payment_method == "online") {
       setShowPaymentQR(true);
+      setOnlineOrderData(updatedData);
     } else {
-      console.log("Form Data:", updatedData);
+      makeOrder(updatedData);
     }
   };
 
-  const handleDownloadInvoice = async () => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/invoices/1234`);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `invoice-1234.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } catch (error) {
-      console.error("Error downloading invoice:", error);
+  const makeOrder = async (userOrder) => {
+    const userOrderDone = await postData(`${baseUrl2}/orders`, userOrder);
+    if (userOrderDone) {
+      setTimeout(() => {
+        navigate("/thank-you");
+      }, 1000);
     }
   };
+
+  //   const handleDownloadInvoice = async () => {
+  //     try {
+  //       const response = await fetch(`http://localhost:5000/api/invoices/1234`);
+  //       const blob = await response.blob();
+  //       const url = window.URL.createObjectURL(blob);
+  //       const a = document.createElement("a");
+  //       a.href = url;
+  //       a.download = `invoice-1234.pdf`;
+  //       document.body.appendChild(a);
+  //       a.click();
+  //       document.body.removeChild(a);
+  //     } catch (error) {
+  //       console.error("Error downloading invoice:", error);
+  //     }
+  //   };
   return (
     <>
       <Navbar />
@@ -408,13 +421,19 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
-      {showPaymentQR && <OnlineOrder setShowPaymentQR={setShowPaymentQR} />}
+      {showPaymentQR && (
+        <OnlineOrder
+          setShowPaymentQR={setShowPaymentQR}
+          onlineOrderData={onlineOrderData}
+          makeOrder={makeOrder}
+        />
+      )}
     </>
   );
 }
 
-const steps = ["QR Code", "Pay Proof", "Done"];
-const OnlineOrder = ({ setShowPaymentQR }) => {
+const OnlineOrder = ({ setShowPaymentQR, onlineOrderData, makeOrder }) => {
+  const steps = ["QR Code", "Pay Proof", "Done"];
   const [currentStep, setCurrentStep] = useState(0);
 
   const handleNext = () => {
@@ -428,10 +447,22 @@ const OnlineOrder = ({ setShowPaymentQR }) => {
       setCurrentStep(currentStep - 1);
     }
   };
+  const upiId = "6201855200@ibl";
+  const upiPaymentUrl = `upi://pay?pa=${upiId}&pn=Md%20Faizaan&am=${
+    Math.floor(onlineOrderData?.total_rupees) || 0
+  }&cu=INR`;
+
+  const phoneNumber = "6201855200"; // Change to your WhatsApp number
+  const whatsappUrl = `https://wa.me/${phoneNumber}`;
+
+  const handleOnlinePayment = async () => {
+    await makeOrder(onlineOrderData);
+    setShowPaymentQR(false);
+  };
 
   return (
     <>
-      <div className="fixed inset-0 z-40 flex items-center justify-center">
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
         <div className="flex flex-col bg-white rounded-lg w-[400px] shadow-md p-6">
           {/* Step Bar */}
           <div className="flex justify-between">
@@ -482,14 +513,85 @@ const OnlineOrder = ({ setShowPaymentQR }) => {
               </div>
             ))}
           </div>
-          <div className="p-2">
-            <img src={placeHolderImage} />
-          </div>
+
+          {currentStep == 0 && (
+            <div className="bg-white rounded-2xl max-w-md overflow-hidden">
+              <div className="flex justify-center items-center p-1 border-b border-t mt-1">
+                <h2 className="text-md font-semibold">
+                  Scan to Pay ₹{onlineOrderData?.total_rupees}
+                </h2>
+              </div>
+
+              <div className="p-1 flex flex-col items-center">
+                <>
+                  <div className="bg-gray-100 rounded-xl p-4 mb-4 w-64 h-64 flex items-center justify-center">
+                    <QRCodeSVG value={upiPaymentUrl} size={200} />
+                  </div>
+                  <p className="text-gray-600 text-center">
+                    Scan this QR code with your UPI app to pay ₹
+                    {onlineOrderData?.total_rupees}
+                  </p>
+                  <p className="text-sm font-semibold text-center text-blue-600">
+                    After completing your payment,{" "}
+                    <span className="text-red-500">click the button</span>{" "}
+                    below!
+                  </p>
+                </>
+              </div>
+            </div>
+          )}
+          {currentStep == 1 && (
+            <div className="flex flex-col items-center justify-center text-center  py-2">
+              <div className="flex justify-center items-center p-1 border-b border-t mb-1">
+                <h2 className="text-md font-semibold">
+                  Scan to Share Payment ScreenShot! of ₹
+                  {onlineOrderData?.total_rupees}.
+                </h2>
+              </div>
+              <div className="bg-green-100 rounded-xl mb-4 w-64 h-64 flex items-center justify-center">
+                <QRCodeSVG value={whatsappUrl} size={200} />
+              </div>
+              <p className="text-sm font-semibold text-blue-600">
+                Your payment of
+                <span className="text-red-500">
+                  {" "}
+                  ₹{onlineOrderData?.total_rupees}
+                </span>{" "}
+                has been done!
+              </p>
+            </div>
+          )}
+          {currentStep == 2 && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+              <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden">
+                <div className="flex flex-col bg-white items-center justify-center text-center py-6">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <FaCheck className="h-8 w-8 text-green-500" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                    Payment Successful!
+                  </h3>
+                  <p className="text-gray-600 mb-6">
+                    Your <span className="font-semibold">Payment</span> of ₹
+                    {onlineOrderData?.total_rupees} and{" "}
+                    <span className="font-semibold">ScreenShot</span> has been
+                    sent.
+                  </p>
+                  <button
+                    onClick={handleOnlinePayment}
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors"
+                  >
+                    Place Order
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           {/* Next Button */}
           {/* <div className="flex justify-between"> */}
           <button
             onClick={handleNext}
-            className="mt-6 px-6 py-2 bg-blue-500 text-white font-bold rounded-lg disabled:bg-gray-400"
+            className="mt-1 px-6 py-2 bg-blue-500 text-white font-bold rounded-lg disabled:bg-gray-400"
             disabled={currentStep === steps.length - 1}
           >
             Continue
