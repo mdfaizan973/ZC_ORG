@@ -5,7 +5,21 @@ const orderRouter = express.Router();
 orderRouter.get("/", async (req, res) => {
   try {
     // user_id find by
-    const orders = await OrderModel.find().sort({ order_date: +1 });
+    const orders = await OrderModel.find().sort({ order_date: -1 });
+    res.status(201).json(orders);
+  } catch (error) {
+    console.error("Internal Server Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+orderRouter.get("/:userId", async (req, res) => {
+  const { userId } = req.params;
+  try {
+    // user_id find by
+    const orders = await OrderModel.find({ user_id: userId }).sort({
+      order_date: -1,
+    });
     res.status(201).json(orders);
   } catch (error) {
     console.error("Internal Server Error:", error);
@@ -21,6 +35,15 @@ orderRouter.post("/", async (req, res) => {
   } catch (error) {
     console.error("Internal Server Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+orderRouter.delete("/deleteAll", async (req, res) => {
+  try {
+    await OrderModel.deleteMany({});
+    res.status(200).json({ message: "All items deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting items", error });
   }
 });
 

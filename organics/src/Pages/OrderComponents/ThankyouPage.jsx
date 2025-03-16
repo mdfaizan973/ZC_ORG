@@ -1,7 +1,7 @@
 export default function ThankyouPage() {
   return (
     <>
-      <div className="flex flex-col items-center justify-center min-h-screen px-6 text-center">
+      <div className="flex flex-col items-center justify-center min-h-screen px-6 mb-2 text-center">
         <div className="bg-white p-8 rounded-2xl shadow-lg max-w-lg">
           <img
             className="mx-auto mb-4"

@@ -61,7 +61,7 @@ cartRouter.delete("/:id", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
+// make delete using prod id
 cartRouter.delete("/deleteAll/:user_id", async (req, res) => {
   const { user_id } = req.params;
   try {

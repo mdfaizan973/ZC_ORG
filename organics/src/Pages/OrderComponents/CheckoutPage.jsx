@@ -47,7 +47,7 @@ export default function CheckoutPage() {
       prod_price: ele.discount_price_inr,
       prod_category: ele.category,
       prod_id: ele._id,
-      prod_qty: 10,
+      prod_qty: ele.quantity,
       saler_name: ele.saler_name,
       saler_id: ele.saler_id,
     }));

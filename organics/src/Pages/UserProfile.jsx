@@ -148,7 +148,9 @@ export default function UserProfile() {
   }, []);
 
   const load_allorders = async () => {
-    const ordersData = await fetchData(`${baseUrl2}/orders`);
+    const ordersData = await fetchData(
+      `${baseUrl2}/orders/${getSessionData("_id")}`
+    );
     const newOrderData = ordersData
       .map((ele) =>
         ele.list_of_items.map((item) => ({
@@ -160,6 +162,7 @@ export default function UserProfile() {
       .flat(); // with status pending with all the object
     setOrderList(newOrderData);
   };
+
   return (
     <>
       <ToastContainer />
