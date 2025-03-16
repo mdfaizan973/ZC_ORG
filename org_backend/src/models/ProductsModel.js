@@ -10,6 +10,7 @@ const ProductSchema = new mongoose.Schema(
     discount_price_inr: { type: Number, required: false },
     discount_percentage: { type: Number, required: false },
     ETA: { type: String, required: false },
+    how_much: { type: String, required: true },
     health_benefits_rich_in_vitamins_and_antioxidants: {
       type: Boolean,
       required: false,

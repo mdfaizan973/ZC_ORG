@@ -48,7 +48,6 @@ export default function AdminDashBoard() {
   }, []);
 
   const handleAddProducts = async (url, data, isEdit) => {
-    console.log(url, data, isEdit);
     await postData(url, data, isEdit ? "PUT" : "POST");
     loadProducts();
   };
@@ -220,8 +219,8 @@ function ProductForm({
     description: "",
     image: "",
     price_inr: "",
-    discount_price_inr: "0",
     discount_percentage: "0",
+    how_much: "",
     ETA: "",
     health_benefits_rich_in_vitamins_and_antioxidants: false,
     health_benefits_improves_immunity: false,
@@ -295,6 +294,11 @@ function ProductForm({
     });
   };
 
+  const calculateDiscountPieces = (pr, des_p) => {
+    const d_p = (Number(pr) / 100) * des_p;
+    return Number(pr) - Number(d_p);
+  };
+  // calculateDiscountPieces(10, 4);
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -306,11 +310,15 @@ function ProductForm({
         typeof formData.organic_ingredients === "string"
           ? formData.organic_ingredients.split(" ")
           : [],
+      discount_price_inr: calculateDiscountPieces(
+        formData?.price_inr,
+        formData?.discount_percentage
+      ),
       saler_name: getSessionData("name"),
       saler_id: getSessionData("_id"),
       saler_email: getSessionData("email"),
     };
-
+    console.log(processedData);
     let url;
     let isEdit = false;
 
@@ -330,8 +338,8 @@ function ProductForm({
         description: "",
         image: "",
         price_inr: "",
-        discount_price_inr: "",
         discount_percentage: "",
+        how_much: "",
         ETA: "",
         health_benefits_rich_in_vitamins_and_antioxidants: false,
         health_benefits_improves_immunity: false,
@@ -525,17 +533,17 @@ function ProductForm({
 
                       <div className="space-y-2">
                         <label
-                          htmlFor="discount_price_inr"
+                          htmlFor="discount_percentage"
                           className="block text-sm font-medium text-gray-700"
                         >
                           Discount Price (INR)
                         </label>
                         <input
                           type="number"
-                          id="discount_price_inr"
+                          id="discount_percentage"
                           placeholder="e.g. 100"
                           className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                          value={formData.discount_price_inr}
+                          value={formData.discount_percentage}
                           onChange={handleInputChange}
                         />
                       </div>
@@ -544,17 +552,18 @@ function ProductForm({
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label
-                          htmlFor="discount_percentage"
+                          htmlFor="how_much"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Discount Percentage
+                          How Much *
                         </label>
                         <input
-                          type="number"
-                          id="discount_percentage"
-                          placeholder="e.g. 15"
+                          type="text"
+                          id="how_much"
+                          placeholder="e.g. 1KG"
+                          required
                           className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                          value={formData.discount_percentage}
+                          value={formData.how_much}
                           onChange={handleInputChange}
                         />
                       </div>
