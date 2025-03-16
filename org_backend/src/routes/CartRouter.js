@@ -62,10 +62,11 @@ cartRouter.delete("/:id", async (req, res) => {
   }
 });
 
-cartRouter.delete("/all/:id", async (req, res) => {
-  const { cartItemIds } = req.params;
+cartRouter.delete("/deleteAll/:user_id", async (req, res) => {
+  const { user_id } = req.params;
+  console.log(user_id);
   try {
-    await CartSchemaModel.deleteMany({ _id: { $in: cartItemIds } });
+    await CartSchemaModel.deleteMany({ userId: user_id });
     res.status(200).json({ message: "All items removed from cart" });
   } catch (error) {
     res.status(500).json({ message: "Error clearing the cart" });

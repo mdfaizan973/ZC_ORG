@@ -96,7 +96,6 @@ export default function CartPage() {
       getDeliveryOption(shippingCharge) == "standard" ? 4 : 1
     );
 
-    console.log(120, prepare_data);
     navigate("/order-review", { state: { cartReview: prepare_data } });
   };
 

@@ -67,19 +67,13 @@ export default function CheckoutPage() {
       makeOrder(updatedData);
     }
   };
-  console.log(orderSummary?.list_of_items);
   const makeOrder = async (userOrder) => {
     const userOrderDone = await postData(`${baseUrl2}/orders`, userOrder);
     if (userOrderDone) {
-      //   setTimeout(() => {
-      navigate("/thank-you");
-      //   }, 1000);
-
-      //   await Promise.all(
-      //     orderSummary?.list_of_items?.map((item) =>
-      //       deleteData(`${baseUrl2}/cart/all/${item._id}`, false)
-      //     )
-      //   );
+      deleteData(`${baseUrl2}/cart/deleteAll/${orderSummary?.user_id}`, false);
+      setTimeout(() => {
+        navigate("/thank-you");
+      }, 1000);
     }
   };
 
