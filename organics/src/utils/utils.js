@@ -14,6 +14,7 @@ export const fetchData = async (url, token = null) => {
 
     toast.error(errorMessage, {
       position: toast.POSITION.TOP_RIGHT,
+      autoClose: 1000,
     });
 
     throw error;
@@ -62,6 +63,7 @@ export const postData = async (url, data, method = "POST", token = null) => {
     });
     toast.success(response?.data?.message, {
       position: toast.POSITION.TOP_RIGHT,
+      autoClose: 1000,
     });
     toast.dismiss(toastId); // Remove loading toast on success
     return response.data;
@@ -71,6 +73,7 @@ export const postData = async (url, data, method = "POST", token = null) => {
     let errorMessage = "Oops! Sorry for the turbulence.🚀";
     toast.error(errorMessage, {
       position: toast.POSITION.TOP_RIGHT,
+      autoClose: 1000,
     });
 
     throw error;
@@ -104,6 +107,7 @@ export const deleteData = async (
       toast.dismiss(toastId);
       toast.success(response?.data?.message || "Deleted successfully!", {
         position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1000,
       });
     }
 
@@ -115,6 +119,7 @@ export const deleteData = async (
       toast.dismiss(toastId);
       toast.error("Oops! Sorry for the turbulence.🚀", {
         position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1000,
       });
     }
 
