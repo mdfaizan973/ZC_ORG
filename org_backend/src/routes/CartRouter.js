@@ -64,7 +64,6 @@ cartRouter.delete("/:id", async (req, res) => {
 
 cartRouter.delete("/deleteAll/:user_id", async (req, res) => {
   const { user_id } = req.params;
-  console.log(user_id);
   try {
     await CartSchemaModel.deleteMany({ userId: user_id });
     res.status(200).json({ message: "All items removed from cart" });

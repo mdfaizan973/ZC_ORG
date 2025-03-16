@@ -41,7 +41,7 @@ export default function UserProfile() {
   const [activeTab, setActiveTab] = useState("profile");
   const [viewMode, setViewMode] = useState("grid");
   const navigate = useNavigate();
-
+  const [orderList, setOrderList] = useState([]);
   const [salerInfo, setSalerInfo] = useState({
     saler_name: "",
     saler_email: "",
@@ -141,6 +141,24 @@ export default function UserProfile() {
       saler_business_name: "",
       sell_description: "",
     });
+  };
+
+  useEffect(() => {
+    load_allorders();
+  }, []);
+
+  const load_allorders = async () => {
+    const ordersData = await fetchData(`${baseUrl2}/orders`);
+    const newOrderData = ordersData
+      .map((ele) =>
+        ele.list_of_items.map((item) => ({
+          ...item,
+          prod_status: ele.order_status,
+          prod_date: ele.delivery_date,
+        }))
+      )
+      .flat(); // with status pending with all the object
+    setOrderList(newOrderData);
   };
   return (
     <>
@@ -354,6 +372,7 @@ export default function UserProfile() {
           {activeTab === "orders" && (
             <OrdersTab
               orders={orders}
+              orderList={orderList}
               viewMode={viewMode}
               setViewMode={setViewMode}
             />
@@ -516,7 +535,7 @@ export default function UserProfile() {
   );
 }
 
-function OrdersTab({ orders, viewMode, setViewMode }) {
+function OrdersTab({ orders, orderList, viewMode, setViewMode }) {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -573,7 +592,7 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
               : "space-y-6"
           }`}
         >
-          {orders.map((order) =>
+          {orderList?.map((order) =>
             viewMode === "grid" ? (
               <OrderCard key={order.id} order={order} />
             ) : (
@@ -697,14 +716,14 @@ function OrderCard({ order }) {
   return (
     <>
       <div
-        key={order.id}
+        key={order?.prod_id}
         className="bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
       >
         <div className="relative">
           <div className="flex justify-center items-center bg-gray-50 p-2">
             <img
-              src={order.image || placeHolderImage}
-              alt={order.title}
+              src={order?.prod_image || placeHolderImage}
+              alt={order?.prod_name}
               width={100}
               height={100}
               className="object-contain h-30 w-30 rounded-full"
@@ -712,23 +731,25 @@ function OrderCard({ order }) {
           </div>
 
           <div className="absolute top-2 right-2">
-            <OrderStatusBadge status={order.status} />
+            <OrderStatusBadge status={order?.prod_status} />
           </div>
         </div>
 
         <div className="p-4">
           <div className="text-xs text-gray-500 mb-1 flex items-center justify-between">
-            <p>{order.category}</p> <p>(Pack of 6)</p>
+            <p>{order?.prod_category}</p> <p>(Qty {order?.prod_qty})</p>
           </div>
           <h4 className="font-medium text-gray-800 mb-2 line-clamp-2">
-            {order.title?.substring(0, 20)}..
+            {order?.prod_name?.substring(0, 20)}..
           </h4>
 
           <div className="flex items-center justify-between mb-4">
-            <p className="font-semibold text-green-800">{order.price}</p>
+            <p className="font-semibold text-green-800">₹{order?.prod_price}</p>
             <div className="flex items-center gap-1 text-sm">
               <FiCalendar size={14} className="text-gray-400" />
-              <span className="text-gray-600">{order.date}</span>
+              <span className="text-gray-600">
+                {new Date(order?.prod_date).toDateString()}
+              </span>
             </div>
           </div>
           <button className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg transition-colors">

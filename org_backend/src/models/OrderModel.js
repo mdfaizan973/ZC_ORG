@@ -7,6 +7,7 @@ const ProdOrderSchema = new mongoose.Schema(
     prod_image: { type: String, required: false },
     prod_name: { type: String, required: true },
     prod_price: { type: Number, required: true },
+    prod_category: { type: String, required: true },
     prod_qty: { type: Number, required: true },
     saler_id: { type: String, required: true },
     saler_name: { type: String, required: true },

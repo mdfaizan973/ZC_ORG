@@ -5,7 +5,7 @@ const orderRouter = express.Router();
 orderRouter.get("/", async (req, res) => {
   try {
     // user_id find by
-    const orders = await OrderModel.find();
+    const orders = await OrderModel.find().sort({ order_date: +1 });
     res.status(201).json(orders);
   } catch (error) {
     console.error("Internal Server Error:", error);

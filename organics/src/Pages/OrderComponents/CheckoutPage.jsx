@@ -45,6 +45,7 @@ export default function CheckoutPage() {
       prod_name: ele.title,
       prod_image: ele.image,
       prod_price: ele.discount_price_inr,
+      prod_category: ele.category,
       prod_id: ele._id,
       prod_qty: 10,
       saler_name: ele.saler_name,
