@@ -41,7 +41,6 @@ export default function UserProfile() {
   const [activeTab, setActiveTab] = useState("profile");
   const [viewMode, setViewMode] = useState("grid");
   const navigate = useNavigate();
-  const [orderList, setOrderList] = useState([]);
   const [salerInfo, setSalerInfo] = useState({
     saler_name: "",
     saler_email: "",
@@ -143,26 +142,6 @@ export default function UserProfile() {
     });
   };
 
-  useEffect(() => {
-    load_allorders();
-  }, []);
-
-  const load_allorders = async () => {
-    const ordersData = await fetchData(
-      `${baseUrl2}/orders/${getSessionData("_id")}`
-    );
-    const newOrderData = ordersData
-      .map((ele) =>
-        ele.list_of_items.map((item) => ({
-          ...item,
-          prod_status: ele.order_status,
-          prod_date: ele.delivery_date,
-        }))
-      )
-      .flat(); // with status pending with all the object
-    setOrderList(newOrderData);
-  };
-
   return (
     <>
       <ToastContainer />
@@ -219,7 +198,7 @@ export default function UserProfile() {
         {/* Tab Content */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100">
           {activeTab === "profile" && (
-            <div className="p-6">
+            <div className="p-6 mb-1">
               <div className="flex flex-col md:flex-row gap-8 items-start">
                 <div className="w-full md:w-1/3 bg-green-50 rounded-xl p-6 flex flex-col items-center">
                   <div className="relative mb-4">
@@ -345,28 +324,6 @@ export default function UserProfile() {
                       </p>
                     </div>
                   </div>
-
-                  <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="bg-green-50 p-4 rounded-xl text-center">
-                      <p className="text-2xl font-bold text-green-800">12</p>
-                      <p className="text-sm text-gray-600">Orders</p>
-                    </div>
-
-                    <div className="bg-green-50 p-4 rounded-xl text-center">
-                      <p className="text-2xl font-bold text-green-800">3</p>
-                      <p className="text-sm text-gray-600">Wishlist</p>
-                    </div>
-
-                    <div className="bg-green-50 p-4 rounded-xl text-center">
-                      <p className="text-2xl font-bold text-green-800">4.8</p>
-                      <p className="text-sm text-gray-600">Rating</p>
-                    </div>
-
-                    <div className="bg-green-50 p-4 rounded-xl text-center">
-                      <p className="text-2xl font-bold text-green-800">$249</p>
-                      <p className="text-sm text-gray-600">Total Spent</p>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -375,7 +332,7 @@ export default function UserProfile() {
           {activeTab === "orders" && (
             <OrdersTab
               orders={orders}
-              orderList={orderList}
+              // orderList={orderList}
               viewMode={viewMode}
               setViewMode={setViewMode}
             />
@@ -538,7 +495,67 @@ export default function UserProfile() {
   );
 }
 
-function OrdersTab({ orders, orderList, viewMode, setViewMode }) {
+function OrdersTab({ orders, viewMode, setViewMode }) {
+  const [orderList, setOrderList] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    load_allorders();
+  }, []);
+
+  const load_allorders = async () => {
+    setLoadingOrders(true);
+    const ordersData = await fetchData(
+      `${baseUrl2}/orders/${getSessionData("_id")}`
+    );
+    setLoadingOrders(false);
+    const newOrderData = ordersData
+      .map((ele) =>
+        ele.list_of_items.map((item) => ({
+          ...item,
+          prod_status: ele.order_status,
+          prod_date: ele.delivery_date,
+        }))
+      )
+      .flat(); // with status pending with all the object
+    setOrderList(newOrderData);
+  };
+
+  const getOrderStatus = (status_type) => {
+    const statusType = orderList.filter(
+      (ele) => ele?.prod_status === status_type
+    );
+
+    if (statusType) {
+      return statusType.length || 0;
+    }
+  };
+
+  const goToDetailsPage = (id) => {
+    navigate(`/productdiscription/${id}`);
+  };
+  const getTotalPrice = () => {
+    const total = orderList.reduce((acc, item) => item.prod_price + acc, 0);
+    return `₹ ${total}` || 0;
+  };
+
+  const sortingData = (val) => {
+    const dataToSort = [...orderList];
+    if (val === "hightolow") {
+      // hightolow
+      const dec = dataToSort.sort((a, b) => a.prod_price - b.prod_price);
+      setOrderList(dec);
+    } else if (val === "lowtohigh") {
+      // lowtohigh
+      const dec = dataToSort.sort((a, b) => b.prod_price - a.prod_price);
+      setOrderList(dec);
+    } else {
+      // as it is
+      setOrderList(dataToSort);
+    }
+  };
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -556,8 +573,12 @@ function OrdersTab({ orders, orderList, viewMode, setViewMode }) {
           </button>
           <select className="bg-white border border-gray-300 text-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
             <option>Sort by: Recent</option>
-            <option>Sort by: Price High to Low</option>
-            <option>Sort by: Price Low to High</option>
+            <option onClick={() => sortingData("hightolow")}>
+              Sort by: Price High to Low
+            </option>
+            <option onClick={() => sortingData("lowtohigh")}>
+              Sort by: Price Low to High
+            </option>
           </select>
         </div>
       </div>
@@ -566,28 +587,33 @@ function OrdersTab({ orders, orderList, viewMode, setViewMode }) {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           <OrderStat
             label="Total Orders"
-            value="23"
+            value={orderList?.length || 0}
             icon={<FaBox className="text-green-600" size={24} />}
           />
           <OrderStat
             label="Completed"
-            value="19"
+            value={getOrderStatus("Delivered")}
             icon={<MdOutlineVerified className="text-green-600" size={24} />}
           />
           <OrderStat
             label="In Progress"
-            value="4"
+            value={getOrderStatus("Processing")}
             icon={<MdLocalShipping className="text-blue-600" size={24} />}
           />
+
           <OrderStat
             label="Total Spent"
-            value="$1,234.56"
-            icon={<FiDollarSign className="text-green-600" size={24} />}
+            value={getTotalPrice()}
+            icon={<div className="text-green-600 text-xl font-bold">₹</div>}
           />
         </div>
       </div>
 
-      {orders.length > 0 ? (
+      {loadingOrders ? (
+        <div className="flex items-center justify-center w-full h-[400px]">
+          <Loader />
+        </div>
+      ) : orderList.length > 0 ? (
         <div
           className={`${
             viewMode === "grid"
@@ -597,7 +623,11 @@ function OrdersTab({ orders, orderList, viewMode, setViewMode }) {
         >
           {orderList?.map((order) =>
             viewMode === "grid" ? (
-              <OrderCard key={order.id} order={order} />
+              <OrderCard
+                key={order.id}
+                order={order}
+                goToDetailsPage={goToDetailsPage}
+              />
             ) : (
               <OrderListItem key={order.id} order={order} />
             )
@@ -715,14 +745,17 @@ function WishlistTab({ viewMode, setViewMode }) {
   );
 }
 
-function OrderCard({ order }) {
+function OrderCard({ order, goToDetailsPage }) {
   return (
     <>
       <div
         key={order?.prod_id}
         className="bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
       >
-        <div className="relative">
+        <div
+          className="relative"
+          onClick={() => goToDetailsPage(order?.prod_id)}
+        >
           <div className="flex justify-center items-center bg-gray-50 p-2">
             <img
               src={order?.prod_image || placeHolderImage}
@@ -755,7 +788,10 @@ function OrderCard({ order }) {
               </span>
             </div>
           </div>
-          <button className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg transition-colors">
+          <button
+            onClick={() => goToDetailsPage(order?.prod_id)}
+            className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg transition-colors"
+          >
             <FaShoppingCart size={12} />
             Shop Again
           </button>
@@ -922,14 +958,14 @@ function ViewToggle({ viewMode, setViewMode }) {
       >
         <FiGrid size={20} />
       </button>
-      <button
+      {/* <button
         onClick={() => setViewMode("list")}
         className={`p-1 rounded ${
           viewMode === "list" ? "bg-white shadow" : "text-gray-500"
         }`}
       >
         <FiList size={20} />
-      </button>
+      </button> */}
     </div>
   );
 }
