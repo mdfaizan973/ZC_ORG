@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
-import { getSessionData, postData } from "../../utils/utils";
+import { deleteData, getSessionData, postData } from "../../utils/utils";
 import BackButton from "../Cards/BackButton";
 import { useLocation, useNavigate } from "react-router-dom";
 import { placeHolderImage } from "../../utils/uiUtils";
@@ -67,13 +67,19 @@ export default function CheckoutPage() {
       makeOrder(updatedData);
     }
   };
-
+  console.log(orderSummary?.list_of_items);
   const makeOrder = async (userOrder) => {
     const userOrderDone = await postData(`${baseUrl2}/orders`, userOrder);
     if (userOrderDone) {
-      setTimeout(() => {
-        navigate("/thank-you");
-      }, 1000);
+      //   setTimeout(() => {
+      navigate("/thank-you");
+      //   }, 1000);
+
+      //   await Promise.all(
+      //     orderSummary?.list_of_items?.map((item) =>
+      //       deleteData(`${baseUrl2}/cart/all/${item._id}`, false)
+      //     )
+      //   );
     }
   };
 
