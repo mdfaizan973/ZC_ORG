@@ -5,7 +5,7 @@ export default function Home() {
   const data = [
     {
       img: "https://i.pinimg.com/736x/dc/cc/a2/dccca27d07678f10b1493b95d9bbeb99.jpg",
-      name: "Latest Product",
+      name: "All Products",
     },
     {
       img: "https://i.pinimg.com/564x/9e/78/9f/9e789faa701819cfbb69a304dcf5b27f.jpg",
@@ -42,7 +42,7 @@ export default function Home() {
           <h1 className="mb-12 text-center font-sans text-5xl font-bold text-gray-900">
             TRENDING NOW
           </h1>
-          <div className="mx-auto grid max-w-screen-xl grid-cols-1 gap-6 p-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mx-auto grid max-w-screen-xxl grid-cols-2 gap-6 p-6 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
             {data.map((ele, i) => (
               <article
                 key={i}
