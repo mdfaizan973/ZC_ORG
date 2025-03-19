@@ -27,6 +27,14 @@ export default function Home() {
       img: "https://i.pinimg.com/564x/4a/b0/e7/4ab0e7ccc090864f5430da7ed563d51d.jpg",
       name: "Dairy",
     },
+    {
+      img: "https://i.pinimg.com/564x/dd/03/b3/dd03b3ec7e42e9d145821b6721b29c17.jpg",
+      name: "grains",
+    },
+    {
+      img: "https://i.pinimg.com/564x/4a/b0/e7/4ab0e7ccc090864f5430da7ed563d51d.jpg",
+      name: "Dairy",
+    },
   ];
 
   return (
@@ -34,15 +42,19 @@ export default function Home() {
       <Navbar />
 
       <div className="banner mt-1 cursor-pointer">
+        <input
+          placeholder="Search...."
+          className="absolute px-4 py-2 max-w-xl rounded-md left-[45%]"
+        />
         <img src="https://www.omfoods.com/cdn/shop/files/Banner_NEW.jpg?v=1681412890" />
       </div>
 
       <div className="main_home_card">
         <section className="py-20">
-          <h1 className="mb-12 text-center font-sans text-5xl font-bold text-gray-900">
+          <h1 className="mb-10 text-center font-sans text-5xl font-bold text-green-600">
             TRENDING NOW
           </h1>
-          <div className="mx-auto grid max-w-screen-xxl grid-cols-2 gap-6 p-6 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
+          <div className="mx-auto grid max-w-screen-xl grid-cols-2 gap-6 p-6 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 xxl-grid-col-6">
             {data.map((ele, i) => (
               <article
                 key={i}
@@ -59,14 +71,12 @@ export default function Home() {
                     </RouterLink>
                   </div>
 
-                  <div className="mt-1 p-2">
-                    <div className="mt-3 flex items-end justify-between">
-                      <p>
-                        <span className="text-lg font-bold text-green-500">
-                          {ele.name}
-                        </span>
-                      </p>
-                    </div>
+                  <div className="mt-3 flex items-end justify-center">
+                    <p>
+                      <span className="text-lg font-bold text-green-500">
+                        {ele.name}
+                      </span>
+                    </p>
                   </div>
                 </a>
               </article>
