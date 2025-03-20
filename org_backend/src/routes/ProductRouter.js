@@ -6,7 +6,7 @@ const ProductsRouter = express.Router();
 // const xlsx = require("xlsx");
 
 // Configure multer for file uploads
-const storage = multer.memoryStorage(); // Store file in memory
+// const storage = multer.memoryStorage(); // Store file in memory
 // const upload = multer({ storage: storage });
 // TODO:- use auth middleware for the token;
 
