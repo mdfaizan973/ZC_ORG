@@ -2,12 +2,12 @@ const express = require("express");
 const ProductSchemaModel = require("../models/ProductsModel");
 const ProductsRouter = express.Router();
 
-// const multer = require("multer");
-// const xlsx = require("xlsx");
+const multer = require("multer");
+const xlsx = require("xlsx");
 
 // Configure multer for file uploads
-// const storage = multer.memoryStorage(); // Store file in memory
-// const upload = multer({ storage: storage });
+const storage = multer.memoryStorage(); // Store file in memory
+const upload = multer({ storage: storage });
 // TODO:- use auth middleware for the token;
 
 ProductsRouter.get("/", async (req, res) => {
@@ -32,30 +32,34 @@ ProductsRouter.post("/", async (req, res) => {
   }
 });
 
-// ProductsRouter.post("/upload", upload.single("file"), async (req, res) => {
-//   try {
-//       if (!req.file) {
-//           return res.status(400).json({ message: "No file uploaded" });
-//       }
+ProductsRouter.post("/upload", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
 
-//       // Check if the uploaded file is named "sample_products.xlsx"
-//       // if (req.file.originalname !== "sample_products.xlsx") {
-//       //     return res.status(400).json({ message: "Please upload a file named sample_products.xlsx" });
-//       // }
+    // Check if the uploaded file is named "sample_products.xlsx"
+    // if (req.file.originalname !== "sample_products.xlsx") {
+    //     return res.status(400).json({ message: "Please upload a file named sample_products.xlsx" });
+    // }
 
-//       // Read Excel file
-//       const workbook = xlsx.read(req.file.buffer, { type: "buffer" });
-//       const sheetName = workbook.SheetNames[0]; // Get the first sheet
-//       let sheetData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: null });         
+    // Read Excel file
+    const workbook = xlsx.read(req.file.buffer, { type: "buffer" });
+    const sheetName = workbook.SheetNames[0]; // Get the first sheet
+    let sheetData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName], {
+      defval: null,
+    });
 
-//       const insertedData = await ProductSchemaModel.insertMany(sheetData);
+    const insertedData = await ProductSchemaModel.insertMany(sheetData);
 
-//       res.status(201).json({ message: "Products uploaded successfully", data: insertedData });
-//   } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ message: "Internal Server Error" });
-//   }
-// });
+    res
+      .status(201)
+      .json({ message: "Products uploaded successfully", data: insertedData });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 ProductsRouter.delete("/:id", async (req, res) => {
   try {

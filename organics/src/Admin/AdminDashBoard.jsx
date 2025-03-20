@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import AdminNav from "./AdminNav";
 // import TableIndid from "./Loding/TableIndid";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import SuperDashBoard from "./SuperDashBoard";
 import { baseUrl2 } from "../../config/confg";
@@ -375,10 +375,36 @@ function ProductForm({
     }
   };
 
-  const handleSubmitExcel = () => {
+  const handleSubmitExcel = async () => {
     if (file) {
-      console.log("File Submitted:", file);
-      closeFileModel(); // Close modal after submitting
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post(
+          `${baseUrl2}/products/upload`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log("File uploaded successfully:", response.data);
+        toast.success("File uploaded successfully!", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 1000,
+        });
+
+        closeFileModel(); // Close modal after submitting
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        toast.error("Failed to upload file!", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 1000,
+        });
+      }
     }
   };
 
@@ -1000,7 +1026,7 @@ function ProductForm({
                 type="file"
                 className="hidden"
                 onChange={handleFileChange}
-                accept="image/*, application/pdf"
+                accept="image/*, application/pdf, .xlsx, .xls"
               />
               <FiUploadCloud className="text-blue-500 text-5xl mb-2" />
               <p className="text-gray-500 text-sm">
@@ -1315,6 +1341,7 @@ import Sidebar from "./Component/Sidebar";
 import Footer from "../Components/Footer";
 import { AiOutlinePlus } from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
+import axios from "axios";
 
 function ProductTable({
   products,
