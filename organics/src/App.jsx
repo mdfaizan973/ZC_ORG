@@ -2,6 +2,7 @@
 
 import "./App.css";
 import AllRoutes from "./Components/AllRoutes";
+import ScrollToTop from "./Components/ScrollToTop";
 import Footer from "./Components/Footer";
 // import Navbar from "./Components/Navbar";
 import { ToastContainer } from "react-toastify";
@@ -10,6 +11,7 @@ function App() {
   return (
     <>
       <ToastContainer />
+      <ScrollToTop />
       <AllRoutes />
       <Footer />
     </>
