@@ -11,6 +11,7 @@ import {
   FiMenu,
   FiX,
   FiChevronRight,
+  FiHome,
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
@@ -37,6 +38,7 @@ const Sidebar = () => {
     },
     { title: "Users", icon: <FiUsers />, route: "/adminusers" },
     { title: "Sellers", icon: <FiUserCheck />, route: "/salers" },
+    { title: "Store", icon: <FiHome />, route: "/" },
   ];
 
   const navigate = useNavigate();
@@ -52,7 +54,6 @@ const Sidebar = () => {
   const handleAdminDashboardRoute = (link, index) => {
     navigate(link);
     setActivePage(index);
-    console.log(index);
   };
 
   return (

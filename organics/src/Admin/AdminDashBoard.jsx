@@ -190,9 +190,9 @@ export default function AdminDashBoard() {
   );
 }
 
-import { FaClosedCaptioning, FaFileUpload } from "react-icons/fa";
+import { FaClosedCaptioning, FaFileExcel, FaFileUpload } from "react-icons/fa";
 import { deleteData, getSessionData, postData } from "../utils/utils";
-
+import { FiUploadCloud } from "react-icons/fi";
 function ProductForm({
   handleAddProducts,
   dataForEdit,
@@ -246,6 +246,23 @@ function ProductForm({
       }
     }
   }, [dataForEdit]);
+
+  // Excel File Upload
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+  };
+
+  const [isOpenFileModel, setIsOpenFileModel] = useState(false);
+
+  const closeFileModel = () => {
+    setIsOpenFileModel(false);
+  };
+  const openFileModel = () => {
+    setIsOpenFileModel(true);
+  };
 
   // Handle click outside to close modal
   useEffect(() => {
@@ -358,17 +375,33 @@ function ProductForm({
     }
   };
 
+  const handleSubmitExcel = () => {
+    if (file) {
+      console.log("File Submitted:", file);
+      closeFileModel(); // Close modal after submitting
+    }
+  };
+
   return (
     <div>
-      <button
-        className="m-3 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg self-end mt-3"
-        type="button"
-        onClick={openModal}
-      >
-        Add Product
-      </button>
+      <div className="flex items-center justify-between">
+        <button
+          className="m-3 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center self-end mt-3"
+          type="button"
+          onClick={openFileModel}
+        >
+          <FaFileExcel className="mr-1" /> Upload Excel
+        </button>
+        <button
+          className="m-3 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center self-end mt-3"
+          type="button"
+          onClick={openModal}
+        >
+          <AiOutlinePlus className="mr-1" /> Add Product
+        </button>
+      </div>
 
-      {/* Modal Overlay */}
+      {/* Modal For Form */}
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center p-4">
           {/* Modal Content */}
@@ -384,7 +417,7 @@ function ProductForm({
                 onClick={closeModal}
                 className="p-1 rounded-full hover:bg-gray-100 transition-colors"
               >
-                <FaClosedCaptioning className="h-6 w-6 text-gray-500" />
+                <IoClose className="h-6 w-6 text-gray-500" />
               </button>
             </div>
 
@@ -948,6 +981,59 @@ function ProductForm({
           </div>
         </div>
       )}
+
+      {/* Model For Excel */}
+      {isOpenFileModel && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center p-4">
+          <div className="w-96 p-6 bg-white rounded-lg shadow-lg relative">
+            {/* Close Button */}
+            <button
+              className="absolute top-1 right-3 mb-2 text-gray-500 hover:text-gray-700 transition text-2xl"
+              onClick={closeFileModel}
+            >
+              <IoClose />
+            </button>
+
+            {/* File Upload Box */}
+            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 transition">
+              <input
+                type="file"
+                className="hidden"
+                onChange={handleFileChange}
+                accept="image/*, application/pdf"
+              />
+              <FiUploadCloud className="text-blue-500 text-5xl mb-2" />
+              <p className="text-gray-500 text-sm">
+                {file ? file.name : "Click to upload or drag & drop"}
+              </p>
+            </label>
+
+            {/* File Name & Remove Option */}
+            {file && (
+              <div className="mt-4 flex items-center justify-between bg-gray-200 px-4 py-3 rounded-md">
+                <span className="text-gray-700 text-sm truncate">
+                  {file.name}
+                </span>
+                <button
+                  className="text-red-500 hover:text-red-700 transition"
+                  onClick={() => setFile(null)}
+                >
+                  ✖
+                </button>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <button
+              className="mt-5 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-lg font-semibold transition"
+              onClick={handleSubmitExcel}
+              disabled={!file}
+            >
+              Submit File
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -1227,6 +1313,8 @@ import { FaEdit, FaTrash, FaEye, FaCopy } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Component/Sidebar";
 import Footer from "../Components/Footer";
+import { AiOutlinePlus } from "react-icons/ai";
+import { IoClose } from "react-icons/io5";
 
 function ProductTable({
   products,
