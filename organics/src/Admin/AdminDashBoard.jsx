@@ -4,7 +4,7 @@ import AdminNav from "./AdminNav";
 // import TableIndid from "./Loding/TableIndid";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import SuperDashBoard from "./SuperDashBoard";
+// import SuperDashBoard from "./SuperDashBoard";
 import { baseUrl2 } from "../../config/confg";
 import { fetchData } from "./AdminAnalytics";
 export default function AdminDashBoard() {
@@ -85,7 +85,8 @@ export default function AdminDashBoard() {
             <div className="flex-1 ">
               <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900  items-start">
                 <aside className="w-full md:w-1/4 lg:w-1/5  bg-white shadow-lg dark:bg-gray-800">
-                  <SuperDashBoard show_descrition={false} />
+                  {/* <SuperDashBoard show_descrition={false} /> */}
+                  <Sidebar />
                 </aside>
 
                 {/* Right Section (Table) */}
@@ -97,16 +98,6 @@ export default function AdminDashBoard() {
                   <header>
                     <div className=" flex flex-wrap justify-between align-center font-bold text-gray-500">
                       <div className="text-4xl"></div>
-
-                      {/* <button
-                        onClick={() =>
-                          document.getElementById("my_modal_1").showModal()
-                        }
-                        className="m-3 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg self-end mt-3"
-                        type="button"
-                      >
-                        Add Products
-                      </button> */}
                       <ProductForm
                         handleAddProducts={handleAddProducts}
                         isOpen={isOpen}
@@ -1234,6 +1225,8 @@ ProductCard.propTypes = {
 
 import { FaEdit, FaTrash, FaEye, FaCopy } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "./Component/Sidebar";
+import Footer from "../Components/Footer";
 
 function ProductTable({
   products,

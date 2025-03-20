@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import SuperDashBoard from "./SuperDashBoard";
 import { baseUrl } from "../../config/confg";
 import { fetchData } from "./AdminAnalytics";
+import Sidebar from "./Component/Sidebar";
 export default function Orders() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -76,7 +77,8 @@ export default function Orders() {
 
       <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900  items-start">
         <aside className="w-full md:w-1/4 lg:w-1/5  bg-white shadow-lg dark:bg-gray-800">
-          <SuperDashBoard show_descrition={false} />
+          {/* <SuperDashBoard show_descrition={false} /> */}
+          <Sidebar />
         </aside>
 
         {/* Right Section (Table) */}

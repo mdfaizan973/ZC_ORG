@@ -1,5 +1,5 @@
 const express = require("express");
-const BugReportModel = require("../models/BugReportModel"); // Adjust path if needed
+const BugReportModel = require("../models/BugReport");
 
 const bugReportRouter = express.Router();
 
@@ -8,7 +8,9 @@ bugReportRouter.post("/", async (req, res) => {
   try {
     const newBugReport = new BugReportModel(req.body);
     await newBugReport.save();
-    res.status(201).json({ message: "Bug Reported Successfully!", newBugReport });
+    res
+      .status(201)
+      .json({ message: "Bug Reported Successfully!", newBugReport });
   } catch (error) {
     console.error("Internal Server Error:", error);
     res.status(500).json({ message: "Internal Server Error" });

@@ -33,7 +33,9 @@ orderRouter.get("/:saler_id", async (req, res) => {
   const { saler_id } = req.params;
   try {
     // user_id find by
-    const orders = await OrderModel.find({ "list_of_items.saler_id": saler_id }).sort({
+    const orders = await OrderModel.find({
+      "list_of_items.saler_id": saler_id,
+    }).sort({
       order_date: -1,
     });
     res.status(201).json(orders);
@@ -55,6 +57,26 @@ orderRouter.post("/", async (req, res) => {
   }
 });
 
+orderRouter.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    const data = await OrderModel.findByIdAndUpdate(id, updateData, {
+      new: true, // Return the updated user
+      runValidators: true, // Apply validation rules
+    });
+
+    if (!data) {
+      return res.status(404).json({ message: "Data not found" });
+    }
+
+    res.status(200).json({ message: "Order updated successfully", prod: data });
+  } catch (error) {
+    console.error("Internal Server Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 // delete order
 orderRouter.delete("/deleteAll", async (req, res) => {
   try {
