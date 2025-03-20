@@ -4,7 +4,7 @@ const BugReportModel = require("../models/BugReportModel"); // Adjust path if ne
 const bugReportRouter = express.Router();
 
 // POST: Create a new bug report
-bugReportRouter.post("/bug-report", async (req, res) => {
+bugReportRouter.post("/", async (req, res) => {
   try {
     const newBugReport = new BugReportModel(req.body);
     await newBugReport.save();
