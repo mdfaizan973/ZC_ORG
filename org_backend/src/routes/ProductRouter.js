@@ -11,6 +11,9 @@ const storage = multer.memoryStorage(); // Store file in memory
 const upload = multer({ storage: storage });
 // TODO:- use auth middleware for the token;
 
+const updateMissingFields = require("../utils/updateMissingFields");
+updateMissingFields(ProductSchemaModel);
+
 ProductsRouter.get("/", async (req, res) => {
   try {
     const produtData = await ProductSchemaModel.find();
