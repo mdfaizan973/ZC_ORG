@@ -336,7 +336,10 @@ function ProductForm({
     });
 
     // Append image file if available
-    if (image) {
+    // if (image) {
+    //   formDataToSend.append("image", image);
+    // }
+      if (image instanceof File) {
       formDataToSend.append("image", image);
     }
     let url;
