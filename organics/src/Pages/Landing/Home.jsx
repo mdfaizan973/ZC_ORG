@@ -1,10 +1,9 @@
 // import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import Navbar from "../../Components/Navbar";
-import { useState } from "react"
-import { IoSearchOutline } from "react-icons/io5"
+import { useState } from "react";
+import { IoSearchOutline } from "react-icons/io5";
 export default function Home() {
-  
   const data = [
     {
       img: "https://i.pinimg.com/736x/dc/cc/a2/dccca27d07678f10b1493b95d9bbeb99.jpg",
@@ -31,63 +30,60 @@ export default function Home() {
       name: "Dairy",
     },
     {
-      img: "https://i.pinimg.com/564x/dd/03/b3/dd03b3ec7e42e9d145821b6721b29c17.jpg",
-      name: "grains",
+      img: "https://i.pinimg.com/736x/0a/ba/88/0aba880fd6a26b8894b534604ef0aa06.jpg",
+      name: "Pure Pressed Juices",
     },
     {
-      img: "https://i.pinimg.com/564x/4a/b0/e7/4ab0e7ccc090864f5430da7ed563d51d.jpg",
-      name: "Dairy",
+      img: "https://i.pinimg.com/474x/2c/f2/b9/2cf2b9844ba007a2bd89e9a8e83fb3b3.jpg",
+      name: "Herbal Spices",
     },
   ];
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (e) => {
-    e.preventDefault()
-    console.log("Searching for:", searchQuery) // navigate
-  }
+    e.preventDefault();
+    console.log("Searching for:", searchQuery); // navigate
+  };
   return (
     <div>
       <Navbar />
 
-{/*       <div className="banner mt-1 cursor-pointer">
-        <input
-          placeholder="Search...."
-          className="absolute px-4 py-2 max-w-xl rounded-md left-[45%]"
-        />
+      <div className="banner mt-1 cursor-pointer">
         <img src="https://www.omfoods.com/cdn/shop/files/Banner_NEW.jpg?v=1681412890" />
-      </div> */}
-      
-       <div className="relative mt-1 w-full">
-      {/* Banner Image */}
-      <div className="w-full overflow-hidden">
-        <img
-          src="https://www.omfoods.com/cdn/shop/files/Banner_NEW.jpg?v=1681412890"
-          alt="Banner"
-          className="w-full object-cover"
-        />
       </div>
 
-      {/* Search Box Overlay */}
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-2">
-        <div className="bg-white/80 backdrop-blur-sm p-2 rounded-md shadow-md w-full max-w-xs sm:max-w-sm mx-auto">
-          <form onSubmit={handleSearch} className="flex flex-row items-center md:flex-row gap-2">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="px-3 py-1 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-xs"
-            />
-            <button
-              type="submit"
-              className="bg-green-600 hover:bg-green-700 text-white font-medium py-1 px-3 rounded-md transition duration-300 text-xs"
-            >
-              <IoSearchOutline />
-            </button>
-          </form>
+      {/* <div className="relative mt-1 w-full">
+        <div className="w-full overflow-hidden">
+          <img
+            src="https://www.omfoods.com/cdn/shop/files/Banner_NEW.jpg?v=1681412890"
+            alt="Banner"
+            className="w-full object-cover"
+          />
         </div>
-      </div>
-    </div>
+
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-2">
+          <div className="bg-white/80 backdrop-blur-sm p-2 rounded-md shadow-md w-full max-w-xs sm:max-w-sm mx-auto">
+            <form
+              onSubmit={handleSearch}
+              className="flex flex-row items-center md:flex-row gap-2"
+            >
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="px-3 py-1 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-xs"
+              />
+              <button
+                type="submit"
+                className="bg-green-600 hover:bg-green-700 text-white font-medium py-1 px-3 rounded-md transition duration-300 text-xs"
+              >
+                <IoSearchOutline />
+              </button>
+            </form>
+          </div>
+        </div>
+      </div> */}
 
       <div className="main_home_card">
         <section className="py-20">

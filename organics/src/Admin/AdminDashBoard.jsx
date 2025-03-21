@@ -1435,6 +1435,7 @@ function ProductRow({
         <img
           src={`http://localhost:5000/uploads${product.image}`}
           alt={product.image}
+          className="w-[40px]"
         />
       </td>
       <td className="px-6 py-4">{product.category}</td>
