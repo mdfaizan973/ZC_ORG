@@ -40,7 +40,7 @@ export default function OrgPro(props) {
       <div className="bg-white w-72 shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
         <RouterLink to={`/productdiscription/${id}`}>
           <img
-            src={image || placeHolderImage}
+            src={`http://localhost:5000/uploads${image}` || placeHolderImage}
             // src="https://i.pinimg.com/564x/6d/1c/fa/6d1cfa4e1a5e58d31cc935fad125e046.jpg"
             alt=""
             className="h-60 w-72 object-cover rounded-t-xl"

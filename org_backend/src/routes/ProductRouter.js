@@ -25,14 +25,14 @@ ProductsRouter.get("/", async (req, res) => {
   }
 });
 
-ProductsRouter.post("/", imageUpload.single('image'), async (req, res) => {
+ProductsRouter.post("/", imageUpload.single("image"), async (req, res) => {
   try {
     const data = req.body; // contains all your fields
-  
+
     // add image path to data
     const fullData = {
       ...data,
-      image: req.file ? `/${req.file.filename}`: ""
+      image: req.file ? `/${req.file.filename}` : "",
     };
 
     const product = new ProductSchemaModel(fullData);
@@ -43,8 +43,6 @@ ProductsRouter.post("/", imageUpload.single('image'), async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
-
 
 ProductsRouter.delete("/:id", async (req, res) => {
   try {
@@ -98,9 +96,9 @@ ProductsRouter.put("/:id", imageUpload.single("image"), async (req, res) => {
 
     const fullData = {
       ...updateData,
-      image: req.file ? `/${req.file.filename}`: ""
+      image: req.file ? `/${req.file.filename}` : "",
     };
-    console.log(req.file.filename)
+    console.log(req.file.filename);
     const data = await ProductSchemaModel.findByIdAndUpdate(id, fullData, {
       new: true,
       runValidators: true,

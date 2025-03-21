@@ -48,8 +48,7 @@ export default function AdminDashBoard() {
   }, []);
 
   const handleAddProducts = async (url, data, isEdit) => {
-
-    await postData(url, data, isEdit ? "PUT" : "POST",);
+    await postData(url, data, isEdit ? "PUT" : "POST");
     loadProducts();
   };
 
@@ -121,14 +120,14 @@ export default function AdminDashBoard() {
                             type="text"
                             className="px-4 py-2 w-64 text-gray-700 focus:outline-none"
                             placeholder="Search..."
-                          // onChange={(e) =>
-                          //   setSearchProdValue(e.target.value)
-                          // }
+                            // onChange={(e) =>
+                            //   setSearchProdValue(e.target.value)
+                            // }
                           />
 
                           <button
                             className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
-                          // onClick={gosSarchData}
+                            // onClick={gosSarchData}
                           >
                             Go
                           </button>
@@ -247,8 +246,8 @@ function ProductForm({
       }
     }
   }, [dataForEdit]);
-  console.log(dataForEdit)
-  console.log(image)
+  console.log(dataForEdit);
+  console.log(image);
 
   // Excel File Upload
   const [file, setFile] = useState(null);
@@ -290,7 +289,6 @@ function ProductForm({
       setImage(file);
     }
   };
-
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -544,7 +542,11 @@ function ProductForm({
                           >
                             {image ? (
                               <img
-                                src={typeof image === 'string' ? image : URL.createObjectURL(image)}
+                                src={
+                                  typeof image === "string"
+                                    ? image
+                                    : URL.createObjectURL(image)
+                                }
                                 alt="Preview"
                                 className="h-full object-contain"
                               />
@@ -563,7 +565,7 @@ function ProductForm({
                               accept="image/*"
                               className="hidden"
                               onChange={handleImageChange}
-                            // required
+                              // required
                             />
                           </label>
                         </div>
@@ -1372,6 +1374,7 @@ function ProductTable({
           <tr className="text-sm text-left bg-green-500 text-white">
             <th className="px-6 py-3 font-medium">ID & Name</th>
             <th className="px-6 py-3 font-medium">Category</th>
+            <th className="px-6 py-3 font-medium">How Much</th>
             <th className="px-6 py-3 font-medium">Price</th>
             <th className="px-6 py-3 font-medium">Saler Name & ID</th>
             <th className="px-6 py-3 font-medium text-center">Actions</th>
@@ -1429,10 +1432,13 @@ function ProductRow({
         <span className="font-semibold">{product._id.substring(0, 5)}</span>
 
         <p className="text-gray-700">{product.title}</p>
-        <img src={`http://localhost:5000/uploads${product.image}`} alt={product.image} />
-
+        <img
+          src={`http://localhost:5000/uploads${product.image}`}
+          alt={product.image}
+        />
       </td>
       <td className="px-6 py-4">{product.category}</td>
+      <td className="px-6 py-4">{product?.how_much}</td>
       <td className="px-6 py-4 font-medium text-gray-800">
         ₹ {product.price_inr}
       </td>

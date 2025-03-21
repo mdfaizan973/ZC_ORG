@@ -113,7 +113,10 @@ export default function ProductDetailsPage() {
               {/* Product Image */}
               <div className="bg-green-50 rounded-xl p-6 flex items-center justify-center">
                 <img
-                  src={product.image || placeHolderImage}
+                  src={
+                    `http://localhost:5000/uploads${product.image}` ||
+                    placeHolderImage
+                  }
                   alt={product.title}
                   width={400}
                   height={400}
