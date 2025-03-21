@@ -28,8 +28,6 @@ ProductsRouter.get("/", async (req, res) => {
 ProductsRouter.post("/", imageUpload.single('image'), async (req, res) => {
   try {
     const data = req.body; // contains all your fields
-    const file = req.file;
-  
   
     // add image path to data
     const fullData = {
@@ -40,6 +38,23 @@ ProductsRouter.post("/", imageUpload.single('image'), async (req, res) => {
     const product = new ProductSchemaModel(fullData);
     await product.save();
     res.status(201).json({ message: "Product Added Successfully!", product });
+  } catch (error) {
+    console.error("Internal Server Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+
+ProductsRouter.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const data = await ProductSchemaModel.findById(id);
+
+    await ProductSchemaModel.findByIdAndDelete(id);
+
+    res.status(201).json({ message: "Product Deleted Successfully!", data });
   } catch (error) {
     console.error("Internal Server Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -75,40 +90,30 @@ ProductsRouter.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-ProductsRouter.delete("/:id", async (req, res) => {
+ProductsRouter.put("/:id", upload.single("image"), async (req, res) => {
   try {
     const { id } = req.params;
 
-    const data = await ProductSchemaModel.findById(id);
+    const updateData = { ...req.body };
 
-    await ProductSchemaModel.findByIdAndDelete(id);
-
-    res.status(201).json({ message: "Product Deleted Successfully!", data });
-  } catch (error) {
-    console.error("Internal Server Error:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
-
-ProductsRouter.put("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const updateData = req.body;
+    if (req.file) {
+      updateData.image = req.file.filename; // or req.file.path depending on your config
+    }
 
     const data = await ProductSchemaModel.findByIdAndUpdate(id, updateData, {
-      new: true, // Return the updated user
-      runValidators: true, // Apply validation rules
+      new: true,
+      runValidators: true,
     });
 
     if (!data) {
-      return res.status(404).json({ message: "Data not found" });
+      return res.status(404).json({ message: "Product not found" });
     }
 
     res
       .status(200)
-      .json({ message: "Produt updated successfully", prod: data });
+      .json({ message: "Product updated successfully", prod: data });
   } catch (error) {
-    console.error("Internal Server Error:", error);
+    console.error("PUT error:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
