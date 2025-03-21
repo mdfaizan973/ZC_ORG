@@ -50,12 +50,14 @@ export const postData = async (url, data, method = "POST", token = null) => {
   });
 
   try {
+
     const isForm = data instanceof FormData; // for image file 
 
     const headers = {
       ...(token && { Authorization: `Bearer ${token}` }),
       ...(isForm ? {} : { "Content-Type": "application/json" }),
     };
+
     const response = await axios({
       method, // Can be "POST" or "PUT"
       url,
