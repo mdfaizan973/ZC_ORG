@@ -284,12 +284,14 @@ function ProductForm({
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-        setFormData({ ...formData, image: reader.result });
-      };
-      reader.readAsDataURL(file);
+      // TODO: Added
+       setImagePreview(file);
+      // const reader = new FileReader();
+      // reader.onloadend = () => {
+      //   setImagePreview(reader.result);
+      //   setFormData({ ...formData, image: reader.result });
+      // };
+      // reader.readAsDataURL(file);
     }
   };
 
@@ -327,6 +329,22 @@ function ProductForm({
       saler_email: getSessionData("email"),
     };
     console.log(processedData);
+// TODO: Added
+  //   const formDataToSend = new FormData();
+  //     Object.entries(processedData).forEach(([key, value]) => {
+  //   if (Array.isArray(value)) {
+  //     value.forEach((item) => {
+  //       formDataToSend.append(`${key}[]`, item);
+  //     });
+  //   } else {
+  //     formDataToSend.append(key, value);
+  //   }
+  // });
+
+  // // Append image file if available
+  // if (imagePreview) {
+  //   formDataToSend.append("image", imagePreview);
+  // }
     let url;
     let isEdit = false;
 
