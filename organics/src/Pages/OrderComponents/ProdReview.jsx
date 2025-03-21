@@ -4,6 +4,7 @@ import { FiShoppingBag } from "react-icons/fi";
 import { placeHolderImage } from "../../utils/uiUtils";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BiSolidBabyCarriage } from "react-icons/bi";
+import { imageUrl } from "../../../config/confg";
 
 export default function ProdReview() {
   const [showPriceDetails, setShowPriceDetails] = useState(false);
@@ -41,7 +42,7 @@ export default function ProdReview() {
                     className="flex items-center border-b pb-4"
                   >
                     <img
-                      src={product.image || placeHolderImage}
+                      src={`${imageUrl}${product.image}` || placeHolderImage}
                       alt={product.title}
                       className="w-20 h-20 object-cover rounded mr-4"
                     />

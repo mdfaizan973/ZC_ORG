@@ -18,14 +18,14 @@ import {
 } from "react-icons/fa";
 import Navbar from "../../Components/Navbar";
 import { useParams } from "react-router-dom";
-import { baseUrl2 } from "../../../config/confg";
+import { baseUrl2, imageUrl } from "../../../config/confg";
 import { fetchData, getSessionData, postData } from "../../utils/utils";
 import ProductFeedbackAndQuestions, {
   cardClass,
 } from "./ProductFeedbackAndQuestions";
 import Loader from "../LoadingUI/Loader";
 import DiscriptionPageLoader from "../LoadingUI/DiscriptionLoad";
-import { placeHolderImage } from "../../utils/uiUtils";
+import { placeHolderImage, prepare_wishlist } from "../../utils/uiUtils";
 
 // const products = {
 //   _id: "67c41e3d08ab0e184e31e163",
@@ -102,6 +102,14 @@ export default function ProductDetailsPage() {
     };
     await postData(`${baseUrl2}/cart`, updatedData);
   };
+
+  const handleWishlist = async (dataItem) => {
+    // setShowWishlist(true);
+    // setTimeout(() => setShowWishlist(false), 1000);
+
+    const wl_data = prepare_wishlist(dataItem);
+    await postData(`${baseUrl2}/product-wishlist`, wl_data);
+  };
   return (
     <>
       <Navbar />
@@ -111,12 +119,9 @@ export default function ProductDetailsPage() {
           <div className="container mx-auto px-4 py-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Product Image */}
-              <div className="bg-green-50 rounded-xl p-6 flex items-center justify-center">
+              <div className="shadow-md rounded-xl p-6 flex items-center justify-center">
                 <img
-                  src={
-                    `http://localhost:5000/uploads${product.image}` ||
-                    placeHolderImage
-                  }
+                  src={`${imageUrl}${product.image}` || placeHolderImage}
                   alt={product.title}
                   width={400}
                   height={400}
@@ -181,11 +186,13 @@ export default function ProductDetailsPage() {
                     className={`p-2 rounded-md border border-green-600 ${
                       isWishlisted ? "bg-green-50" : "bg-white"
                     } transition-colors`}
-                    onClick={() => setIsWishlisted(!isWishlisted)}
+                    onClick={() => {
+                      handleWishlist(product);
+                    }}
                   >
                     <FaHeart
                       className={
-                        isWishlisted ? "text-green-600" : "text-gray-400"
+                        isWishlisted ? "text-red-600" : "text-gray-400"
                       }
                     />
                   </button>

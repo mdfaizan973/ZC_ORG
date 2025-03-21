@@ -27,7 +27,17 @@ wishListRouter.get("/:id", async (req, res) => {
 });
 
 wishListRouter.post("/", async (req, res) => {
+  const { product_id } = req.body;
+
   try {
+    const isWishListPresent = await WishListSchemaModel.findOne({ product_id });
+
+    if (isWishListPresent) {
+      return res
+        .status(201)
+        .json({ message: "Already present in the Wishlist!" });
+    }
+
     const wishlistProd = new WishListSchemaModel(req.body);
     await wishlistProd.save();
     res.status(201).json({ message: "WishList Added", wishlistProd });

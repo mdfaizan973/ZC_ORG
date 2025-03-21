@@ -8,10 +8,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { postData } from "../../utils/utils";
 import { placeHolderImage, prepare_wishlist } from "../../utils/uiUtils";
-import { baseUrl2 } from "../../../config/confg";
+import { baseUrl2, imageUrl } from "../../../config/confg";
 
 export default function OrgPro(props) {
-  const { image, price, title, addtocart, id, dataItem } = props;
+  const { image, price, title, addtocart, id, howmuch, dataItem } = props;
   // image , price ,title
 
   const [showTooltip, setShowTooltip] = useState(false);
@@ -40,7 +40,7 @@ export default function OrgPro(props) {
       <div className="bg-white w-72 shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
         <RouterLink to={`/productdiscription/${id}`}>
           <img
-            src={`http://localhost:5000/uploads${image}` || placeHolderImage}
+            src={`${imageUrl}${image}` || placeHolderImage}
             // src="https://i.pinimg.com/564x/6d/1c/fa/6d1cfa4e1a5e58d31cc935fad125e046.jpg"
             alt=""
             className="h-60 w-72 object-cover rounded-t-xl"
@@ -85,9 +85,15 @@ export default function OrgPro(props) {
             </div>
           </div>
           {/* <span className="text-red-400 mr-3 text-xs">{title}</span> */}
-          <p className="text-lg font-bold text-black truncate block capitalize">
-            {title}
-          </p>
+          <div className="flex justify-between items-center gap-3">
+            <p className="text-lg font-bold text-black truncate block capitalize">
+              {title}
+            </p>
+            <p className="text-sm text-gray-400 truncate block capitalize">
+              {howmuch}
+            </p>
+          </div>
+
           <div className="flex items-center">
             <p className="text-lg font-semibold text-black cursor-auto my-3">
               {price} ₹

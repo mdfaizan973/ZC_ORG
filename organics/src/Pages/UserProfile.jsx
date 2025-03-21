@@ -32,7 +32,7 @@ import {
   postData,
 } from "../utils/utils";
 import { ToastContainer, toast } from "react-toastify";
-import { baseUrl2 } from "../../config/confg";
+import { baseUrl2, imageUrl } from "../../config/confg";
 import Loader from "./LoadingUI/Loader";
 import { useNavigate } from "react-router-dom";
 import { placeHolderImage } from "../utils/uiUtils";
@@ -758,7 +758,7 @@ function OrderCard({ order, goToDetailsPage }) {
         >
           <div className="flex justify-center items-center bg-gray-50 p-2">
             <img
-              src={order?.prod_image || placeHolderImage}
+              src={`${imageUrl}${order?.prod_image}` || placeHolderImage}
               alt={order?.prod_name}
               width={100}
               height={100}
@@ -871,7 +871,7 @@ function WishlistCard({ item, removeItemFromWishList, goToDetailsPage }) {
           onClick={() => goToDetailsPage(item.product_id)}
         >
           <img
-            src={item.product_img || placeHolderImage}
+            src={`${imageUrl}${item.product_img}` || placeHolderImage}
             alt={item.product_title}
             width={100}
             height={100}

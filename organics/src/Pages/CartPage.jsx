@@ -13,7 +13,7 @@ import {
   FaShoppingCart,
 } from "react-icons/fa";
 import { deleteData, fetchData, getSessionData } from "../utils/utils";
-import { baseUrl2 } from "../../config/confg";
+import { baseUrl, baseUrl2, imageUrl } from "../../config/confg";
 import { useNavigate } from "react-router-dom";
 import CartLoading from "./LoadingUI/CartLoading";
 import { placeHolderImage } from "../utils/uiUtils";
@@ -147,7 +147,9 @@ export default function CartPage() {
                         <div className="flex flex-col sm:flex-row items-center gap-4 mb-2">
                           <div className="flex-shrink-0 bg-white rounded-xl p-1 shadow-md border border-green-100 overflow-hidden">
                             <img
-                              src={item.image || placeHolderImage}
+                              src={
+                                `${imageUrl}${item.image}` || placeHolderImage
+                              }
                               alt={item.title}
                               className="w-20 h-20 object-cover rounded-lg"
                             />

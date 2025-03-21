@@ -22,14 +22,6 @@ export default function OrganicPro() {
   const [loadProd, setLoadProd] = useState(true);
   const organicProdRef = useRef([]);
 
-  const handleprev = () => {
-    setPage(page - 1);
-  };
-
-  const handlenext = () => {
-    setPage(page + 1);
-  };
-
   // Adding to cart
 
   const addToCart = async (cartData) => {
@@ -100,6 +92,29 @@ export default function OrganicPro() {
     setOrgData(searchData);
   };
 
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(orgData.length / itemsPerPage);
+
+  const paginationData = () => {
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const dataToShow = orgData.slice(start, end);
+    // setOrgData(dataToShow);
+    console.log(dataToShow);
+  };
+
+  const handlePrev = () => {
+    if (page > 0) setPage((prev) => prev - 1);
+  };
+
+  const handleNext = () => {
+    if (page < totalPages - 1) setPage((prev) => prev + 1);
+  };
+
+  useEffect(() => {
+    paginationData();
+  }, [page, orgData]);
+
   return (
     <div>
       <Navbar />
@@ -113,7 +128,7 @@ export default function OrganicPro() {
       </div>
 
       {/* Filter  */}
-      <div className="max-w-7xl p-2  mt-6 mx-auto">
+      <div className="max-w-7xl p-2 shadow-sm rounded-lg mt-6 mx-auto">
         <div className="flex flex-col justify-between md:flex-row md:items-end gap-6">
           {/* Category + Sort (1/3 width) */}
           <div className="w-full md:w-1/3 flex flex-col sm:flex-row gap-4">
@@ -201,6 +216,7 @@ export default function OrganicPro() {
               title={ele.title}
               image={ele.image}
               price={ele.price_inr}
+              howmuch={ele.how_much}
               id={ele._id}
               dataItem={ele}
               addtocart={addToCart}
@@ -213,7 +229,7 @@ export default function OrganicPro() {
         <div className="inline-flex mt-2 xs:mt-0">
           <button
             disabled={page == 1}
-            onClick={handleprev}
+            onClick={handlePrev}
             className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-green-500 rounded-l hover:bg-green-900 dark:bg-green-500 dark:border-green-700  dark:hover:bg-green-700 "
           >
             <svg
@@ -239,7 +255,7 @@ export default function OrganicPro() {
 
           <button
             disabled={curdatalength < 9}
-            onClick={handlenext}
+            onClick={handleNext}
             className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-green-500 border-0 border-l border-green-700 rounded-r hover:bg-green-900 dark:bg-green-500 dark:border-green-700 dark:text-black-400 dark:hover:bg-green-700 "
           >
             Next
