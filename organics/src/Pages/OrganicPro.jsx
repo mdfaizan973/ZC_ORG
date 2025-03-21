@@ -8,7 +8,7 @@ import { fetchData, getSessionData, postData } from "../utils/utils";
 import ProductsCarload from "./LoadingUI/ProductsCarload";
 import { FaSearch } from "react-icons/fa";
 import { HiChevronDown } from "react-icons/hi"; // Heroicons
-import { FiFilter } from "react-icons/fi"; // Feather Icons
+import { FiBox, FiFilter } from "react-icons/fi"; // Feather Icons
 import { BiSortAlt2 } from "react-icons/bi"; // BoxIcons Alternative
 import { MdCategory } from "react-icons/md";
 import { useRef } from "react";
@@ -78,7 +78,7 @@ export default function OrganicPro() {
     if (data.length > 0) {
       setOrgData(data);
     } else {
-      setOrgData(categoryData);
+      setOrgData([]);
     }
   };
 
@@ -191,6 +191,8 @@ export default function OrganicPro() {
 
       {loadProd ? (
         <ProductsCarload />
+      ) : orgData?.length <= 0 ? (
+        <EmptyData />
       ) : (
         <div className="w-fit mx-auto grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
           {orgData?.map((ele, i) => (
@@ -262,3 +264,18 @@ export default function OrganicPro() {
     </div>
   );
 }
+
+const EmptyData = () => {
+  return (
+    <>
+      <div className="w-[95%] md:w-[65%] mx-auto mt-10">
+        <div className="border border-dashed border-gray-300 rounded-lg py-12 flex flex-col items-center justify-center bg-white">
+          <FiBox className="text-gray-400 text-5xl mb-4" />
+          <p className="text-gray-500 text-base font-medium">
+            No Results Found
+          </p>
+        </div>
+      </div>
+    </>
+  );
+};
