@@ -48,6 +48,7 @@ export default function AdminDashBoard() {
   }, []);
 
   const handleAddProducts = async (url, data, isEdit) => {
+
     await postData(url, data, isEdit ? "PUT" : "POST");
     loadProducts();
   };
@@ -120,14 +121,14 @@ export default function AdminDashBoard() {
                             type="text"
                             className="px-4 py-2 w-64 text-gray-700 focus:outline-none"
                             placeholder="Search..."
-                            // onChange={(e) =>
-                            //   setSearchProdValue(e.target.value)
-                            // }
+                          // onChange={(e) =>
+                          //   setSearchProdValue(e.target.value)
+                          // }
                           />
 
                           <button
                             className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
-                            // onClick={gosSarchData}
+                          // onClick={gosSarchData}
                           >
                             Go
                           </button>
@@ -200,8 +201,8 @@ function ProductForm({
   openModal,
   closeModal,
 }) {
-  const [imagePreview, setImagePreview] = useState(null);
   const modalRef = useRef(null);
+  const [image, setImage] = useState(null);
 
   // State to track all form values
   const [formData, setFormData] = useState({
@@ -242,7 +243,7 @@ function ProductForm({
       }));
 
       if (dataForEdit.image) {
-        setImagePreview(dataForEdit.image);
+        setImage(dataForEdit.image);
       }
     }
   }, [dataForEdit]);
@@ -284,16 +285,10 @@ function ProductForm({
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      // TODO: Added
-       setImagePreview(file);
-      // const reader = new FileReader();
-      // reader.onloadend = () => {
-      //   setImagePreview(reader.result);
-      //   setFormData({ ...formData, image: reader.result });
-      // };
-      // reader.readAsDataURL(file);
+      setImage(file);
     }
   };
+
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -310,10 +305,9 @@ function ProductForm({
   };
   // calculateDiscountPieces(10, 4);
   // Handle form submission
+  console.log(formData) // getting here while edit pop up open
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Process organic ingredients from space-separated string to array
     const processedData = {
       ...formData,
       organic_ingredients:
@@ -328,23 +322,23 @@ function ProductForm({
       saler_id: getSessionData("_id"),
       saler_email: getSessionData("email"),
     };
-    console.log(processedData);
-// TODO: Added
-  //   const formDataToSend = new FormData();
-  //     Object.entries(processedData).forEach(([key, value]) => {
-  //   if (Array.isArray(value)) {
-  //     value.forEach((item) => {
-  //       formDataToSend.append(`${key}[]`, item);
-  //     });
-  //   } else {
-  //     formDataToSend.append(key, value);
-  //   }
-  // });
+    console.log(324, processedData); // getting chnged data here
+    // TODO: Added
+    const formDataToSend = new FormData();
+    Object.entries(processedData).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          formDataToSend.append(`${key}[]`, item);
+        });
+      } else {
+        formDataToSend.append(key, value);
+      }
+    });
 
-  // // Append image file if available
-  // if (imagePreview) {
-  //   formDataToSend.append("image", imagePreview);
-  // }
+    // Append image file if available
+    if (image) {
+      formDataToSend.append("image", image);
+    }
     let url;
     let isEdit = false;
 
@@ -356,7 +350,7 @@ function ProductForm({
     }
 
     try {
-      await handleAddProducts(url, processedData, isEdit);
+      await handleAddProducts(url, formDataToSend, isEdit);
 
       setFormData({
         category: "",
@@ -546,9 +540,9 @@ function ProductForm({
                             htmlFor="image-upload"
                             className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
                           >
-                            {imagePreview ? (
+                            {image ? (
                               <img
-                                src={imagePreview || "/placeholder.svg"}
+                                src={typeof image === 'string' ? image : URL.createObjectURL(image)}
                                 alt="Preview"
                                 className="h-full object-contain"
                               />
@@ -560,13 +554,14 @@ function ProductForm({
                                 </p>
                               </div>
                             )}
+
                             <input
                               id="image-upload"
                               type="file"
                               accept="image/*"
                               className="hidden"
                               onChange={handleImageChange}
-                              // required
+                            // required
                             />
                           </label>
                         </div>
@@ -604,7 +599,7 @@ function ProductForm({
                           htmlFor="discount_percentage"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Discount Price (INR)
+                          Discount %
                         </label>
                         <input
                           type="number"
@@ -1432,6 +1427,8 @@ function ProductRow({
         <span className="font-semibold">{product._id.substring(0, 5)}</span>
 
         <p className="text-gray-700">{product.title}</p>
+        {/* <img src={`http://localhost:5000/uploads${product.image}`} alt={product.image} /> */}
+
       </td>
       <td className="px-6 py-4">{product.category}</td>
       <td className="px-6 py-4 font-medium text-gray-800">
