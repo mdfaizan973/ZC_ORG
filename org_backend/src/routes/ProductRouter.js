@@ -90,17 +90,18 @@ ProductsRouter.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-ProductsRouter.put("/:id", upload.single("image"), async (req, res) => {
+ProductsRouter.put("/:id", imageUpload.single("image"), async (req, res) => {
   try {
     const { id } = req.params;
 
     const updateData = { ...req.body };
 
-    if (req.file) {
-      updateData.image = req.file.filename; // or req.file.path depending on your config
-    }
-
-    const data = await ProductSchemaModel.findByIdAndUpdate(id, updateData, {
+    const fullData = {
+      ...updateData,
+      image: req.file ? `/${req.file.filename}`: ""
+    };
+    console.log(req.file.filename)
+    const data = await ProductSchemaModel.findByIdAndUpdate(id, fullData, {
       new: true,
       runValidators: true,
     });
