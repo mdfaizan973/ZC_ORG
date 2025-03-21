@@ -4,6 +4,7 @@ const ProductsRouter = express.Router();
 
 const multer = require("multer");
 const xlsx = require("xlsx");
+const imageUpload = require("../config/uploadStorage");
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage(); // Store file in memory
@@ -21,9 +22,19 @@ ProductsRouter.get("/", async (req, res) => {
   }
 });
 
-ProductsRouter.post("/", async (req, res) => {
+ProductsRouter.post("/", imageUpload.single('image'), async (req, res) => {
   try {
-    const product = new ProductSchemaModel(req.body);
+    const data = req.body; // contains all your fields
+    const file = req.file;
+  
+  
+    // add image path to data
+    const fullData = {
+      ...data,
+      image: req.file ? `/${req.file.filename}`: ""
+    };
+
+    const product = new ProductSchemaModel(fullData);
     await product.save();
     res.status(201).json({ message: "Product Added Successfully!", product });
   } catch (error) {
