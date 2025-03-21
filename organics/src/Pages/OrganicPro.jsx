@@ -6,6 +6,7 @@ import Navbar from "../Components/Navbar";
 import { baseUrl2 } from "../../config/confg";
 import { fetchData, getSessionData, postData } from "../utils/utils";
 import ProductsCarload from "./LoadingUI/ProductsCarload";
+import { useRef } from "react";
 export default function OrganicPro() {
   const [orgData, setOrgData] = useState([]);
   const [page, setPage] = useState(1);
@@ -14,39 +15,15 @@ export default function OrganicPro() {
   const [fileter, setFilter] = useState("");
   const curdatalength = orgData.length;
   const [loadProd, setLoadProd] = useState(true);
-  // let limit = 9;
+  const organicProdRef = useRef([]);
 
-  // const getData = async (page, filter) => {
-  //   try {
-  //     setLoad(true);
-
-  //     // Encode filter to handle special characters like '&' and spaces
-  //     const encodedFilter = filter
-  //       ? `category=${encodeURIComponent(filter)}`
-  //       : "";
-
-  //     const url = `${baseUrl}/orgproducts?${encodedFilter}&_limit=${limit}&_page=${page}`;
-
-  //     const response = await axios.get(url);
-
-  //     setLoad(false);
-  //     setOrgData(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  // {Pagination function}
   const handleprev = () => {
     setPage(page - 1);
   };
+
   const handlenext = () => {
     setPage(page + 1);
   };
-
-  // useEffect(() => {
-  //   getData(page, fileter);
-  // }, [page, fileter]);
 
   // Adding to cart
 
@@ -64,22 +41,6 @@ export default function OrganicPro() {
       userName: getSessionData("name"),
     };
     await postData(`${baseUrl2}/cart`, updatedData);
-    // axios
-    //   .get(`${baseUrl}/orgproducts/${id}`)
-    //   .then((res) => {
-    //     // console.warn(res.data);
-    //     axios
-    //       .post(`${baseUrl}/cartdata`, res.data)
-    //       .then((res) => {
-    //         console.warn(res.data);
-    //       })
-    //       .catch((err) => {
-    //         console.log(err);
-    //       });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   };
 
   // Sorting
@@ -103,6 +64,17 @@ export default function OrganicPro() {
     const data = await fetchData(`${baseUrl2}/products`);
     setLoadProd(false);
     setOrgData(data);
+    organicProdRef.current = data;
+  };
+
+  const handleCategoyChange = (cat) => {
+    const categoryData = [...organicProdRef.current];
+    const data = categoryData.filter((ele) => ele.category === cat);
+    if (data.length > 0) {
+      setOrgData(data);
+    } else {
+      setOrgData(categoryData);
+    }
   };
 
   return (
@@ -123,11 +95,10 @@ export default function OrganicPro() {
         <div className="flex w-full sm:w-[30%]">
           <select
             onChange={(e) => {
-              setFilter(e.target.value);
-              setPage(1);
+              handleCategoyChange(e.target.value);
             }}
             id="countries"
-            className="bg-white-50 border border-white-300 text-black-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-white-50 mr-1 border border-white-300 text-black-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option value="">Filter</option>
             <option value="fruits">Fruits</option>
