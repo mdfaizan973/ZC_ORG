@@ -49,7 +49,7 @@ export default function AdminDashBoard() {
 
   const handleAddProducts = async (url, data, isEdit) => {
 
-    await postData(url, data, isEdit ? "PUT" : "POST");
+    await postData(url, data, isEdit ? "PUT" : "POST",);
     loadProducts();
   };
 
@@ -247,6 +247,8 @@ function ProductForm({
       }
     }
   }, [dataForEdit]);
+  console.log(dataForEdit)
+  console.log(image)
 
   // Excel File Upload
   const [file, setFile] = useState(null);
@@ -305,7 +307,6 @@ function ProductForm({
   };
   // calculateDiscountPieces(10, 4);
   // Handle form submission
-  console.log(formData) // getting here while edit pop up open
   const handleSubmit = async (e) => {
     e.preventDefault();
     const processedData = {
@@ -322,7 +323,6 @@ function ProductForm({
       saler_id: getSessionData("_id"),
       saler_email: getSessionData("email"),
     };
-    console.log(324, processedData); // getting chnged data here
     // TODO: Added
     const formDataToSend = new FormData();
     Object.entries(processedData).forEach(([key, value]) => {
@@ -339,7 +339,7 @@ function ProductForm({
     // if (image) {
     //   formDataToSend.append("image", image);
     // }
-      if (image instanceof File) {
+    if (image instanceof File) {
       formDataToSend.append("image", image);
     }
     let url;
@@ -406,7 +406,6 @@ function ProductForm({
           }
         );
 
-        console.log("File uploaded successfully:", response.data);
         toast.success("File uploaded successfully!", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 1000,
@@ -1430,7 +1429,7 @@ function ProductRow({
         <span className="font-semibold">{product._id.substring(0, 5)}</span>
 
         <p className="text-gray-700">{product.title}</p>
-        {/* <img src={`http://localhost:5000/uploads${product.image}`} alt={product.image} /> */}
+        <img src={`http://localhost:5000/uploads${product.image}`} alt={product.image} />
 
       </td>
       <td className="px-6 py-4">{product.category}</td>
