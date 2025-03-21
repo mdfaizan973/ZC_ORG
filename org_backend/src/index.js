@@ -11,12 +11,10 @@ const salerRouter = require("./routes/SalerRouter");
 const invoiceDownloadRouter = require("./routes/InvoiceDownloadRouter");
 const orderRouter = require("./routes/OrderRouter");
 const bugReportRouter = require("./routes/BugReportRouter");
-
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-
 connectDB();
 
 app.get("/", (req, res) => {
@@ -27,6 +25,8 @@ app.get("/", (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static("uploads")); 
 
 app.use("/api/users", UserRouter);
 app.use("/api/products", ProductsRouter);
@@ -38,7 +38,9 @@ app.use("/api/saler", salerRouter);
 app.use("/api/invoices", invoiceDownloadRouter);
 app.use("/api/orders", orderRouter); 
 app.use("/api/bug-report", bugReportRouter);
+
 const PORT = 5000;
+
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}`);
 });
