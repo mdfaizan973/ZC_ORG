@@ -42,7 +42,7 @@ export default function AdminProductsTable({
   const [categories, setCategories] = useState([]);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   // Extract unique categories
   useEffect(() => {
