@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
   }
 });
 // app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use("/uploads", express.static("uploads")); 
+app.use("/uploads", express.static("uploads"));
 
 app.use("/api/users", UserRouter);
 app.use("/api/products", ProductsRouter);
@@ -36,7 +36,7 @@ app.use("/api/product-question", questionRouter);
 app.use("/api/product-wishlist", wishListRouter);
 app.use("/api/saler", salerRouter);
 app.use("/api/invoices", invoiceDownloadRouter);
-app.use("/api/orders", orderRouter); 
+app.use("/api/orders", orderRouter);
 app.use("/api/bug-report", bugReportRouter);
 
 const PORT = 5000;

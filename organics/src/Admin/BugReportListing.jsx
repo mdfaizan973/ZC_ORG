@@ -485,7 +485,7 @@ const BugReportListing = () => {
                               User ID
                             </h4>
                             <p className="text-gray-700 font-mono">
-                              {selectedBug.user_id}
+                              {selectedBug?.user_id || "UnAuthorized User"}
                             </p>
                           </div>
                           <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">

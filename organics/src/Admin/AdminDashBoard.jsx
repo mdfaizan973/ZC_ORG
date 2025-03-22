@@ -8,34 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { baseUrl2 } from "../../config/confg";
 import { fetchData } from "./AdminAnalytics";
 export default function AdminDashBoard() {
-  // const [data, setData] = useState([]);
-  // const [page, setPage] = useState(1);
-  // const [load, setLoad] = useState(false);
-
-  // const admingetdata = (page) => {
-  //   setLoad(true);
-  //   axios
-  //     .get(`${baseUrl}/orgproducts?_limit=10&_page=${page}`)
-  //     .then((res) => {
-  //       // console.log(res.data);
-  //       setLoad(false);
-  //       setData(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-  // useEffect(() => {
-  //   admingetdata(page);
-  // }, [page]);
-
-  // const handlepre = () => {
-  //   setPage(page - 1);
-  // };
-  // const handlenext = () => {
-  //   setPage(page + 1);
-  // };
-
   // ------------------New API's--------------------------
   const [products, setProducts] = useState([]);
   const [singleData, setSingleData] = useState({});
@@ -83,8 +55,8 @@ export default function AdminDashBoard() {
           <div className="flex">
             {/* Main-Content */}
             <div className="flex-1 ">
-              <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900  items-start">
-                <aside className="w-full md:w-1/4 lg:w-1/5  bg-white shadow-lg dark:bg-gray-800">
+              <div className="flex flex-col md:flex-row min-h-screen    items-start">
+                <aside className="w-full md:w-1/4 lg:w-1/5  bg-white shadow-lg">
                   {/* <SuperDashBoard show_descrition={false} /> */}
                   <Sidebar />
                 </aside>
@@ -95,22 +67,18 @@ export default function AdminDashBoard() {
                 {/* ) : ( */}
                 <main className="w-4/5  rounded p-4 ">
                   {/* Header */}
-                  <header>
-                    <div className=" flex flex-wrap justify-between align-center font-bold text-gray-500">
-                      <div className="text-4xl"></div>
-                      <ProductForm
-                        handleAddProducts={handleAddProducts}
-                        isOpen={isOpen}
-                        openModal={openModal}
-                        closeModal={closeModal}
-                        dataForEdit={singleData}
-                      />
-                    </div>
-                  </header>
-                  <section className="flex justify-center min-h-screen font-poppins">
-                    {/* <div className="w-full max-w-6xl px-6 py-8 bg-white rounded-lg"> */}
+                  <div className="flex flex-wrap justify-end items-center gap-4 p-2 font-bold text-gray-500 shadow-md bg-white rounded-lg mb-4">
+                    <ProductForm
+                      handleAddProducts={handleAddProducts}
+                      isOpen={isOpen}
+                      openModal={openModal}
+                      closeModal={closeModal}
+                      dataForEdit={singleData}
+                    />
+                  </div>
+                  {/* <section className="flex justify-center min-h-screen font-poppins">
                     <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
-                      {/* Header */}
+                 
                       <div className="flex justify-between items-center px-6 pb-4 border-b border-gray-300">
                         <h2 className="text-2xl font-semibold text-gray-700">
                           List of Products (100)
@@ -120,21 +88,14 @@ export default function AdminDashBoard() {
                             type="text"
                             className="px-4 py-2 w-64 text-gray-700 focus:outline-none"
                             placeholder="Search..."
-                            // onChange={(e) =>
-                            //   setSearchProdValue(e.target.value)
-                            // }
                           />
 
-                          <button
-                            className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
-                            // onClick={gosSarchData}
-                          >
+                          <button className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600">
                             Go
                           </button>
                         </div>
                       </div>
 
-                      {/* Table */}
                       <div className="overflow-x-auto mt-4">
                         <ProductTable
                           products={products}
@@ -147,16 +108,12 @@ export default function AdminDashBoard() {
                         />
                       </div>
 
-                      {/* Pagination */}
+                  
                       <div className="flex justify-end pt-6 border-t border-gray-300">
                         <nav aria-label="Page navigation">
                           <ul className="flex items-center justify-center space-x-4">
                             <li>
-                              <button
-                                // onClick={handlepre}
-                                // disabled={page === 1}
-                                className="px-4 py-2 text-gray-700 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 disabled:opacity-50"
-                              >
+                              <button className="px-4 py-2 text-gray-700 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 disabled:opacity-50">
                                 Previous
                               </button>
                             </li>
@@ -166,11 +123,7 @@ export default function AdminDashBoard() {
                               </span>
                             </li>
                             <li>
-                              <button
-                                // onClick={handlenext}
-                                // disabled={data.length <= 9}
-                                className="px-4 py-2 text-gray-700 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 disabled:opacity-50"
-                              >
+                              <button className="px-4 py-2 text-gray-700 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 disabled:opacity-50">
                                 Next
                               </button>
                             </li>
@@ -178,7 +131,16 @@ export default function AdminDashBoard() {
                         </nav>
                       </div>
                     </div>
-                  </section>
+                  </section> */}
+                  <AdminProductsTable
+                    products={products}
+                    isOpen={isOpen}
+                    openModal={openModal}
+                    closeModal={closeModal}
+                    handleEditProduts={handleEditProduts}
+                    handleDaleteData={handleDaleteData}
+                    handleAddProducts={handleAddProducts}
+                  />
                 </main>
                 {/* )} */}
               </div>
@@ -192,7 +154,7 @@ export default function AdminDashBoard() {
 
 import { FaClosedCaptioning, FaFileExcel, FaFileUpload } from "react-icons/fa";
 import { deleteData, getSessionData, postData } from "../utils/utils";
-import { FiUploadCloud } from "react-icons/fi";
+import { FiShoppingBag, FiUploadCloud } from "react-icons/fi";
 function ProductForm({
   handleAddProducts,
   dataForEdit,
@@ -422,20 +384,32 @@ function ProductForm({
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="w-full flex flex-wrap justify-center md:justify-between items-center gap-4 p-4">
         <button
-          className="m-3 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center self-end mt-3"
+          className="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center"
           type="button"
           onClick={openFileModel}
         >
-          <FaFileExcel className="mr-1" /> Upload Excel
+          <FaFileExcel className="mr-2" />
+          Upload Excel
         </button>
+
         <button
-          className="m-3 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center self-end mt-3"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center"
           type="button"
           onClick={openModal}
         >
-          <AiOutlinePlus className="mr-1" /> Add Product
+          <AiOutlinePlus className="mr-2" />
+          Add Product
+        </button>
+
+        <button
+          className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center"
+          type="button"
+          onClick={openModal}
+        >
+          <AiOutlineDelete className="mr-2" />
+          Clear All Data
         </button>
       </div>
 
@@ -1356,9 +1330,10 @@ import { FaEdit, FaTrash, FaEye, FaCopy } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Component/Sidebar";
 import Footer from "../Components/Footer";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlinePlus, AiOutlineDelete } from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
 import axios from "axios";
+import AdminProductsTable from "./Component/AdminProductsTable";
 
 function ProductTable({
   products,

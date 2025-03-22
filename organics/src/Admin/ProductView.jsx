@@ -17,7 +17,8 @@ import AdminNav from "./AdminNav";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchData } from "./AdminAnalytics";
-import { baseUrl2 } from "../../config/confg";
+import { baseUrl2, imageUrl } from "../../config/confg";
+import { placeHolderImage } from "../utils/uiUtils";
 
 const product = {
   _id: "67c41e3d08ab0e184e31e163",
@@ -136,10 +137,7 @@ export default function AdminProductView() {
             {/* bg-green-50 */}
             <div className="border rounded-xl p-6 flex items-center justify-center">
               <img
-                src={
-                  singleData.image ||
-                  "https://i.pinimg.com/736x/dc/cc/a2/dccca27d07678f10b1493b95d9bbeb99.jpg"
-                }
+                src={`${imageUrl}${singleData.image}` || placeHolderImage}
                 alt={singleData.title}
                 width={400}
                 height={400}
