@@ -77,13 +77,29 @@ orderRouter.put("/:id", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 // delete order
-orderRouter.delete("/deleteAll", async (req, res) => {
+// orderRouter.delete("/deleteAll", async (req, res) => {
+//   try {
+//     await OrderModel.deleteMany({});
+//     res.status(200).json({ message: "All items deleted successfully" });
+//   } catch (error) {
+//     res.status(500).json({ message: "Error deleting items", error });
+//   }
+// });
+
+orderRouter.delete("/:id", async (req, res) => {
   try {
-    await OrderModel.deleteMany({});
-    res.status(200).json({ message: "All items deleted successfully" });
+    const { id } = req.params;
+
+    const data = await OrderModel.findById(id);
+
+    await OrderModel.findByIdAndDelete(id);
+
+    res.status(201).json({ message: "Product Deleted Successfully!", data });
   } catch (error) {
-    res.status(500).json({ message: "Error deleting items", error });
+    console.error("Internal Server Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
