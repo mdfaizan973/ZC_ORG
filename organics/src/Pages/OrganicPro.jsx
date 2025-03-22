@@ -15,9 +15,7 @@ import { useRef } from "react";
 export default function OrganicPro() {
   const [orgData, setOrgData] = useState([]);
   const [page, setPage] = useState(1);
-  // const [load, setLoad] = useState(false);
   const [sort, setSort] = useState("");
-  const [fileter, setFilter] = useState("");
   const curdatalength = orgData.length;
   const [loadProd, setLoadProd] = useState(true);
   const organicProdRef = useRef([]);
@@ -92,28 +90,28 @@ export default function OrganicPro() {
     setOrgData(searchData);
   };
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 12;
   const totalPages = Math.ceil(orgData.length / itemsPerPage);
 
-  const paginationData = () => {
-    const start = (page - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    const dataToShow = orgData.slice(start, end);
-    // setOrgData(dataToShow);
-    console.log(dataToShow);
-  };
+  // Get current page data
+  const currentProducts = orgData.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
 
-  const handlePrev = () => {
-    if (page > 0) setPage((prev) => prev - 1);
-  };
-
+  // Go to next page
   const handleNext = () => {
-    if (page < totalPages - 1) setPage((prev) => prev + 1);
+    if (page < totalPages) {
+      setPage((prev) => prev + 1);
+    }
   };
 
-  useEffect(() => {
-    paginationData();
-  }, [page, orgData]);
+  // Go to previous page
+  const handlePrev = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
+    }
+  };
 
   return (
     <div>
@@ -210,7 +208,7 @@ export default function OrganicPro() {
         <EmptyData />
       ) : (
         <div className="w-fit mx-auto grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
-          {orgData?.map((ele, i) => (
+          {currentProducts?.map((ele, i) => (
             <OrgPro
               key={i}
               title={ele.title}
@@ -225,57 +223,25 @@ export default function OrganicPro() {
         </div>
       )}
       {/* Pagination */}
-      <div className="flex flex-col items-center mt-10 mb-10">
-        <div className="inline-flex mt-2 xs:mt-0">
-          <button
-            disabled={page == 1}
-            onClick={handlePrev}
-            className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-green-500 rounded-l hover:bg-green-900 dark:bg-green-500 dark:border-green-700  dark:hover:bg-green-700 "
-          >
-            <svg
-              className="w-3.5 h-3.5 mr-2"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 10"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13 5H1m0 0 4 4M1 5l4-4"
-              />
-            </svg>
-            Prev
-          </button>
-          <button className="bg-green-500 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full">
-            {page}
-          </button>
+      <div className="flex justify-center items-center mt-10 mb-10">
+        <button
+          disabled={page == 1}
+          onClick={handlePrev}
+          className="flex items-center justify-center mr-1 py-2 px-4  h-8 text-sm font-medium text-white bg-green-500 rounded-l hover:bg-green-900 dark:bg-green-500 dark:border-green-700  dark:hover:bg-green-700 "
+        >
+          Prev
+        </button>
+        <button className="bg-green-500 border-b text-white font-bold py-2 px-4 rounded-lg">
+          Page {page} of {totalPages}
+        </button>
 
-          <button
-            disabled={curdatalength < 9}
-            onClick={handleNext}
-            className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-green-500 border-0 border-l border-green-700 rounded-r hover:bg-green-900 dark:bg-green-500 dark:border-green-700 dark:text-black-400 dark:hover:bg-green-700 "
-          >
-            Next
-            <svg
-              className="w-3.5 h-3.5 ml-2"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 10"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M1 5h12m0 0L9 1m4 4L9 9"
-              />
-            </svg>
-          </button>
-        </div>
+        <button
+          disabled={curdatalength < 9}
+          onClick={handleNext}
+          className="flex items-center justify-center ml-1 py-2 px-4  h-8 text-sm font-medium text-white bg-green-500 border-green-700 rounded-r hover:bg-green-900 dark:bg-green-500 dark:border-green-700 dark:text-black-400 dark:hover:bg-green-700 "
+        >
+          Next
+        </button>
       </div>
     </div>
   );
