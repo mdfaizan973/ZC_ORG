@@ -12,6 +12,7 @@ export default function AdminDashBoard() {
   const [products, setProducts] = useState([]);
   const [singleData, setSingleData] = useState({});
   const [isOpen, setIsOpen] = useState(false);
+  const [prodLoading, setProdLoading] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
@@ -34,7 +35,9 @@ export default function AdminDashBoard() {
   };
 
   const loadProducts = async () => {
+    setProdLoading(true);
     const data = await fetchData(`${baseUrl2}/products`);
+    setProdLoading(false);
     if (data) {
       setProducts(data);
     }
@@ -137,6 +140,7 @@ export default function AdminDashBoard() {
                     isOpen={isOpen}
                     openModal={openModal}
                     closeModal={closeModal}
+                    prodLoading={prodLoading}
                     handleEditProduts={handleEditProduts}
                     handleDaleteData={handleDaleteData}
                     handleAddProducts={handleAddProducts}

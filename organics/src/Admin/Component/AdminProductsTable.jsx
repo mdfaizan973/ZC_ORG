@@ -19,14 +19,14 @@ import {
 } from "react-icons/fi";
 import { baseUrl2 } from "../../../config/confg";
 import { useNavigate } from "react-router-dom";
-import { PopcornUI } from "../AdminDashBoard";
-
+import Loader from "../../Pages/LoadingUI/Loader";
 export default function AdminProductsTable({
   products,
   handleEditProduts,
   handleDaleteData,
   handleAddProducts,
   openModal,
+  prodLoading,
 }) {
   // Sample product data
 
@@ -224,179 +224,185 @@ export default function AdminProductsTable({
       {/* Main content */}
       <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-xl">
         {/* Table header */}
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-green-50 text-left">
-                <th
-                  className="px-6 py-4 font-semibold text-green-800 cursor-pointer hover:bg-green-100 transition-colors"
-                  onClick={() => handleSort("name")}
-                >
-                  <div className="flex items-center">
-                    <FiShoppingBag className="mr-2 text-green-600" />
-                    Product Name
-                    {getSortIcon("name")}
-                  </div>
-                </th>
-                <th
-                  className="px-6 py-4 font-semibold text-green-800 cursor-pointer hover:bg-green-100 transition-colors"
-                  onClick={() => handleSort("price")}
-                >
-                  <div className="flex items-center">
-                    <FiDollarSign className="mr-2 text-green-600" />
-                    Price
-                    {getSortIcon("price")}
-                  </div>
-                </th>
-                <th
-                  className="px-6 py-4 font-semibold text-green-800 cursor-pointer hover:bg-green-100 transition-colors hidden md:table-cell"
-                  onClick={() => handleSort("category")}
-                >
-                  <div className="flex items-center">
-                    <FiTag className="mr-2 text-green-600" />
-                    Category
-                    {getSortIcon("category")}
-                  </div>
-                </th>
-                <th
-                  className="px-6 py-4 font-semibold text-green-800 cursor-pointer hover:bg-green-100 transition-colors hidden lg:table-cell"
-                  onClick={() => handleSort("createdAt")}
-                >
-                  <div className="flex items-center">
-                    <FiCalendar className="mr-2 text-green-600" />
-                    Created
-                    {getSortIcon("createdAt")}
-                  </div>
-                </th>
-                <th
-                  className="px-6 py-4 font-semibold text-green-800 cursor-pointer hover:bg-green-100 transition-colors hidden md:table-cell"
-                  onClick={() => handleSort("seller")}
-                >
-                  <div className="flex items-center">
-                    <FiUser className="mr-2 text-green-600" />
-                    Seller
-                    {getSortIcon("seller")}
-                  </div>
-                </th>
-                <th className="px-6 py-4 font-semibold text-green-800 text-right">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentProducts.length > 0 ? (
-                currentProducts.map((product) => (
-                  <>
-                    <tr
-                      key={product.id}
-                      className={`border-b border-gray-100 transition-all duration-200 ${
-                        hoveredRow === product._id
-                          ? "bg-green-50"
-                          : "hover:bg-gray-50"
-                      }`}
-                      onMouseEnter={() => setHoveredRow(product._id)}
-                      onMouseLeave={() => setHoveredRow(null)}
-                    >
-                      <td className="px-6 py-4">
-                        <div className="font-medium text-gray-800">
-                          {product.title}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="font-medium text-green-700">
-                          ${product.price_inr.toFixed(2)}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 hidden md:table-cell">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                          {product.category}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 hidden lg:table-cell text-gray-600">
-                        {formatDate(product.product_create_date)}
-                      </td>
-                      <td className="px-6 py-4 hidden md:table-cell text-gray-600">
-                        {product.saler_name}
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex justify-end gap-3">
-                          <button
-                            className="p-2  border border-gray-600 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-full transition-colors"
-                            aria-label="Edit product"
-                          >
-                            <FaCopy
-                              onClick={() => handleCopy(product)}
-                              className="h-5 w-5"
-                            />
-                          </button>
-                          <button
-                            className="p-2  border border-green-600 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-full transition-colors"
-                            aria-label="Edit product"
-                          >
-                            <FaEye
-                              onClick={() => handleView(product)}
-                              className="h-5 w-5"
-                            />
-                          </button>
-                          <button
-                            className="p-2  border border-blue-600 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-full transition-colors"
-                            aria-label="Edit product"
-                          >
-                            <FiEdit
-                              onClick={() => handleEdit(product)}
-                              className="h-5 w-5"
-                            />
-                          </button>
-                          <button
-                            className="p-2  border border-red-600 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-full transition-colors"
-                            onClick={() => handleDelete(product)}
-                            aria-label="Delete product"
-                          >
-                            <FiTrash2 className="h-5 w-5" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-
-                    {/* Mobile View: Additional Fields Inside Table */}
-                    <tr className="md:hidden border-b border-gray-100 bg-gray-50">
-                      <td
-                        colSpan="6"
-                        className="px-6 py-2 text-sm text-gray-700"
-                      >
-                        <div className="flex flex-wrap justify-between">
-                          <div>
-                            <span className="font-medium">Category:</span>{" "}
-                            <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                              {product.category}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="font-medium">Created:</span>{" "}
-                            {formatDate(product.createdAt)}
-                          </div>
-                          <div>
-                            <span className="font-medium">Seller:</span>{" "}
-                            {product.seller}
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={6}
-                    className="px-6 py-10 text-center text-gray-500"
+        {prodLoading ? (
+          <div className="flex items-center justify-center h-[400px] w-full">
+            <Loader />
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-green-50 text-left">
+                  <th
+                    className="px-6 py-4 font-semibold text-green-800 cursor-pointer hover:bg-green-100 transition-colors"
+                    onClick={() => handleSort("name")}
                   >
-                    No products found. Try a different search term or filter.
-                  </td>
+                    <div className="flex items-center">
+                      <FiShoppingBag className="mr-2 text-green-600" />
+                      Product Name
+                      {getSortIcon("name")}
+                    </div>
+                  </th>
+                  <th
+                    className="px-6 py-4 font-semibold text-green-800 cursor-pointer hover:bg-green-100 transition-colors"
+                    onClick={() => handleSort("price")}
+                  >
+                    <div className="flex items-center">
+                      <FiDollarSign className="mr-2 text-green-600" />
+                      Price
+                      {getSortIcon("price")}
+                    </div>
+                  </th>
+                  <th
+                    className="px-6 py-4 font-semibold text-green-800 cursor-pointer hover:bg-green-100 transition-colors hidden md:table-cell"
+                    onClick={() => handleSort("category")}
+                  >
+                    <div className="flex items-center">
+                      <FiTag className="mr-2 text-green-600" />
+                      Category
+                      {getSortIcon("category")}
+                    </div>
+                  </th>
+                  <th
+                    className="px-6 py-4 font-semibold text-green-800 cursor-pointer hover:bg-green-100 transition-colors hidden lg:table-cell"
+                    onClick={() => handleSort("createdAt")}
+                  >
+                    <div className="flex items-center">
+                      <FiCalendar className="mr-2 text-green-600" />
+                      Created
+                      {getSortIcon("createdAt")}
+                    </div>
+                  </th>
+                  <th
+                    className="px-6 py-4 font-semibold text-green-800 cursor-pointer hover:bg-green-100 transition-colors hidden md:table-cell"
+                    onClick={() => handleSort("seller")}
+                  >
+                    <div className="flex items-center">
+                      <FiUser className="mr-2 text-green-600" />
+                      Seller
+                      {getSortIcon("seller")}
+                    </div>
+                  </th>
+                  <th className="px-6 py-4 font-semibold text-green-800 text-right">
+                    Actions
+                  </th>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {currentProducts.length > 0 ? (
+                  currentProducts.map((product) => (
+                    <>
+                      <tr
+                        key={product.id}
+                        className={`border-b border-gray-100 transition-all duration-200 ${
+                          hoveredRow === product._id
+                            ? "bg-green-50"
+                            : "hover:bg-gray-50"
+                        }`}
+                        onMouseEnter={() => setHoveredRow(product._id)}
+                        onMouseLeave={() => setHoveredRow(null)}
+                      >
+                        <td className="px-6 py-4">
+                          <div className="font-medium text-gray-800">
+                            {product.title}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="font-medium text-green-700">
+                            ${product.price_inr.toFixed(2)}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 hidden md:table-cell">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            {product.category}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 hidden lg:table-cell text-gray-600">
+                          {formatDate(product.product_create_date)}
+                        </td>
+                        <td className="px-6 py-4 hidden md:table-cell text-gray-600">
+                          {product.saler_name}
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <div className="flex justify-end gap-3">
+                            <button
+                              className="p-2  border border-gray-600 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-full transition-colors"
+                              aria-label="Edit product"
+                            >
+                              <FaCopy
+                                onClick={() => handleCopy(product)}
+                                className="h-5 w-5"
+                              />
+                            </button>
+                            <button
+                              className="p-2  border border-green-600 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-full transition-colors"
+                              aria-label="Edit product"
+                            >
+                              <FaEye
+                                onClick={() => handleView(product)}
+                                className="h-5 w-5"
+                              />
+                            </button>
+                            <button
+                              className="p-2  border border-blue-600 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-full transition-colors"
+                              aria-label="Edit product"
+                            >
+                              <FiEdit
+                                onClick={() => handleEdit(product)}
+                                className="h-5 w-5"
+                              />
+                            </button>
+                            <button
+                              className="p-2  border border-red-600 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-full transition-colors"
+                              onClick={() => handleDelete(product)}
+                              aria-label="Delete product"
+                            >
+                              <FiTrash2 className="h-5 w-5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+
+                      {/* Mobile View: Additional Fields Inside Table */}
+                      <tr className="md:hidden border-b border-gray-100 bg-gray-50">
+                        <td
+                          colSpan="6"
+                          className="px-6 py-2 text-sm text-gray-700"
+                        >
+                          <div className="flex flex-wrap justify-between">
+                            <div>
+                              <span className="font-medium">Category:</span>{" "}
+                              <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                {product.category}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="font-medium">Created:</span>{" "}
+                              {formatDate(product.createdAt)}
+                            </div>
+                            <div>
+                              <span className="font-medium">Seller:</span>{" "}
+                              {product.seller}
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={6}
+                      className="px-6 py-10 text-center text-gray-500"
+                    >
+                      No products found. Try a different search term or filter.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         {/* Pagination */}
         {filteredProducts.length > itemsPerPage && (
