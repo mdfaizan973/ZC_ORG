@@ -110,8 +110,8 @@ export default function ChakOutPage() {
     }
   }, [location]);
 
-  console.log(reviewData);
-  console.log(orderSummary);
+  // console.log(reviewData);
+  // console.log(orderSummary);
   return (
     <>
       <ToastContainer />

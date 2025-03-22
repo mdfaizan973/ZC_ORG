@@ -68,13 +68,21 @@ export default function CheckoutPage() {
       makeOrder(updatedData);
     }
   };
+  const getProdIds = (order) => {
+    const data = order.list_of_items?.map((ele) => ele.prod_id);
+    return data;
+  };
+
   const makeOrder = async (userOrder) => {
     const userOrderDone = await postData(`${baseUrl2}/orders`, userOrder);
     if (userOrderDone) {
-      deleteData(`${baseUrl2}/cart/deleteAll/${orderSummary?.user_id}`, false);
-      setTimeout(() => {
-        navigate("/thank-you");
-      }, 1000);
+      const ids = getProdIds(userOrder);
+      deleteData(`${baseUrl2}/cart/delete-multiple`, false, null, {
+        prod_id: ids,
+      });
+      // setTimeout(() => {
+      //   navigate("/thank-you");
+      // }, 1000);
     }
   };
 

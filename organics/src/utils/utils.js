@@ -50,8 +50,7 @@ export const postData = async (url, data, method = "POST", token = null) => {
   });
 
   try {
-
-    const isForm = data instanceof FormData; // for image file 
+    const isForm = data instanceof FormData; // for image file
 
     const headers = {
       ...(token && { Authorization: `Bearer ${token}` }),
@@ -88,7 +87,8 @@ export const postData = async (url, data, method = "POST", token = null) => {
 export const deleteData = async (
   url,
   showNotification = true,
-  token = null
+  token = null,
+  body
 ) => {
   let toastId = null;
 
@@ -104,8 +104,10 @@ export const deleteData = async (
       ...(token && { Authorization: `Bearer ${token}` }),
     };
 
-    const response = await axios.delete(url, { headers });
-
+    const response = await axios.delete(url, {
+      headers,
+      ...(body && { data: body }), // ✅ allow sending data in DELETE
+    });
     if (showNotification) {
       toast.dismiss(toastId);
       toast.success(response?.data?.message || "Deleted successfully!", {
