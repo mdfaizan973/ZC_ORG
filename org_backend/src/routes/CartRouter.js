@@ -49,7 +49,6 @@ cartRouter.post("/", async (req, res) => {
 
 cartRouter.delete("/delete-multiple", async (req, res) => {
   const { prod_id } = req.body;
-  console.log(prod_id);
 
   if (!Array.isArray(prod_id) || prod_id.length === 0) {
     return res.status(400).json({ message: "No product IDs provided" });

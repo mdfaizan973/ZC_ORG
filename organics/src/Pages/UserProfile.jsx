@@ -28,6 +28,7 @@ import { BiPackage } from "react-icons/bi";
 import {
   deleteData,
   fetchData,
+  fixedNumber,
   getSessionData,
   postData,
 } from "../utils/utils";
@@ -537,24 +538,24 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
   };
   const getTotalPrice = () => {
     const total = orderList.reduce((acc, item) => item.prod_price + acc, 0);
-    return `₹ ${total}` || 0;
+    return `₹ ${fixedNumber(total)}` || 0;
   };
 
-  const sortingData = (val) => {
-    const dataToSort = [...orderList];
-    if (val === "hightolow") {
-      // hightolow
-      const dec = dataToSort.sort((a, b) => a.prod_price - b.prod_price);
-      setOrderList(dec);
-    } else if (val === "lowtohigh") {
-      // lowtohigh
-      const dec = dataToSort.sort((a, b) => b.prod_price - a.prod_price);
-      setOrderList(dec);
-    } else {
-      // as it is
-      setOrderList(dataToSort);
-    }
-  };
+  // const sortingData = (val) => {
+  //   const dataToSort = [...orderList];
+  //   if (val === "hightolow") {
+  //     // hightolow
+  //     const dec = dataToSort.sort((a, b) => a.prod_price - b.prod_price);
+  //     setOrderList(dec);
+  //   } else if (val === "lowtohigh") {
+  //     // lowtohigh
+  //     const dec = dataToSort.sort((a, b) => b.prod_price - a.prod_price);
+  //     setOrderList(dec);
+  //   } else {
+  //     // as it is
+  //     setOrderList(dataToSort);
+  //   }
+  // };
 
   return (
     <div className="p-6">
@@ -759,7 +760,9 @@ function OrderCard({ order, goToDetailsPage }) {
           </h4>
 
           <div className="flex items-center justify-between mb-4">
-            <p className="font-semibold text-green-800">₹{order?.prod_price}</p>
+            <p className="font-semibold text-green-800">
+              ₹{fixedNumber(order?.prod_price)}
+            </p>
             <div className="flex items-center gap-1 text-sm">
               <FiCalendar size={14} className="text-gray-400" />
               <span className="text-gray-600">
@@ -867,7 +870,7 @@ function WishlistCard({ item, removeItemFromWishList, goToDetailsPage }) {
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
               <p className="font-semibold text-green-800">
-                ₹{item.product_discount_price_inr}
+                ₹{fixedNumber(item.product_discount_price_inr)}
               </p>
             </div>
             <div className="flex items-center gap-1 text-sm">

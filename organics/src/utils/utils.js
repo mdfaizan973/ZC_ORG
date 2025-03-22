@@ -206,3 +206,8 @@ export const hasToken = () => {
     return false;
   }
 };
+
+export const fixedNumber = (num, time = 2) => {
+  const res = num ? Number(num)?.toFixed(time) : 0;
+  return res;
+};
