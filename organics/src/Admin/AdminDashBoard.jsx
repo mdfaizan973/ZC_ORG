@@ -107,7 +107,7 @@ export default function AdminDashBoard() {
                       />
                     </div>
                   </header>
-                  <section className="items-center flex justify-center min-h-screen font-poppins">
+                  <section className="flex justify-center min-h-screen font-poppins">
                     {/* <div className="w-full max-w-6xl px-6 py-8 bg-white rounded-lg"> */}
                     <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
                       {/* Header */}
