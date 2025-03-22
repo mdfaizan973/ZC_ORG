@@ -25,6 +25,7 @@ import UserProfile from "../Pages/UserProfile";
 import OrderReview from "../Pages/OrderComponents/OrderReview";
 import CheckoutPage from "../Pages/OrderComponents/CheckoutPage";
 import ThankyouPage from "../Pages/OrderComponents/ThankyouPage";
+import BugReport from "../Pages/BugReport";
 export default function AllRoutes() {
   // const [isOrgAdmin, setisOrgAdmin] = useState(false);
 
@@ -42,6 +43,7 @@ export default function AllRoutes() {
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/register" element={<SignupPage />}></Route>
         <Route path="/upcoming" element={<UpCaoming />}></Route>
+        <Route path="/bug-report" element={<BugReport />}></Route>
 
         <Route
           path="/delivery"

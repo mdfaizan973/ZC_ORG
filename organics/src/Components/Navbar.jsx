@@ -5,6 +5,7 @@ import {
   // AiOutlineShopping,
   AiOutlineUser,
   AiOutlineShoppingCart,
+  AiFillBug,
 } from "react-icons/ai";
 
 import { Link as RouterLink } from "react-router-dom";
@@ -117,6 +118,17 @@ export default function Navbar() {
                   data-ripple-light="true"
                 >
                   <AiOutlineUser />
+                </button>
+              </RouterLink>
+
+              <RouterLink to={"/bug-report"}>
+                {" "}
+                <button
+                  className="middle none center hidden rounded-lg bg-gradient-to-tr from-red-600 to-red-400 py-2 px-4 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
+                  type="button"
+                  data-ripple-light="true"
+                >
+                  <AiFillBug />
                 </button>
               </RouterLink>
 

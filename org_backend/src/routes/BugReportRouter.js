@@ -1,8 +1,10 @@
 const express = require("express");
 const BugReportModel = require("../models/BugReport");
+const updateMissingFields = require("../utils/updateMissingFields");
 
 const bugReportRouter = express.Router();
 
+updateMissingFields(BugReportModel);
 // POST: Create a new bug report
 bugReportRouter.post("/", async (req, res) => {
   try {

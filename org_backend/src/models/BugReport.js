@@ -7,8 +7,12 @@ const BugReportSchema = new mongoose.Schema(
     user_email: { type: String, required: true },
     bug: { type: String, required: true },
     priority: { type: String, required: false },
+    is_bug_fixed: { type: String, required: false },
   },
-  { timestamps: { createdAt: "bug_report_date", updatedAt: false }, versionKey: false }
+  {
+    timestamps: { createdAt: "bug_report_date", updatedAt: false },
+    versionKey: false,
+  }
 );
 
 const BugReportModel = mongoose.model("bugReport", BugReportSchema);
