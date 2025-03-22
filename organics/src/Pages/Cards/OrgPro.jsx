@@ -6,7 +6,7 @@ import { FiShare2 } from "react-icons/fi";
 import { Link as RouterLink } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { postData } from "../../utils/utils";
+import { hasToken, postData } from "../../utils/utils";
 import { placeHolderImage, prepare_wishlist } from "../../utils/uiUtils";
 import { baseUrl2, imageUrl } from "../../../config/confg";
 
@@ -114,6 +114,7 @@ export default function OrgPro(props) {
                   onClick={() => {
                     addtocart(dataItem);
                   }}
+                  disabled={hasToken}
                   className="mr-2 mb-4 flex cursor-pointer items-center justify-center rounded-md bg-emerald-600 hover:bg-emerald-800 py-2 px-8 text-center text-white transition duration-150 ease-in-out hover:translate-y-1 "
                 >
                   <svg

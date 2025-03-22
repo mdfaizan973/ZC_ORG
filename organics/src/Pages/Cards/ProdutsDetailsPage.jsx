@@ -19,7 +19,12 @@ import {
 import Navbar from "../../Components/Navbar";
 import { useParams } from "react-router-dom";
 import { baseUrl2, imageUrl } from "../../../config/confg";
-import { fetchData, getSessionData, postData } from "../../utils/utils";
+import {
+  fetchData,
+  getSessionData,
+  hasToken,
+  postData,
+} from "../../utils/utils";
 import ProductFeedbackAndQuestions, {
   cardClass,
 } from "./ProductFeedbackAndQuestions";
@@ -177,6 +182,7 @@ export default function ProductDetailsPage() {
 
                   <button
                     onClick={() => handleCart(product)}
+                    disabled={hasToken}
                     className="flex items-center justify-center px-8 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
                   >
                     <FaShoppingCart className="mr-2" /> Add to Cart
