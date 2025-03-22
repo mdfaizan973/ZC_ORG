@@ -7,7 +7,6 @@ import {
   AiOutlineShoppingCart,
   AiFillBug,
 } from "react-icons/ai";
-
 import { Link as RouterLink } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { getSessionData, hasToken } from "../utils/utils";
