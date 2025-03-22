@@ -16,8 +16,9 @@ import {
   FiMail,
   FiMapPin,
   FiLock,
+  FiX,
 } from "react-icons/fi";
-import { FaShoppingCart, FaBox } from "react-icons/fa";
+import { FaShoppingCart, FaBox, FaTrafficLight } from "react-icons/fa";
 import {
   MdOutlineVerified,
   MdLocalShipping,
@@ -150,7 +151,7 @@ export default function UserProfile() {
 
       <div className=" mx-auto p-4 md:p-6 bg-gray-50 min-h-screen">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
           <div>
             <h1 className="text-2xl font-bold text-green-800">
               Hey! Organic Store Customer
@@ -169,7 +170,7 @@ export default function UserProfile() {
         </div>
 
         {/* Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-xl shadow-sm">
+        <div className="flex flex-wrap gap-2 mb-4 bg-white p-2 rounded-xl shadow-sm">
           <TabButton
             active={activeTab === "profile"}
             onClick={() => setActiveTab("profile")}
@@ -725,7 +726,184 @@ function WishlistTab({ viewMode, setViewMode }) {
   );
 }
 
+import { FiDownload } from "react-icons/fi";
+import { FiCheckCircle } from "react-icons/fi";
+
+export const OrderStatusModal = ({ order, closeModel }) => {
+  // Helper function to determine if a step is active or completed
+  const getStepStatus = (step) => {
+    const statusOrder = ["processing", "shipped", "delivered"];
+    const currentIndex = statusOrder.indexOf(order.status);
+    const stepIndex = statusOrder.indexOf(step);
+
+    if (stepIndex < currentIndex) return "completed";
+    if (stepIndex === currentIndex) return "active";
+    return "pending";
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white">
+          <h3 className="text-lg font-semibold text-gray-900">Order Status</h3>
+          <button
+            className="text-gray-400 hover:text-gray-500"
+            onClick={closeModel}
+          >
+            <FiX className="text-xl" />
+          </button>
+        </div>
+
+        {order.status === "delivered" && (
+          <div className="flex justify-end text-blue-500 p-2 cursor-pointer items-center">
+            <FiDownload className="mr-1" /> Download Invoice
+          </div>
+        )}
+
+        {/* Order details */}
+        <div className="p-6">
+          <div className="mb-6">
+            <h4 className="text-2xl mb-1">{order?.prod_name}</h4>
+
+            <h4 className="text-sm text-gray-500 mb-1">Order Amount</h4>
+            <p className="text-xl font-bold">
+              ₹{order?.prod_price?.toLocaleString()}
+            </p>
+          </div>
+
+          {/* Timeline */}
+          <div className="mb-6">
+            <h4 className="text-sm text-gray-500 mb-4">Order Timeline</h4>
+
+            <div className="relative">
+              {/* Timeline track */}
+              <div className="absolute left-0 ml-[15px] top-0 h-full w-[2px] bg-gray-200"></div>
+
+              {/* Processing Step */}
+              <div className="relative flex items-start mb-8">
+                <div
+                  className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center z-10 
+                  ${
+                    getStepStatus("Processing") === "active"
+                      ? "bg-blue-500 text-white"
+                      : getStepStatus("Processing") === "completed"
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-200 text-gray-500"
+                  }`}
+                >
+                  {getStepStatus("Processing") === "completed" ? (
+                    <FiCheckCircle className="h-5 w-5" />
+                  ) : (
+                    "1"
+                  )}
+                </div>
+                <div className="ml-4">
+                  <h5
+                    className={`font-medium ${
+                      getStepStatus("Processing") === "active"
+                        ? "text-blue-500"
+                        : getStepStatus("Processing") === "completed"
+                        ? "text-green-500"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    Order Processing
+                  </h5>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Your order has been received and is being processed
+                  </p>
+                </div>
+              </div>
+
+              {/* Shipped Step */}
+              <div className="relative flex items-start mb-8">
+                <div
+                  className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center z-10 
+                  ${
+                    getStepStatus("shipped") === "active"
+                      ? "bg-blue-500 text-white"
+                      : getStepStatus("shipped") === "completed"
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-200 text-gray-500"
+                  }`}
+                >
+                  {getStepStatus("shipped") === "completed" ? (
+                    <FiCheckCircle className="h-5 w-5" />
+                  ) : (
+                    "2"
+                  )}
+                </div>
+                <div className="ml-4">
+                  <h5
+                    className={`font-medium ${
+                      getStepStatus("shipped") === "active"
+                        ? "text-blue-500"
+                        : getStepStatus("shipped") === "completed"
+                        ? "text-green-500"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    Shipped
+                  </h5>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Your order has been shipped and is on the way
+                  </p>
+                </div>
+              </div>
+
+              {/* Delivered Step */}
+              <div className="relative flex items-start">
+                <div
+                  className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center z-10 
+                  ${
+                    getStepStatus("delivered") === "active"
+                      ? "bg-blue-500 text-white"
+                      : getStepStatus("delivered") === "completed"
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-200 text-gray-500"
+                  }`}
+                >
+                  {getStepStatus("delivered") === "completed" ? (
+                    <FiCheckCircle className="h-5 w-5" />
+                  ) : (
+                    "3"
+                  )}
+                </div>
+                <div className="ml-4">
+                  <h5
+                    className={`font-medium ${
+                      getStepStatus("delivered") === "active"
+                        ? "text-blue-500"
+                        : getStepStatus("delivered") === "completed"
+                        ? "text-green-500"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    Delivered
+                  </h5>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Your order has been delivered successfully
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 function OrderCard({ order, goToDetailsPage }) {
+  const [orderStatus, setOrderStatus] = useState(false);
+
+  const showOrderStatus = () => {
+    setOrderStatus(true);
+  };
+
+  const closeModel = () => {
+    setOrderStatus(false);
+  };
   return (
     <>
       <div
@@ -770,15 +948,27 @@ function OrderCard({ order, goToDetailsPage }) {
               </span>
             </div>
           </div>
-          <button
-            onClick={() => goToDetailsPage(order?.prod_id)}
-            className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg transition-colors"
-          >
-            <FaShoppingCart size={12} />
-            Shop Again
-          </button>
+          <div className="flex justify-between items-center gap-2">
+            <button
+              onClick={() => goToDetailsPage(order?.prod_id)}
+              className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded-lg transition-colors"
+            >
+              <FaShoppingCart size={12} />
+              Shop
+            </button>
+            <button
+              onClick={showOrderStatus}
+              className="w-full flex items-center justify-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded-lg transition-colors"
+            >
+              <FaTrafficLight size={12} />
+              Status
+            </button>
+          </div>
         </div>
       </div>
+      {orderStatus && (
+        <OrderStatusModal order={order} closeModel={closeModel} />
+      )}
     </>
   );
 }

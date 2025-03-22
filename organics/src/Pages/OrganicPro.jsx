@@ -12,6 +12,7 @@ import { FiBox, FiFilter } from "react-icons/fi"; // Feather Icons
 import { BiSortAlt2 } from "react-icons/bi"; // BoxIcons Alternative
 import { MdCategory } from "react-icons/md";
 import { useRef } from "react";
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 export default function OrganicPro() {
   const [orgData, setOrgData] = useState([]);
   const [page, setPage] = useState(1);
@@ -229,7 +230,7 @@ export default function OrganicPro() {
           onClick={handlePrev}
           className="flex items-center justify-center mr-1 py-2 px-4  h-8 text-sm font-medium text-white bg-green-500 rounded-l hover:bg-green-900 dark:bg-green-500 dark:border-green-700  dark:hover:bg-green-700 "
         >
-          Prev
+          <AiOutlineLeft /> Prev
         </button>
         <button className="bg-green-500 border-b text-white font-bold py-2 px-4 rounded-lg">
           Page {page} of {totalPages}
@@ -240,7 +241,7 @@ export default function OrganicPro() {
           onClick={handleNext}
           className="flex items-center justify-center ml-1 py-2 px-4  h-8 text-sm font-medium text-white bg-green-500 border-green-700 rounded-r hover:bg-green-900 dark:bg-green-500 dark:border-green-700 dark:text-black-400 dark:hover:bg-green-700 "
         >
-          Next
+          Next <AiOutlineRight />
         </button>
       </div>
     </div>
