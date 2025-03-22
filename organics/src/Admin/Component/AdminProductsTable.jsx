@@ -29,7 +29,6 @@ export default function AdminProductsTable({
   openModal,
 }) {
   // Sample product data
-  const [newProducts, setProducts] = useState([]);
 
   // State for search, pagination, sorting, and filtering
   const [searchTerm, setSearchTerm] = useState("");
