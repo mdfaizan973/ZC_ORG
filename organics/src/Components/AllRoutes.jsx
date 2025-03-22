@@ -26,6 +26,7 @@ import OrderReview from "../Pages/OrderComponents/OrderReview";
 import CheckoutPage from "../Pages/OrderComponents/CheckoutPage";
 import ThankyouPage from "../Pages/OrderComponents/ThankyouPage";
 import BugReport from "../Pages/BugReport";
+import BugReportListing from "../Admin/BugReportListing";
 export default function AllRoutes() {
   // const [isOrgAdmin, setisOrgAdmin] = useState(false);
 
@@ -104,6 +105,10 @@ export default function AllRoutes() {
         <Route
           path="/thank-you"
           element={<ProtectedRoute component={ThankyouPage} />}
+        />
+        <Route
+          path="/bug-report-list"
+          element={<ProtectedRoute component={BugReportListing} />}
         />
 
         {/* </>

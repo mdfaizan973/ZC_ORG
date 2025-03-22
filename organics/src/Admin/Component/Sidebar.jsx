@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AiFillBug, AiFillDashboard } from "react-icons/ai";
 import {
   FiShoppingBag,
   FiShoppingCart,
@@ -14,6 +15,7 @@ import {
   FiHome,
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { getSessionData } from "../../utils/utils";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -28,6 +30,7 @@ const Sidebar = () => {
   };
 
   const menuItems = [
+    { title: "Dashboard", icon: <AiFillDashboard />, route: "/admin-portal" },
     { title: "Products", icon: <FiShoppingBag />, route: "/adminproducts" },
     { title: "Orders", icon: <FiShoppingCart />, route: "/orders" },
     { title: "Analytics", icon: <FiBarChart2 />, route: "/admin-analytics" },
@@ -38,6 +41,7 @@ const Sidebar = () => {
     },
     { title: "Users", icon: <FiUsers />, route: "/adminusers" },
     { title: "Sellers", icon: <FiUserCheck />, route: "/salers" },
+    { title: "Bug Report", icon: <AiFillBug />, route: "/bug-report-list" },
     { title: "Store", icon: <FiHome />, route: "/" },
   ];
 
@@ -120,7 +124,7 @@ const Sidebar = () => {
               <li key={index}>
                 <a
                   onClick={() => handleAdminDashboardRoute(item.route, index)}
-                  className={`flex items-center p-3 text-gray-700 cursor-pointer rounded-lg hover:bg-green-50 hover:text-green-600 group transition-all duration-200
+                  className={`flex items-center p-2 text-gray-700 cursor-pointer rounded-lg hover:bg-green-50 hover:text-green-600 group transition-all duration-200
                     ${
                       index === activePage ? "bg-green-50 text-green-600" : ""
                     }`}
@@ -168,8 +172,12 @@ const Sidebar = () => {
             />
             {!isCollapsed && (
               <div className="ml-3">
-                <p className="text-sm font-medium text-gray-800">John Doe</p>
-                <p className="text-xs text-gray-500">Admin</p>
+                <p className="text-sm font-medium text-gray-800">
+                  {getSessionData("name")}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {getSessionData("email")}
+                </p>
               </div>
             )}
           </div>
