@@ -18,56 +18,13 @@ import {
   FiX,
   FiEye,
 } from "react-icons/fi";
-import Navbar from "../Components/Navbar";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+
 import Sidebar from "./Component/Sidebar";
 import AdminNav from "./AdminNav";
-import { fetchData } from "../utils/utils";
+import { fetchData, postData } from "../utils/utils";
 import { baseUrl2 } from "../../config/confg";
 import Loader from "../Pages/LoadingUI/Loader";
-
-// Sample data based on the provided structure
-const initialBugs = [
-  {
-    _id: "67de598281fead4696b8a239",
-    user_name: "Md Faizan",
-    user_id: "67dd7bd1f61951f0bb9b7dbd",
-    user_email: "faizan.md9735@gmail.com",
-    bug: "no chat AI",
-    priority: "Low",
-    is_bug_fixed: "Work in progress",
-    bug_report_date: "2025-03-22T06:32:34.924Z",
-  },
-  {
-    _id: "67de598281fead4696b8a240",
-    user_name: "John Doe",
-    user_id: "67dd7bd1f61951f0bb9b7dbe",
-    user_email: "john.doe@example.com",
-    bug: "Login button not working",
-    priority: "High",
-    is_bug_fixed: "Work in progress",
-    bug_report_date: "2025-03-21T14:22:34.924Z",
-  },
-  {
-    _id: "67de598281fead4696b8a241",
-    user_name: "Jane Smith",
-    user_id: "67dd7bd1f61951f0bb9b7dbf",
-    user_email: "jane.smith@example.com",
-    bug: "Images not loading in gallery",
-    priority: "Medium",
-    is_bug_fixed: "Fixed",
-    bug_report_date: "2025-03-20T09:15:34.924Z",
-  },
-  {
-    _id: "67de598281fead4696b8a242",
-    user_name: "Robert Johnson",
-    user_id: "67dd7bd1f61951f0bb9b7dc0",
-    user_email: "robert.johnson@example.com",
-    bug: "Payment gateway error",
-    priority: "Critical",
-    is_bug_fixed: "Fixed",
-    bug_report_date: "2025-03-19T18:45:34.924Z",
-  },
-];
 
 const BugReportListing = () => {
   const [bugs, setBugs] = useState([]);
@@ -174,6 +131,15 @@ const BugReportListing = () => {
     setBugs(data);
   };
 
+  const changeStatus = async (data) => {
+    const update = {
+      ...data,
+      is_bug_fixed: "Fixed",
+    };
+    await postData(`${baseUrl2}/bug-report/${data._id}`, update);
+    load_all_bugs();
+    setSelectedBug(null);
+  };
   return (
     <>
       <AdminNav />
@@ -406,8 +372,11 @@ const BugReportListing = () => {
                                   >
                                     <FiEye />
                                   </button>
-                                  <button className="text-gray-600 hover:text-gray-900">
-                                    <FaEllipsisV />
+                                  <button
+                                    className="text-gray-600 hover:text-gray-900"
+                                    onClick={() => changeStatus(bug)}
+                                  >
+                                    <FiChevronRight />
                                   </button>
                                 </td>
                               </tr>
@@ -545,7 +514,10 @@ const BugReportListing = () => {
                         >
                           Close
                         </button>
-                        <button className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors">
+                        <button
+                          onClick={() => changeStatus(selectedBug)}
+                          className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
+                        >
                           Update Status
                         </button>
                       </div>
