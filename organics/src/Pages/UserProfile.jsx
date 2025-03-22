@@ -726,19 +726,27 @@ function WishlistTab({ viewMode, setViewMode }) {
   );
 }
 
-import { FiDownload } from "react-icons/fi";
+import { FiDownload, FiPackage, FiTruck, FiHome } from "react-icons/fi";
 import { FiCheckCircle } from "react-icons/fi";
 
 export const OrderStatusModal = ({ order, closeModel }) => {
   // Helper function to determine if a step is active or completed
   const getStepStatus = (step) => {
-    const statusOrder = ["processing", "shipped", "delivered"];
-    const currentIndex = statusOrder.indexOf(order.status);
+    const statusOrder = ["Processing", "Shipped", "Delivered"];
+    const currentIndex = statusOrder.indexOf(order.prod_status);
     const stepIndex = statusOrder.indexOf(step);
 
     if (stepIndex < currentIndex) return "completed";
     if (stepIndex === currentIndex) return "active";
     return "pending";
+  };
+
+  // Get appropriate icon for each step
+  const getStepIcon = (step) => {
+    if (step === "Processing") return <FiPackage className="h-5 w-5" />;
+    if (step === "Shipped") return <FiTruck className="h-5 w-5" />;
+    if (step === "Delivered") return <FiHome className="h-5 w-5" />;
+    return null;
   };
 
   return (
@@ -747,45 +755,66 @@ export const OrderStatusModal = ({ order, closeModel }) => {
         <div className="p-6 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white">
           <h3 className="text-lg font-semibold text-gray-900">Order Status</h3>
           <button
-            className="text-gray-400 hover:text-gray-500"
+            className="text-gray-400 hover:text-gray-500 transition-colors"
             onClick={closeModel}
           >
             <FiX className="text-xl" />
           </button>
         </div>
 
-        {order.status === "delivered" && (
-          <div className="flex justify-end text-blue-500 p-2 cursor-pointer items-center">
-            <FiDownload className="mr-1" /> Download Invoice
-          </div>
-        )}
-
         {/* Order details */}
         <div className="p-6">
-          <div className="mb-6">
-            <h4 className="text-2xl mb-1">{order?.prod_name}</h4>
+          <div className="bg-gray-50 rounded-lg p-4 mb-8">
+            <div className="flex justify-between items-start mb-2">
+              <div>
+                <h4 className="text-2xl font-medium text-gray-800 mb-1">
+                  {order?.prod_name || "Product Name"}
+                </h4>
+                <p className="text-sm text-gray-500">
+                  Order ID {order?.prod_id || "*****"}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-gray-500 mb-1">Order Amount</p>
+                <p className="text-2xl font-bold text-gray-800">
+                  ₹{order?.prod_price?.toLocaleString() || "0"}
+                </p>
+              </div>
+            </div>
 
-            <h4 className="text-sm text-gray-500 mb-1">Order Amount</h4>
-            <p className="text-xl font-bold">
-              ₹{order?.prod_price?.toLocaleString()}
-            </p>
+            {order?.estimated_delivery && (
+              <p className="text-sm text-gray-600 mt-2">
+                <span className="font-medium">Estimated Delivery:</span>{" "}
+                {order.estimated_delivery}
+              </p>
+            )}
+
+            {order.prod_status === "Delivered" && (
+              <div className="flex justify-end mt-3">
+                <button className="flex items-center text-blue-600 hover:text-blue-800 transition-colors font-medium text-sm">
+                  <FiDownload className="mr-1" /> Download Invoice
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Timeline */}
           <div className="mb-6">
-            <h4 className="text-sm text-gray-500 mb-4">Order Timeline</h4>
+            <h4 className="text-base font-medium text-gray-800 mb-6">
+              Order Timeline
+            </h4>
 
             <div className="relative">
               {/* Timeline track */}
               <div className="absolute left-0 ml-[15px] top-0 h-full w-[2px] bg-gray-200"></div>
 
               {/* Processing Step */}
-              <div className="relative flex items-start mb-8">
+              <div className="relative flex items-start mb-10">
                 <div
-                  className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center z-10 
+                  className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center z-10 transition-all duration-300
                   ${
                     getStepStatus("Processing") === "active"
-                      ? "bg-blue-500 text-white"
+                      ? "bg-blue-500 text-white ring-4 ring-blue-100"
                       : getStepStatus("Processing") === "completed"
                       ? "bg-green-500 text-white"
                       : "bg-gray-200 text-gray-500"
@@ -794,17 +823,17 @@ export const OrderStatusModal = ({ order, closeModel }) => {
                   {getStepStatus("Processing") === "completed" ? (
                     <FiCheckCircle className="h-5 w-5" />
                   ) : (
-                    "1"
+                    getStepIcon("Processing")
                   )}
                 </div>
-                <div className="ml-4">
+                <div className="ml-6">
                   <h5
-                    className={`font-medium ${
+                    className={`font-medium text-base ${
                       getStepStatus("Processing") === "active"
-                        ? "text-blue-500"
+                        ? "text-blue-600"
                         : getStepStatus("Processing") === "completed"
-                        ? "text-green-500"
-                        : "text-gray-500"
+                        ? "text-green-600"
+                        : "text-gray-700"
                     }`}
                   >
                     Order Processing
@@ -812,35 +841,40 @@ export const OrderStatusModal = ({ order, closeModel }) => {
                   <p className="text-sm text-gray-500 mt-1">
                     Your order has been received and is being processed
                   </p>
+                  {order?.processing_date && (
+                    <p className="text-xs text-gray-400 mt-2">
+                      {order.processing_date}
+                    </p>
+                  )}
                 </div>
               </div>
 
               {/* Shipped Step */}
-              <div className="relative flex items-start mb-8">
+              <div className="relative flex items-start mb-10">
                 <div
-                  className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center z-10 
+                  className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center z-10 transition-all duration-300
                   ${
-                    getStepStatus("shipped") === "active"
-                      ? "bg-blue-500 text-white"
-                      : getStepStatus("shipped") === "completed"
+                    getStepStatus("Shipped") === "active"
+                      ? "bg-blue-500 text-white ring-4 ring-blue-100"
+                      : getStepStatus("Shipped") === "completed"
                       ? "bg-green-500 text-white"
                       : "bg-gray-200 text-gray-500"
                   }`}
                 >
-                  {getStepStatus("shipped") === "completed" ? (
+                  {getStepStatus("Shipped") === "completed" ? (
                     <FiCheckCircle className="h-5 w-5" />
                   ) : (
-                    "2"
+                    getStepIcon("Shipped")
                   )}
                 </div>
-                <div className="ml-4">
+                <div className="ml-6">
                   <h5
-                    className={`font-medium ${
-                      getStepStatus("shipped") === "active"
-                        ? "text-blue-500"
-                        : getStepStatus("shipped") === "completed"
-                        ? "text-green-500"
-                        : "text-gray-500"
+                    className={`font-medium text-base ${
+                      getStepStatus("Shipped") === "active"
+                        ? "text-blue-600"
+                        : getStepStatus("Shipped") === "completed"
+                        ? "text-green-600"
+                        : "text-gray-700"
                     }`}
                   >
                     Shipped
@@ -848,35 +882,48 @@ export const OrderStatusModal = ({ order, closeModel }) => {
                   <p className="text-sm text-gray-500 mt-1">
                     Your order has been shipped and is on the way
                   </p>
+                  {order?.shipping_date && (
+                    <p className="text-xs text-gray-400 mt-2">
+                      {order.shipping_date}
+                    </p>
+                  )}
+                  {order?.tracking_number &&
+                    getStepStatus("Shipped") !== "pending" && (
+                      <div className="mt-2 p-2 bg-gray-50 rounded border border-gray-200 text-sm">
+                        <p className="font-medium text-gray-700">
+                          Tracking #: {order.tracking_number}
+                        </p>
+                      </div>
+                    )}
                 </div>
               </div>
 
               {/* Delivered Step */}
               <div className="relative flex items-start">
                 <div
-                  className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center z-10 
+                  className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center z-10 transition-all duration-300
                   ${
-                    getStepStatus("delivered") === "active"
-                      ? "bg-blue-500 text-white"
-                      : getStepStatus("delivered") === "completed"
+                    getStepStatus("Delivered") === "active"
+                      ? "bg-blue-500 text-white ring-4 ring-blue-100"
+                      : getStepStatus("Delivered") === "completed"
                       ? "bg-green-500 text-white"
                       : "bg-gray-200 text-gray-500"
                   }`}
                 >
-                  {getStepStatus("delivered") === "completed" ? (
+                  {getStepStatus("Delivered") === "completed" ? (
                     <FiCheckCircle className="h-5 w-5" />
                   ) : (
-                    "3"
+                    getStepIcon("Delivered")
                   )}
                 </div>
-                <div className="ml-4">
+                <div className="ml-6">
                   <h5
-                    className={`font-medium ${
-                      getStepStatus("delivered") === "active"
-                        ? "text-blue-500"
-                        : getStepStatus("delivered") === "completed"
-                        ? "text-green-500"
-                        : "text-gray-500"
+                    className={`font-medium text-base ${
+                      getStepStatus("Delivered") === "active"
+                        ? "text-blue-600"
+                        : getStepStatus("Delivered") === "completed"
+                        ? "text-green-600"
+                        : "text-gray-700"
                     }`}
                   >
                     Delivered
@@ -884,10 +931,27 @@ export const OrderStatusModal = ({ order, closeModel }) => {
                   <p className="text-sm text-gray-500 mt-1">
                     Your order has been delivered successfully
                   </p>
+                  {order?.delivery_date && (
+                    <p className="text-xs text-gray-400 mt-2">
+                      {order.delivery_date}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Additional order information */}
+          {/* {order?.shipping_address && ( */}
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <h4 className="text-base font-medium text-gray-800 mb-3">
+              Shipping Address
+            </h4>
+            <p className="text-sm text-gray-600 whitespace-pre-line">
+              {/* {order.shipping_address} */}India
+            </p>
+          </div>
+          {/* )} */}
         </div>
       </div>
     </div>
