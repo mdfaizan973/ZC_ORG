@@ -195,6 +195,7 @@ export default function ProductDetailsPage() {
                     onClick={() => {
                       handleWishlist(product);
                     }}
+                    disabled={hasToken}
                   >
                     <FaHeart
                       className={

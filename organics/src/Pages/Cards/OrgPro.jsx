@@ -62,6 +62,7 @@ export default function OrgPro(props) {
               <button
                 className="text-red-500 hover:text-red-600 text-xl"
                 onClick={() => handleWishlist(dataItem)}
+                disabled={hasToken}
               >
                 <AiOutlineHeart />
               </button>
