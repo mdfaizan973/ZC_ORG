@@ -1,6 +1,6 @@
 import Navbar from "../Components/Navbar";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   FiUser,
   FiShoppingBag,
@@ -567,19 +567,6 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
         </h3>
         <div className="flex items-center gap-4">
           <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
-          <button className="flex items-center gap-2 text-gray-600 hover:text-green-700 transition-colors">
-            <FiFilter size={18} />
-            Filter
-          </button>
-          <select className="bg-white border border-gray-300 text-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
-            <option>Sort by: Recent</option>
-            <option onClick={() => sortingData("hightolow")}>
-              Sort by: Price High to Low
-            </option>
-            <option onClick={() => sortingData("lowtohigh")}>
-              Sort by: Price Low to High
-            </option>
-          </select>
         </div>
       </div>
 
@@ -649,6 +636,8 @@ function WishlistTab({ viewMode, setViewMode }) {
   const [wishListData, setWishListData] = useState([]);
   const [loadingWishList, setLoadingWishList] = useState(true);
   const [emptyWishList, setEmptyWishList] = useState(false);
+  const wishlistDataRef = useRef([]);
+
   const navigate = useNavigate();
   useEffect(() => {
     loadWistListData();
@@ -657,20 +646,20 @@ function WishlistTab({ viewMode, setViewMode }) {
   const loadWistListData = async () => {
     setLoadingWishList(true);
     const _user_id = getSessionData("_id");
-    const wisthList = await fetchData(
+    const wishlistData = await fetchData(
       `${baseUrl2}/product-wishlist/${_user_id}`
     );
-    console.log(wisthList);
     setLoadingWishList(false);
 
-    if (wisthList.length > 0) {
-      setWishListData(wisthList);
+    if (wishlistData.length > 0) {
+      setWishListData(wishlistData);
       setLoadingWishList(false);
+      wishlistDataRef.current = wishlistData;
     } else {
       setEmptyWishList(true);
     }
-    console.log(wisthList);
   };
+
   const goToDetailsPage = (id) => {
     navigate(`/productdiscription/${id}`);
   };
@@ -679,6 +668,7 @@ function WishlistTab({ viewMode, setViewMode }) {
     await deleteData(`${baseUrl2}/product-wishlist/${id}`);
     loadWistListData();
   };
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -690,17 +680,6 @@ function WishlistTab({ viewMode, setViewMode }) {
         </h3>
         <div className="flex items-center gap-4">
           <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search wishlist"
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-            <FiSearch
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              size={18}
-            />
-          </div>
         </div>
       </div>
       {loadingWishList ? (
