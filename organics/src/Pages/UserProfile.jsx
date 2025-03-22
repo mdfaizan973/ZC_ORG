@@ -518,6 +518,7 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
           ...item,
           prod_status: ele.order_status,
           prod_date: ele.delivery_date,
+          order_id: ele._id,
         }))
       )
       .flat(); // with status pending with all the object
@@ -557,7 +558,6 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
   //     setOrderList(dataToSort);
   //   }
   // };
-
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -748,6 +748,32 @@ export const OrderStatusModal = ({ order, closeModel }) => {
     if (step === "Delivered") return <FiHome className="h-5 w-5" />;
     return null;
   };
+  const invoiceDownload = async (orderId, prodId) => {
+    try {
+      const response = await fetch(
+        `${baseUrl2}/invoices/${orderId}/${prodId}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to download invoice");
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `invoice_${orderId}.pdf`; // You can customize filename or extension
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  };
   console.log(order);
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -793,7 +819,12 @@ export const OrderStatusModal = ({ order, closeModel }) => {
 
             {order.prod_status === "Delivered" && (
               <div className="flex justify-end mt-3">
-                <button className="flex items-center text-blue-600 hover:text-blue-800 transition-colors font-medium text-sm">
+                <button
+                  className="flex items-center text-blue-600 hover:text-blue-800 transition-colors font-medium text-sm"
+                  onClick={() =>
+                    invoiceDownload(order?.order_id, order?.prod_id)
+                  }
+                >
                   <FiDownload className="mr-1" /> Download Invoice
                 </button>
               </div>

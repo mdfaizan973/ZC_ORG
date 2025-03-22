@@ -2,26 +2,29 @@ const express = require("express");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
-// const OrganicProductModel = require("../models/organicProductsModel");
+const OrderModel = require("../models/OrderModel");
 
 const invoiceDownloadRouter = express.Router();
 
-invoiceDownloadRouter.get("/:orderId", async (req, res) => {
-  const { orderId } = req.params;
-  console.log(orderId);
+invoiceDownloadRouter.get("/:orderId/:prodId", async (req, res) => {
+  const { orderId, prodId } = req.params;
+  const findOrder = await OrderModel.findOne({ _id: orderId });
+  console.log(findOrder);
+  const invoiceData = findOrder.list_of_items.find(
+    (ele) => ele.prod_id == prodId
+  );
+  console.log(invoiceData); // -> saler_id i can find the sler details
   try {
-    // const order = await OrganicProductModel.findOne({ _id: orderId });
     const order = {
       id: orderId,
-      customerName: "John Doe",
+      customerName: findOrder.user_name,
       invoiceDate: new Date().toLocaleDateString(), // Changed from 'date' to 'invoiceDate'
-      name: "Apple",
-      price: 50,
-      discount: 5, // Added discount field
-      quantity: 2,
-      userAddress: "123 Street, City, Country", // Changed 'user_address' to camelCase
-      orderDate: new Date().toLocaleDateString(), // Added 'orderDate'
-      phoneNo: "(123) 456-7890", // Changed 'phone_no' to camelCase
+      name: invoiceData.prod_name,
+      price: invoiceData.prod_price,
+      quantity: invoiceData.prod_qty,
+      userAddress: findOrder.user_address, // Changed 'user_address' to camelCase
+      orderDate: new Date(findOrder.order_date).toLocaleDateString(), // Added 'orderDate'
+      phoneNo: findOrder.user_phone_no, // Changed 'phone_no' to camelCase
     };
 
     if (!order) {
@@ -37,28 +40,31 @@ invoiceDownloadRouter.get("/:orderId", async (req, res) => {
     doc.pipe(res);
 
     // Order ID at the top-right
-    doc
-      .fontSize(12)
-      .text(`Order ID: ${order.id}`, doc.page.width - 350, 30, {
-        align: "right",
-      });
+    doc.fontSize(12).text(`Order ID: ${order.id}`, doc.page.width - 350, 30, {
+      align: "right",
+    });
 
     // Logo
-    const logoPath = path.join(__dirname, "uploads", "1739810851986.png");
-
+    const logoPath = path.join(
+      __dirname,
+      "../../uploads",
+      "organicstorelogo.jpg"
+    );
     if (fs.existsSync(logoPath)) {
       doc.image(logoPath, 50, 50, { width: 100 });
     }
-
-    // **Company Header**
     doc
       .fontSize(20)
       .fillColor("#333")
-      .text("Organic Store", 200, 50, { align: "right" })
+      .text("Organic Store", 50, 30, { align: "left" });
+
+    // **Company Header**
+    doc
+
       .fontSize(12)
-      .text("123 Street, City, Country", { align: "right" })
-      .text("Phone: (123) 456-7890", { align: "right" })
-      .text("Email: faizan@gmail.com", { align: "right" })
+      .text(`Saler Name: ${invoiceData.saler_name}`, { align: "right" })
+      // .text("Phone: (123) 456-7890", { align: "right" })
+      // .text("Email: faizan@gmail.com", { align: "right" })
       .moveDown(2);
 
     // **Invoice Title**
@@ -103,7 +109,6 @@ invoiceDownloadRouter.get("/:orderId", async (req, res) => {
     // Table Content
     const rowY = doc.y;
     const totalPrice = order.price * order.quantity;
-    const discountedPrice = totalPrice - order.discount;
 
     doc
       .fillColor("#444")
@@ -115,16 +120,6 @@ invoiceDownloadRouter.get("/:orderId", async (req, res) => {
       .text(`${totalPrice}rs`, 450, rowY + 8, { width: 80, align: "right" });
 
     doc.moveDown(1);
-
-    // Discount
-    doc
-      .font("Helvetica-Bold")
-      .fillColor("black")
-      .fontSize(14)
-      .text(`Discount: -${order.discount}rs`, 350, doc.y + 10, {
-        width: 200,
-        align: "right",
-      });
 
     // Final Total Row
     doc
@@ -138,7 +133,7 @@ invoiceDownloadRouter.get("/:orderId", async (req, res) => {
       .font("Helvetica-Bold")
       .fillColor("black")
       .fontSize(14)
-      .text(`Total Amount: ${discountedPrice}rs`, 350, doc.y + 10, {
+      .text(`Total Amount: ${totalPrice}rs`, 350, doc.y + 10, {
         width: 200,
         align: "right",
       });

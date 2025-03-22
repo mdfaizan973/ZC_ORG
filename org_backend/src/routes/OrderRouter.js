@@ -2,6 +2,8 @@ const express = require("express");
 const OrderModel = require("../models/OrderModel");
 const orderRouter = express.Router();
 
+const updateMissingFields = require("../utils/updateMissingFields");
+updateMissingFields(OrderModel);
 // get all order
 orderRouter.get("/", async (req, res) => {
   try {

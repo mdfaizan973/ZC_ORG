@@ -11,6 +11,7 @@ const ProdOrderSchema = new mongoose.Schema(
     prod_qty: { type: Number, required: true },
     saler_id: { type: String, required: true },
     saler_name: { type: String, required: true },
+    // order_id: { type: String, required: true },
   },
   { _id: false } // Prevents automatic _id generation for subdocuments
 );
