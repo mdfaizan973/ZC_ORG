@@ -411,6 +411,7 @@ function ProductForm({
           className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center"
           type="button"
           onClick={openModal}
+          disabled
         >
           <AiOutlineDelete className="mr-2" />
           Clear All Data

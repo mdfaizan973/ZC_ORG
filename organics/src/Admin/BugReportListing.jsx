@@ -309,7 +309,7 @@ const BugReportListing = () => {
                                   <div className="flex items-start">
                                     <div className="ml-2">
                                       <div className="text-sm font-medium text-gray-900 line-clamp-1 max-w-xs">
-                                        {bug.bug}
+                                        {bug.bug.substring(0, 25)}...
                                       </div>
                                       <div className="text-xs text-gray-500 mt-1">
                                         ID: {bug._id.substring(0, 8)}...

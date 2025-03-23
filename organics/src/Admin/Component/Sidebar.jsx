@@ -34,11 +34,11 @@ const Sidebar = () => {
     { title: "Products", icon: <FiShoppingBag />, route: "/adminproducts" },
     { title: "Orders", icon: <FiShoppingCart />, route: "/orders" },
     { title: "Analytics", icon: <FiBarChart2 />, route: "/admin-analytics" },
-    {
-      title: "Upcoming Products",
-      icon: <FiCalendar />,
-      route: "/upoming-products",
-    },
+    // {
+    //   title: "Upcoming Products",
+    //   icon: <FiCalendar />,
+    //   route: "/upoming-products",
+    // },
     {
       title: "Users",
       icon: <FiUsers />,
@@ -143,7 +143,7 @@ const Sidebar = () => {
               <li key={index}>
                 <a
                   onClick={() => handleAdminDashboardRoute(item.route, index)}
-                  className={`flex items-center p-2 text-gray-700 cursor-pointer rounded-lg hover:bg-green-50 hover:text-green-600 group transition-all duration-200
+                  className={`flex items-center p-3 text-gray-700 cursor-pointer rounded-lg hover:bg-green-50 hover:text-green-600 group transition-all duration-200
                     ${
                       index === activePage ? "bg-green-50 text-green-600" : ""
                     }`}
