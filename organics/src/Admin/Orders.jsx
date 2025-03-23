@@ -115,29 +115,29 @@ export default function Orders() {
           <TableIndid />
         ) : (
           <main className="w-4/5  rounded ">
-            <section className="flex flex-col items-center justify-center">
-              <header className="bg-white border-b border-gray-200 mt-2 mb-2">
-                <div className="container mx-auto px-4 py-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className="bg-green-500 p-2 rounded-lg">
-                        {/* <FaBug className="text-white text-xl" /> */}
-                      </div>
-                      <h1 className="text-xl font-bold text-gray-800">
-                        Bug Report Dashboard
-                      </h1>
+            <header className="bg-white border-b border-gray-200 mt-2 mr-2 mb-2">
+              <div className="container mx-auto px-4 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-green-500 p-2 rounded-lg">
+                      {/* <FaBug className="text-white text-xl" /> */}
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="bg-green-100 text-green-800 px-3 py-1 rounded-md text-sm font-medium">
-                        Total: {orderDisplayData.length}
-                      </div>
-                      <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center">
-                        <FiRefreshCw className="mr-2" /> Refresh
-                      </button>
+                    <h1 className="text-xl font-bold text-gray-800">
+                      Bug Report Dashboard
+                    </h1>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-green-100 text-green-800 px-3 py-1 rounded-md text-sm font-medium">
+                      Total: {orderDisplayData.length}
                     </div>
+                    <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center">
+                      <FiRefreshCw className="mr-2" /> Refresh
+                    </button>
                   </div>
                 </div>
-              </header>{" "}
+              </div>
+            </header>{" "}
+            <section className="flex flex-col w-full items-center justify-center">
               <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
                 <div className="overflow-x-auto mt-4">
                   <table className="w-full border-collapse rounded-lg">

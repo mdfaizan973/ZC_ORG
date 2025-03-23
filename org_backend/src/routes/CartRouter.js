@@ -53,6 +53,7 @@ cartRouter.delete("/delete-multiple", async (req, res) => {
   if (!Array.isArray(prod_id) || prod_id.length === 0) {
     return res.status(400).json({ message: "No product IDs provided" });
   }
+  console.log(prod_id);
 
   try {
     await CartSchemaModel.deleteMany({ _id: { $in: prod_id } });

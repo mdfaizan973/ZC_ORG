@@ -38,6 +38,7 @@ export default function CheckoutPage() {
       [name]: value,
     }));
   };
+  console.log(orderSummary);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -50,6 +51,7 @@ export default function CheckoutPage() {
       prod_qty: ele.quantity,
       saler_name: ele.saler_name,
       saler_id: ele.saler_id,
+      cart_id: ele._id,
     }));
 
     const updatedData = {
@@ -69,7 +71,7 @@ export default function CheckoutPage() {
     }
   };
   const getProdIds = (order) => {
-    const data = order.list_of_items?.map((ele) => ele.prod_id);
+    const data = order.list_of_items?.map((ele) => ele.cart_id);
     return data;
   };
 
@@ -77,6 +79,7 @@ export default function CheckoutPage() {
     const userOrderDone = await postData(`${baseUrl2}/orders`, userOrder);
     if (userOrderDone) {
       const ids = getProdIds(userOrder);
+      console.log(ids);
       deleteData(`${baseUrl2}/cart/delete-multiple`, false, null, {
         prod_id: ids,
       });

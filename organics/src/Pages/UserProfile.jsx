@@ -193,7 +193,7 @@ export default function UserProfile() {
             active={activeTab === "sell"}
             onClick={() => setActiveTab("sell")}
             icon={<FiDollarSign />}
-            label="Sell in the Website"
+            label="Become a Saller"
           />
         </div>
 
