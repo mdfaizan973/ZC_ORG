@@ -7,9 +7,11 @@ import CodOrders from "./CodOrders";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SuperDashBoard from "./SuperDashBoard";
-import { baseUrl } from "../../config/confg";
+import { baseUrl, baseUrl2 } from "../../config/confg";
 import { fetchData } from "./AdminAnalytics";
 import Sidebar from "./Component/Sidebar";
+import { getSessionData } from "../utils/utils";
+import { FiRefreshCw } from "react-icons/fi";
 export default function Orders() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -69,6 +71,35 @@ export default function Orders() {
         console.error("Error deleting:", error);
       });
   };
+
+  // Order Data
+  const [orderDisplayData, setOrderDisplayData] = useState([]);
+  const [orderProdutsList, setOrderProdutsList] = useState([]);
+  useEffect(() => {
+    load_order_data();
+  }, []);
+  const load_order_data = async () => {
+    const data = await fetchData(`${baseUrl2}/orders`);
+    setOrderDisplayData(data);
+
+    const listOrderProd = data
+      .map((ele) =>
+        ele.list_of_items
+          .filter((item) => item.saler_id === getSessionData("_id"))
+          .map((item) => ({
+            ...item,
+            prod_status: ele.order_status,
+            prod_date: ele.delivery_date,
+            order_id: ele._id,
+            payment_method: ele.payment_method,
+            payment_status: ele.payment_status,
+          }))
+      )
+      .flat();
+
+    setOrderProdutsList(listOrderProd);
+  };
+  console.log(orderDisplayData);
   return (
     <div>
       <ToastContainer />
@@ -77,56 +108,106 @@ export default function Orders() {
 
       <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900  items-start">
         <aside className="w-full md:w-1/4 lg:w-1/5  bg-white shadow-lg dark:bg-gray-800">
-          {/* <SuperDashBoard show_descrition={false} /> */}
           <Sidebar />
         </aside>
-
-        {/* Right Section (Table) */}
 
         {load ? (
           <TableIndid />
         ) : (
           <main className="w-4/5  rounded ">
-            <section className="flex items-center justify-center p-6">
-              <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
-                <div className="border-b pb-4 mb-4">
-                  <h2 className="text-2xl font-semibold text-gray-800">
-                    {" "}
-                    List of PayPal Orders ({ppOrders?.length})
-                  </h2>
+            <section className="flex flex-col items-center justify-center">
+              <header className="bg-white border-b border-gray-200 mt-2 mb-2">
+                <div className="container mx-auto px-4 py-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <div className="bg-green-500 p-2 rounded-lg">
+                        {/* <FaBug className="text-white text-xl" /> */}
+                      </div>
+                      <h1 className="text-xl font-bold text-gray-800">
+                        Bug Report Dashboard
+                      </h1>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="bg-green-100 text-green-800 px-3 py-1 rounded-md text-sm font-medium">
+                        Total: {orderDisplayData.length}
+                      </div>
+                      <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center">
+                        <FiRefreshCw className="mr-2" /> Refresh
+                      </button>
+                    </div>
+                  </div>
                 </div>
+              </header>{" "}
+              <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
                 <div className="overflow-x-auto mt-4">
-                  <table className="w-full border-collapse rounded-lg overflow-hidden shadow-sm">
+                  <table className="w-full border-collapse rounded-lg">
                     <thead>
                       <tr className="text-sm text-left bg-green-500 text-white">
-                        <th className="px-6 py-3 text-left">User ID</th>
-                        <th className="px-6 py-3 text-left">Name</th>
-                        <th className="px-6 py-3 text-left">Email</th>
-                        <th className="px-6 py-3 text-left">Phone</th>
-                        <th className="px-6 py-3 text-left">CVV</th>
-                        <th className="px-6 py-3 text-left">Expiry Date</th>
-                        <th className="px-6 py-3 text-left">Card No</th>
-                        <th className="px-6 py-3 text-center">Action</th>
+                        <th className="px-6 py-3 font-medium">Order Id</th>
+                        <th className="px-6 py-3 font-medium">Name</th>
+                        <th className="px-6 py-3 font-medium">Category</th>
+                        <th className="px-6 py-3 font-medium">
+                          Payment Method <br /> Payment Status
+                        </th>
+                        <th className="px-6 py-3 font-medium">Order Status</th>
+                        <th className="px-6 py-3 font-medium text-center">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {data.map((ele, i) => (
+                      {orderProdutsList.map((ele, i) => (
                         <tr
                           key={i}
                           className="text-sm border-b hover:bg-gray-100 dark:hover:bg-gray-700"
                         >
-                          <td className="px-6 py-4">{ele.id}</td>
-                          <td className="px-6 py-4 font-medium">
-                            {ele.name.toUpperCase()}
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-gray-900">
+                              {ele.order_id.substring(0, 5)}....
+                            </div>
+                          </td>{" "}
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            {ele.prod_name}
                           </td>
-                          <td className="px-6 py-4">{ele.email}</td>
-                          <td className="px-6 py-4">{ele.phone}</td>
-                          <td className="px-6 py-4">{ele.cvv}</td>
-                          <td className="px-6 py-4">{ele.exD}</td>
-                          <td className="px-6 py-4">{ele.cardNumber}</td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            {ele.prod_category?.toUpperCase()}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-start">
+                              <div className="ml-2 flex items-center">
+                                <div className="text-sm font-medium text-gray-900 line-clamp-1 mr-1 max-w-xs">
+                                  {ele.payment_method.toUpperCase()}
+                                </div>
+                                <div
+                                  className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mt-1
+    ${
+      ele.payment_status?.toLowerCase() === "paid"
+        ? "bg-green-100 text-green-600"
+        : "bg-red-100 text-red-500"
+    }`}
+                                >
+                                  {ele.payment_status || "UnPaid"}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div
+                              className={`inline-block px-3 py-1 rounded-full text-xs font-semibold
+      ${
+        ele.prod_status?.toLowerCase() === "delivered"
+          ? "bg-green-100 text-green-600"
+          : ele.prod_status?.toLowerCase() === "shipped"
+          ? "bg-blue-100 text-blue-600"
+          : "bg-yellow-100 text-yellow-600"
+      }`}
+                            >
+                              {ele.prod_status || "Processing"}
+                            </div>
+                          </td>
                           <td className="px-6 py-4 text-center">
                             <button
-                              onClick={() => handleDelete(ele.id)}
+                              // onClick={() => handleDelete(ele.id)}
                               className="px-3 py-2 text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all"
                             >
                               <svg
@@ -185,7 +266,6 @@ export default function Orders() {
                 </div>
               </div>
             </section>
-            <CodOrders />
           </main>
         )}
       </div>

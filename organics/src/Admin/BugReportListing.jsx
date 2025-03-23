@@ -154,7 +154,7 @@ const BugReportListing = () => {
           <section className="flex flex-col justify-center min-h-screen font-poppins">
             {/* Header */}
             <>
-              <header className="bg-white border-b border-gray-200s">
+              <header className="bg-white border-b border-gray-200">
                 <div className="container mx-auto px-4 py-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">

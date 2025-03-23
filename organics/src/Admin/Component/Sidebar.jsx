@@ -29,7 +29,7 @@ const Sidebar = () => {
     setIsMobileOpen(!isMobileOpen);
   };
 
-  const menuItems = [
+  const allMenuItems = [
     { title: "Dashboard", icon: <AiFillDashboard />, route: "/admin-portal" },
     { title: "Products", icon: <FiShoppingBag />, route: "/adminproducts" },
     { title: "Orders", icon: <FiShoppingCart />, route: "/orders" },
@@ -39,9 +39,24 @@ const Sidebar = () => {
       icon: <FiCalendar />,
       route: "/upoming-products",
     },
-    { title: "Users", icon: <FiUsers />, route: "/adminusers" },
-    { title: "Sellers", icon: <FiUserCheck />, route: "/salers" },
-    { title: "Bug Report", icon: <AiFillBug />, route: "/bug-report-list" },
+    {
+      title: "Users",
+      icon: <FiUsers />,
+      route: "/adminusers",
+      onlyAdmin: getSessionData("role_id") == 1,
+    },
+    {
+      title: "Sellers",
+      icon: <FiUserCheck />,
+      route: "/salers",
+      onlyAdmin: getSessionData("role_id") == 1,
+    },
+    {
+      title: "Bug Report",
+      icon: <AiFillBug />,
+      route: "/bug-report-list",
+      onlyAdmin: getSessionData("role_id") == 1,
+    },
     { title: "Store", icon: <FiHome />, route: "/" },
   ];
 
@@ -49,7 +64,7 @@ const Sidebar = () => {
   const [activePage, setActivePage] = useState(() => {
     // Check the current route and set the active index accordingly
     const currentPath = window.location.pathname;
-    const activeIndex = menuItems.findIndex(
+    const activeIndex = allMenuItems.findIndex(
       (item) => item.route === currentPath
     );
     return activeIndex !== -1 ? activeIndex : 0;
@@ -59,6 +74,10 @@ const Sidebar = () => {
     navigate(link);
     setActivePage(index);
   };
+
+  const menuItems = allMenuItems.filter(
+    (item) => item.onlyAdmin === undefined || item.onlyAdmin
+  );
 
   return (
     <>
