@@ -4,10 +4,14 @@ import { useState } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
 import { FiShare2 } from "react-icons/fi";
 import { Link as RouterLink } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { hasToken, postData } from "../../utils/utils";
+import { placeHolderImage, prepare_wishlist } from "../../utils/uiUtils";
+import { baseUrl2, imageUrl } from "../../../config/confg";
+
 export default function OrgPro(props) {
-  const { image, price, title, addtocart, id } = props;
+  const { image, price, title, addtocart, id, howmuch, dataItem } = props;
   // image , price ,title
 
   const [showTooltip, setShowTooltip] = useState(false);
@@ -21,9 +25,12 @@ export default function OrgPro(props) {
     });
   };
 
-  const handleWishlist = () => {
+  const handleWishlist = async (dataItem) => {
     setShowWishlist(true);
     setTimeout(() => setShowWishlist(false), 1000);
+
+    const wl_data = prepare_wishlist(dataItem);
+    await postData(`${baseUrl2}/product-wishlist`, wl_data);
   };
 
   return (
@@ -33,7 +40,7 @@ export default function OrgPro(props) {
       <div className="bg-white w-72 shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
         <RouterLink to={`/productdiscription/${id}`}>
           <img
-            src={image}
+            src={`${imageUrl}${image}` || placeHolderImage}
             // src="https://i.pinimg.com/564x/6d/1c/fa/6d1cfa4e1a5e58d31cc935fad125e046.jpg"
             alt=""
             className="h-60 w-72 object-cover rounded-t-xl"
@@ -54,13 +61,14 @@ export default function OrgPro(props) {
             <div>
               <button
                 className="text-red-500 hover:text-red-600 text-xl"
-                onClick={handleWishlist}
+                onClick={() => handleWishlist(dataItem)}
+                disabled={!hasToken()}
               >
                 <AiOutlineHeart />
               </button>
               {showWishlist && (
                 <div className="absolute whitespace-nowrap bg-red-800 text-white text-xs font-semibold py-1 px-2 rounded-md shadow-md">
-                  Work in progres!
+                  Added to Wish List!
                 </div>
               )}
 
@@ -78,9 +86,15 @@ export default function OrgPro(props) {
             </div>
           </div>
           {/* <span className="text-red-400 mr-3 text-xs">{title}</span> */}
-          <p className="text-lg font-bold text-black truncate block capitalize">
-            {title}
-          </p>
+          <div className="flex justify-between items-center gap-3">
+            <p className="text-lg font-bold text-black truncate block capitalize">
+              {title}
+            </p>
+            <p className="text-sm text-gray-400 truncate block capitalize">
+              {howmuch}
+            </p>
+          </div>
+
           <div className="flex items-center">
             <p className="text-lg font-semibold text-black cursor-auto my-3">
               {price} ₹
@@ -99,12 +113,12 @@ export default function OrgPro(props) {
               <div className="ml-auto">
                 <button
                   onClick={() => {
-                    addtocart(id);
-                    toast.success("Item Added To Cart", {
-                      position: toast.POSITION.TOP_CENTER,
-                    });
+                    addtocart(dataItem);
                   }}
-                  className="mr-2 mb-4 flex cursor-pointer items-center justify-center rounded-md bg-emerald-600 hover:bg-emerald-800 py-2 px-8 text-center text-white transition duration-150 ease-in-out hover:translate-y-1 "
+                  disabled={!hasToken()}
+                  className={`mr-2 mb-4 flex cursor-pointer items-center justify-center rounded-md bg-emerald-600 hover:bg-emerald-800 py-2 px-8 text-center text-white transition duration-150 ease-in-out hover:translate-y-1 ${
+                    !hasToken() ? "line-through" : ""
+                  }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

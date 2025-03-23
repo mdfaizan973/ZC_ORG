@@ -2,8 +2,8 @@ export default function ProductsCarload() {
   return (
     <div>
       {" "}
-      <div className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
+      <div className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5 animate-pulse">
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
           <div
             key={i}
             className="bg-white w-72 shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl"

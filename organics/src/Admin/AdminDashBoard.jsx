@@ -1,904 +1,1555 @@
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import PropTypes from "prop-types";
 import AdminNav from "./AdminNav";
-import TableIndid from "./Loding/TableIndid";
-import { ToastContainer, toast } from "react-toastify";
+// import TableIndid from "./Loding/TableIndid";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import SuperDashBoard from "./SuperDashBoard";
-import { baseUrl } from "../../config/confg";
+// import SuperDashBoard from "./SuperDashBoard";
+import { baseUrl2 } from "../../config/confg";
 import { fetchData } from "./AdminAnalytics";
 export default function AdminDashBoard() {
-  const [data, setData] = useState([]);
-  const [page, setPage] = useState(1);
-  const [showsingle, setShowsingle] = useState({});
-  const [editdata, setEditdata] = useState({});
-  const [load, setLoad] = useState(false);
-  const [prodData, setProdData] = useState([]);
-  const [searchProdValue, setSearchProdValue] = useState("");
-  const editIdRef = useRef("");
-
-  const admingetdata = (page) => {
-    setLoad(true);
-    axios
-      .get(`${baseUrl}/orgproducts?_limit=10&_page=${page}`)
-      .then((res) => {
-        // console.log(res.data);
-        setLoad(false);
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  useEffect(() => {
-    admingetdata(page);
-  }, [page]);
-
-  const handlepre = () => {
-    setPage(page - 1);
-  };
-  const handlenext = () => {
-    setPage(page + 1);
-  };
-
-  const product_url = `${baseUrl}/orgproducts`;
+  // ------------------New API's--------------------------
+  const [products, setProducts] = useState([]);
+  const [singleData, setSingleData] = useState({});
+  const [isOpen, setIsOpen] = useState(false);
+  const [prodLoading, setProdLoading] = useState(false);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
 
   useEffect(() => {
-    const load_Data = async () => {
-      try {
-        const prod_Data = await fetchData(product_url);
-        setProdData(prod_Data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    load_Data();
+    loadProducts();
   }, []);
 
-  // Here is the code of adding data ---->
-  const [formData, setFormData] = useState({
-    category: "",
-    title: "",
-    image: "",
-    health_benefits_rich_in_vitamins_and_antioxidants: false,
-    health_benefits_improves_immunity: false,
-    health_benefits_enhances_skin_health: false,
-    price_inr: 0,
-    discount_price_inr: 0,
-    discount_percentage: 0,
-    ETA: "",
-    description: "",
-  });
-
-  const handleChange = (event) => {
-    const { name, value, type, checked } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  const handleAddProducts = async (url, data, isEdit) => {
+    await postData(url, data, isEdit ? "PUT" : "POST");
+    loadProducts();
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // console.log(formData);
-    axios
-      .post(`${baseUrl}/orgproducts`, formData)
-      .then((response) => {
-        console.log("Response:", response.data);
-        admingetdata(page);
-        toast.success(`Added Product successfully`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        document.getElementById("my_modal_1").close();
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        document.getElementById("my_modal_1").close();
-      });
+  const handleEditProduts = (data) => {
+    setSingleData(data);
   };
 
-  // Handle view pop up
-  const handleviewpop = (id) => {
-    document.getElementById("my_modal_2").showModal();
-    axios
-      .get(`${baseUrl}/orgproducts/${id}`)
-      .then((res) => {
-        // console.log(res);
-        setShowsingle(res.data);
-      })
-      .then((err) => {
-        console.log(err);
-      });
+  const handleDaleteData = async (data) => {
+    await deleteData(`${baseUrl2}/products/${data._id}`);
+    loadProducts();
   };
 
-  // Edite function
-  const handleEdit = (id) => {
-    document.getElementById("edit_modal").showModal();
-    editIdRef.current = id;
-    // handleEditFormSubmit(id);
-    axios
-      .get(`${baseUrl}/orgproducts/${id}`)
-      .then((res) => {
-        console.log(res.data);
-        setEditdata(res.data);
-      })
-      .then((err) => {
-        console.log(err);
-      });
-  };
-  // Delete function
-  const handleDelete = (id) => {
-    axios
-      .delete(`${baseUrl}/orgproducts/${id}`)
-      .then(function (res) {
-        console.log(res);
-        toast.success(`Deleted Product with ID ${id} successfully`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setData(data.filter((item) => item.id !== id));
-      })
-      .catch(function (error) {
-        console.error("Error deleting:", error);
-      });
-  };
-  const handleEditFormSubmit = (e) => {
-    e.preventDefault();
-    axios
-      .put(`${baseUrl}/orgproducts/${editIdRef.current}`, editdata)
-      .then((res) => {
-        console.log(res);
-        toast.success(`Successfully Edited!`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        document.getElementById("edit_modal").close();
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.info(`Issue With Edit!`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        document.getElementById("edit_modal").close();
-      });
-  };
-
-  const gosSarchData = () => {
-    // searchProdValue;
-    const value = searchProdValue.toLowerCase();
-    const dataSearch = prodData.filter((ele) => {
-      const title = ele.title.toLowerCase();
-      const category = ele.category.toLowerCase();
-      return title.includes(value) || category.includes(value);
-    });
-    setData(dataSearch);
+  const loadProducts = async () => {
+    setProdLoading(true);
+    const data = await fetchData(`${baseUrl2}/products`);
+    setProdLoading(false);
+    if (data) {
+      setProducts(data);
+    }
   };
 
   return (
     <>
       <ToastContainer />
+
       <div>
         <AdminNav />
+
+        {/* {products.map((product, index) => (
+          <ProductCard key={index} product={product} />
+        ))} */}
+
         <div className="min-h-screen ">
           <div className="flex">
             {/* Main-Content */}
             <div className="flex-1 ">
-              <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900  items-start">
-                <aside className="w-full md:w-1/4 lg:w-1/5  bg-white shadow-lg dark:bg-gray-800">
-                  <SuperDashBoard show_descrition={false} />
+              <div className="flex flex-col md:flex-row min-h-screen    items-start">
+                <aside className="w-full md:w-1/4 lg:w-1/5  bg-white shadow-lg">
+                  {/* <SuperDashBoard show_descrition={false} /> */}
+                  <Sidebar />
                 </aside>
 
                 {/* Right Section (Table) */}
-                {load ? (
-                  <TableIndid />
-                ) : (
-                  <main className="w-4/5  rounded p-4 ">
-                    {/* Header */}
-                    <header>
-                      <div className=" flex flex-wrap justify-between align-center font-bold text-gray-500">
-                        <div className="text-4xl"></div>
+                {/* {load ? ( */}
+                {/* <TableIndid /> */}
+                {/* ) : ( */}
+                <main className="w-4/5  rounded p-4 ">
+                  {/* Header */}
+                  <div className="flex flex-wrap justify-end items-center gap-4 p-2 font-bold text-gray-500 shadow-md bg-white rounded-lg mb-4">
+                    <ProductForm
+                      handleAddProducts={handleAddProducts}
+                      isOpen={isOpen}
+                      openModal={openModal}
+                      closeModal={closeModal}
+                      dataForEdit={singleData}
+                    />
+                  </div>
+                  {/* <section className="flex justify-center min-h-screen font-poppins">
+                    <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
+                 
+                      <div className="flex justify-between items-center px-6 pb-4 border-b border-gray-300">
+                        <h2 className="text-2xl font-semibold text-gray-700">
+                          List of Products (100)
+                        </h2>
+                        <div className="flex items-center border border-gray-400 rounded-md overflow-hidden">
+                          <input
+                            type="text"
+                            className="px-4 py-2 w-64 text-gray-700 focus:outline-none"
+                            placeholder="Search..."
+                          />
 
-                        <button
-                          onClick={() =>
-                            document.getElementById("my_modal_1").showModal()
-                          }
-                          className="m-3 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg self-end mt-3"
-                          type="button"
-                        >
-                          Add Products
-                        </button>
-                      </div>
-                    </header>
-                    <section className="items-center flex justify-center min-h-screen font-poppins">
-                      {/* <div className="w-full max-w-6xl px-6 py-8 bg-white rounded-lg"> */}
-                      <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6">
-                        {/* Header */}
-                        <div className="flex justify-between items-center px-6 pb-4 border-b border-gray-300">
-                          <h2 className="text-2xl font-semibold text-gray-700">
-                            List of Products ({prodData?.length})
-                          </h2>
-                          <div className="flex items-center border border-gray-400 rounded-md overflow-hidden">
-                            <input
-                              type="text"
-                              className="px-4 py-2 w-64 text-gray-700 focus:outline-none"
-                              placeholder="Search..."
-                              onChange={(e) =>
-                                setSearchProdValue(e.target.value)
-                              }
-                            />
-                            <button
-                              className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
-                              onClick={gosSarchData}
-                            >
-                              Go
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Table */}
-                        <div className="overflow-x-auto mt-4">
-                          <table className="w-full border-collapse rounded-lg overflow-hidden shadow-sm">
-                            <thead>
-                              <tr className="text-sm text-left bg-green-500 text-white">
-                                <th className="px-6 py-3 font-medium">
-                                  ID & Name
-                                </th>
-                                <th className="px-6 py-3 font-medium">
-                                  Category
-                                </th>
-                                <th className="px-6 py-3 font-medium">Price</th>
-                                <th className="px-6 py-3 font-medium">ETA</th>
-                                <th className="px-6 py-3 font-medium text-center">
-                                  View
-                                </th>
-                                <th className="px-6 py-3 font-medium text-center">
-                                  Actions
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {data.map((ele, i) => (
-                                <tr
-                                  key={i}
-                                  className={`text-sm ${
-                                    i % 2 === 0 ? "bg-gray-50" : "bg-gray-100"
-                                  }`}
-                                >
-                                  <td className="px-6 py-4 flex items-center space-x-3">
-                                    <span className="font-semibold">
-                                      {ele.id}
-                                    </span>
-                                    <p className="text-gray-700">{ele.title}</p>
-                                  </td>
-                                  <td className="px-6 py-4">{ele.category}</td>
-                                  <td className="px-6 py-4 font-medium text-gray-800">
-                                    ₹ {ele.price_inr}
-                                  </td>
-                                  <td className="px-6 py-4">{ele.ETA}</td>
-                                  <td className="px-6 py-4 text-center">
-                                    <button
-                                      onClick={() => handleviewpop(ele.id)}
-                                      className="px-3 py-2 text-green-600 border border-green-600 rounded-lg hover:bg-green-600 hover:text-white transition-all"
-                                    >
-                                      View
-                                    </button>
-                                  </td>
-                                  <td className="px-6 py-4 flex justify-center space-x-4">
-                                    <button
-                                      onClick={() => handleEdit(ele.id)}
-                                      className="px-3 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all"
-                                    >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="currentColor"
-                                        className="w-5 h-5"
-                                      >
-                                        <path d="M14.06 2.94a1.5 1.5 0 0 1 2.12 0l4.88 4.88a1.5 1.5 0 0 1 0 2.12l-12 12a1.5 1.5 0 0 1-.71.39l-6 1.5a1 1 0 0 1-1.21-1.21l1.5-6a1.5 1.5 0 0 1 .39-.71l12-12zm-2.65 3.65L4 14.94V19h4.06l7.41-7.41-4.06-4.06zm6.59-1.59l-2.12-2.12-2.83 2.83 2.12 2.12 2.83-2.83z" />
-                                      </svg>
-                                    </button>
-
-                                    <button
-                                      onClick={() => handleDelete(ele.id)}
-                                      className="px-3 py-2 text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all"
-                                    >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="16"
-                                        height="16"
-                                        fill="currentColor"
-                                        className="w-5 h-5"
-                                        viewBox="0 0 16 16"
-                                      >
-                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5z" />
-                                      </svg>
-                                    </button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-
-                        {/* Pagination */}
-                        <div className="flex justify-end pt-6 border-t border-gray-300">
-                          <nav aria-label="Page navigation">
-                            <ul className="flex items-center justify-center space-x-4">
-                              <li>
-                                <button
-                                  onClick={handlepre}
-                                  disabled={page === 1}
-                                  className="px-4 py-2 text-gray-700 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 disabled:opacity-50"
-                                >
-                                  Previous
-                                </button>
-                              </li>
-                              <li>
-                                <span className="px-4 py-2 text-white bg-blue-600 border border-blue-700 rounded-lg">
-                                  {page}
-                                </span>
-                              </li>
-                              <li>
-                                <button
-                                  onClick={handlenext}
-                                  disabled={data.length <= 9}
-                                  className="px-4 py-2 text-gray-700 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 disabled:opacity-50"
-                                >
-                                  Next
-                                </button>
-                              </li>
-                            </ul>
-                          </nav>
+                          <button className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600">
+                            Go
+                          </button>
                         </div>
                       </div>
-                    </section>
-                  </main>
-                )}
+
+                      <div className="overflow-x-auto mt-4">
+                        <ProductTable
+                          products={products}
+                          isOpen={isOpen}
+                          openModal={openModal}
+                          closeModal={closeModal}
+                          handleEditProduts={handleEditProduts}
+                          handleDaleteData={handleDaleteData}
+                          handleAddProducts={handleAddProducts}
+                        />
+                      </div>
+
+                  
+                      <div className="flex justify-end pt-6 border-t border-gray-300">
+                        <nav aria-label="Page navigation">
+                          <ul className="flex items-center justify-center space-x-4">
+                            <li>
+                              <button className="px-4 py-2 text-gray-700 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 disabled:opacity-50">
+                                Previous
+                              </button>
+                            </li>
+                            <li>
+                              <span className="px-4 py-2 text-white bg-blue-600 border border-blue-700 rounded-lg">
+                                {1}
+                              </span>
+                            </li>
+                            <li>
+                              <button className="px-4 py-2 text-gray-700 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 disabled:opacity-50">
+                                Next
+                              </button>
+                            </li>
+                          </ul>
+                        </nav>
+                      </div>
+                    </div>
+                  </section> */}
+                  <AdminProductsTable
+                    products={products}
+                    isOpen={isOpen}
+                    openModal={openModal}
+                    closeModal={closeModal}
+                    prodLoading={prodLoading}
+                    handleEditProduts={handleEditProduts}
+                    handleDaleteData={handleDaleteData}
+                    handleAddProducts={handleAddProducts}
+                  />
+                </main>
+                {/* )} */}
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* this modal pop for Add Products */}
-      <dialog id="my_modal_1" className="modal w-fit p-3 rounded-xl">
-        <div className="modal-box">
-          <form method="dialog">
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-              ✕
-            </button>
-          </form>
-
-          <div className="relative flex flex-col rounded-xl bg-transparent bg-clip-border text-gray-700 shadow-none">
-            <h4 className="block font-sans text-2xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
-              Add Products
-            </h4>
-            <form
-              onSubmit={handleSubmit}
-              className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
-            >
-              <div className="relative h-10 mb-2 w-72 min-w-[200px]">
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                >
-                  <option value="">Select</option>
-                  <option value="fruits">Fruits</option>
-                  <option value="vegetables">Vegetables</option>
-                  <option value="grains">Grains</option>
-                  <option value="dairy">Dairy</option>
-                </select>
-                <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                  Select Category
-                </label>
-              </div>
-
-              <div className="relative h-11 mb-2 w-full min-w-[200px]">
-                <input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleChange}
-                  className="peer h-full w-full rounded-md border  border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-400 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                  placeholder=" "
-                />
-                <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                  Title
-                </label>
-              </div>
-
-              <div className="relative h-11 mb-2 w-full min-w-[200px]">
-                <input
-                  type="text"
-                  name="image"
-                  value={formData.image}
-                  onChange={handleChange}
-                  className="peer h-full w-full rounded-md border  border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-400 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                  placeholder=" "
-                />
-                <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                  Image URL
-                </label>
-              </div>
-              {/*  */}
-
-              <div className="inline-flex items-center">
-                <label
-                  className="relative flex items-center p-3 rounded-full cursor-pointer"
-                  htmlFor="checkbox"
-                  data-ripple-dark="true"
-                >
-                  Health Benefits (Vitamins and Antioxidants):
-                  <input
-                    type="checkbox"
-                    name="health_benefits_rich_in_vitamins_and_antioxidants"
-                    checked={
-                      formData.health_benefits_rich_in_vitamins_and_antioxidants
-                    }
-                    onChange={handleChange}
-                    className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:bg-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
-                    id="checkbox"
-                  />
-                  <div className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-3.5 w-3.5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      stroke="currentColor"
-                      strokeWidth="1"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </div>
-                </label>
-              </div>
-
-              {/*  */}
-              <div className="inline-flex items-center">
-                <label
-                  className="relative flex items-center p-3 rounded-full cursor-pointer"
-                  htmlFor="checkbox"
-                  data-ripple-dark="true"
-                >
-                  Health Benefits (Improves Immunity):
-                  <input
-                    type="checkbox"
-                    name="health_benefits_improves_immunity"
-                    checked={formData.health_benefits_improves_immunity}
-                    onChange={handleChange}
-                    className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:bg-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
-                    id="checkbox"
-                  />
-                  <div className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-3.5 w-3.5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      stroke="currentColor"
-                      strokeWidth="1"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </div>
-                </label>
-              </div>
-              {/*  */}
-
-              <div className="inline-flex items-center">
-                <label
-                  className="relative flex items-center p-3 rounded-full cursor-pointer"
-                  htmlFor="checkbox"
-                  data-ripple-dark="true"
-                >
-                  Health Benefits (Enhances Skin Health):
-                  <input
-                    type="checkbox"
-                    name="health_benefits_enhances_skin_health"
-                    checked={formData.health_benefits_enhances_skin_health}
-                    onChange={handleChange}
-                    className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:bg-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
-                    id="checkbox"
-                  />
-                  <div className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-3.5 w-3.5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      stroke="currentColor"
-                      strokeWidth="1"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </div>
-                </label>
-              </div>
-              {/*  */}
-              <div className="flex">
-                <div className="relative h-11 w-full min-w-[100px]">
-                  <input
-                    type="number"
-                    name="price_inr"
-                    value={formData.price_inr}
-                    onChange={handleChange}
-                    className="peer h-full w-full rounded-md border  border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-400 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                    placeholder=" "
-                  />
-                  <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                    Price (INR):
-                  </label>
-                </div>
-
-                {/*  */}
-
-                <div className="relative h-11 w-full min-w-[100px]">
-                  <input
-                    type="number"
-                    name="discount_price_inr"
-                    value={formData.discount_price_inr}
-                    onChange={handleChange}
-                    className="peer h-full w-full rounded-md border  border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-400 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                    placeholder=" "
-                  />
-                  <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                    Discount Price (INR):
-                  </label>
-                </div>
-                {/* / */}
-
-                <div className="relative h-11 w-full min-w-[100px]">
-                  <input
-                    type="number"
-                    name="discount_percentage"
-                    value={formData.discount_percentage}
-                    onChange={handleChange}
-                    className="peer h-full w-full rounded-md border  border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-400 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                    placeholder=" "
-                  />
-                  <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                    Discount %:
-                  </label>
-                </div>
-              </div>
-              <div className="relative h-11 mt-2 mb-2 w-full min-w-[200px]">
-                <input
-                  type="text"
-                  name="ETA"
-                  value={formData.ETA}
-                  onChange={handleChange}
-                  className="peer h-full w-full rounded-md border  border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-400 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                  placeholder=" "
-                />
-                <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                  ETA:
-                </label>
-              </div>
-
-              {/*  */}
-              <div className="w-96">
-                <div className="relative w-full min-w-[200px]">
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    className="peer h-full min-h-[100px] w-full resize-none rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:resize-none disabled:border-0 disabled:bg-blue-gray-50"
-                    placeholder=" "
-                  ></textarea>
-                  <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                    Description:
-                  </label>
-                </div>
-              </div>
-
-              <button
-                className="mt-2 block w-full select-none rounded-lg bg-green-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                type="submit"
-                data-ripple-light="true"
-              >
-                Submit
-              </button>
-            </form>
-          </div>
-        </div>
-      </dialog>
-
-      {/* This for View PopUp  for View Data*/}
-      <dialog id="my_modal_2" className="modal w-fit p-8 rounded-xl">
-        <form method="dialog">
-          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-            ✕
-          </button>
-        </form>{" "}
-        <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-          <a href="#">
-            <img className="rounded-t-lg" src={showsingle.image} alt="" />
-          </a>
-          <div className="p-5">
-            <a href="#">
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">
-                {showsingle.title}
-              </h5>
-            </a>
-            <p className="mb-3 font-normal text-gray-700 ">
-              {showsingle.description}
-            </p>
-          </div>
-        </div>
-      </dialog>
-
-      {/* This for View PopUp  for Edit*/}
-
-      <dialog id="edit_modal" className="modal w-fit p-3 rounded-xl">
-        <div className="modal-box">
-          <form method="dialog">
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-              ✕
-            </button>
-          </form>
-
-          <div className="relative flex flex-col rounded-xl bg-transparent bg-clip-border text-gray-700 shadow-none">
-            <h4 className="block font-sans text-2xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
-              Edit Products
-            </h4>
-            <form
-              onSubmit={handleEditFormSubmit}
-              className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
-            >
-              <div className="relative h-10 mb-2 w-72 min-w-[200px]">
-                <select
-                  name="category"
-                  value={editdata.category}
-                  // onChange={handleChange}
-                  className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                >
-                  <option value="">Select</option>
-                  <option value="fruits">Fruits</option>
-                  <option value="vegetables">Vegetables</option>
-                  <option value="grains">Grains</option>
-                  <option value="dairy">Dairy</option>
-                </select>
-                <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                  Select Category
-                </label>
-              </div>
-
-              <div className="relative h-11 mb-2 w-full min-w-[200px]">
-                <input
-                  type="text"
-                  name="title"
-                  value={editdata.title}
-                  // onChange={handleChange}
-                  className="peer h-full w-full rounded-md border  border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-400 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                  placeholder=" "
-                />
-                <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                  Title
-                </label>
-              </div>
-
-              <div className="relative h-11 mb-2 w-full min-w-[200px]">
-                <input
-                  type="text"
-                  name="image"
-                  value={formData.image}
-                  // onChange={handleChange}
-                  className="peer h-full w-full rounded-md border  border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-400 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                  placeholder=" "
-                />
-                <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                  Image URL
-                </label>
-              </div>
-              {/*  */}
-
-              <div className="inline-flex items-center">
-                <label
-                  className="relative flex items-center p-3 rounded-full cursor-pointer"
-                  htmlFor="checkbox"
-                  data-ripple-dark="true"
-                >
-                  Health Benefits (Vitamins and Antioxidants):
-                  <input
-                    type="checkbox"
-                    name="health_benefits_rich_in_vitamins_and_antioxidants"
-                    checked={
-                      editdata.health_benefits_rich_in_vitamins_and_antioxidants
-                    }
-                    // onChange={handleChange}
-                    className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:bg-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
-                    id="checkbox"
-                  />
-                  <div className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-3.5 w-3.5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      stroke="currentColor"
-                      strokeWidth="1"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </div>
-                </label>
-              </div>
-
-              {/*  */}
-              <div className="inline-flex items-center">
-                <label
-                  className="relative flex items-center p-3 rounded-full cursor-pointer"
-                  htmlFor="checkbox"
-                  data-ripple-dark="true"
-                >
-                  Health Benefits (Improves Immunity):
-                  <input
-                    type="checkbox"
-                    name="health_benefits_improves_immunity"
-                    checked={editdata.health_benefits_improves_immunity}
-                    // onChange={handleChange}
-                    className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:bg-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
-                    id="checkbox"
-                  />
-                  <div className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-3.5 w-3.5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      stroke="currentColor"
-                      strokeWidth="1"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </div>
-                </label>
-              </div>
-              {/*  */}
-
-              <div className="inline-flex items-center">
-                <label
-                  className="relative flex items-center p-3 rounded-full cursor-pointer"
-                  htmlFor="checkbox"
-                  data-ripple-dark="true"
-                >
-                  Health Benefits (Enhances Skin Health):
-                  <input
-                    type="checkbox"
-                    name="health_benefits_enhances_skin_health"
-                    checked={editdata.health_benefits_enhances_skin_health}
-                    // onChange={handleChange}
-                    className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:bg-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
-                    id="checkbox"
-                  />
-                  <div className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-3.5 w-3.5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      stroke="currentColor"
-                      strokeWidth="1"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </div>
-                </label>
-              </div>
-              {/*  */}
-              <div className="flex">
-                <div className="relative h-11 w-full min-w-[100px]">
-                  <input
-                    type="number"
-                    name="price_inr"
-                    value={editdata.price_inr}
-                    // onChange={handleChange}
-                    className="peer h-full w-full rounded-md border  border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-400 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                    placeholder=" "
-                  />
-                  <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                    Price (INR):
-                  </label>
-                </div>
-
-                {/*  */}
-
-                <div className="relative h-11 w-full min-w-[100px]">
-                  <input
-                    type="number"
-                    name="discount_price_inr"
-                    value={editdata.discount_price_inr}
-                    // onChange={handleChange}
-                    className="peer h-full w-full rounded-md border  border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-400 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                    placeholder=" "
-                  />
-                  <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                    Discount Price (INR):
-                  </label>
-                </div>
-                {/* / */}
-
-                <div className="relative h-11 w-full min-w-[100px]">
-                  <input
-                    type="number"
-                    name="discount_percentage"
-                    value={editdata.discount_percentage}
-                    // onChange={handleChange}
-                    className="peer h-full w-full rounded-md border  border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-400 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                    placeholder=" "
-                  />
-                  <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                    Discount %:
-                  </label>
-                </div>
-              </div>
-              <div className="relative h-11 mt-2 mb-2 w-full min-w-[200px]">
-                <input
-                  type="text"
-                  name="ETA"
-                  value={editdata.ETA}
-                  // onChange={handleChange}
-                  className="peer h-full w-full rounded-md border  border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-400 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                  placeholder=" "
-                />
-                <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                  ETA:
-                </label>
-              </div>
-
-              {/*  */}
-              <div className="w-96">
-                <div className="relative w-full min-w-[200px]">
-                  <textarea
-                    name="description"
-                    value={editdata.description}
-                    // onChange={handleChange}
-                    className="peer h-full min-h-[100px] w-full resize-none rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:resize-none disabled:border-0 disabled:bg-blue-gray-50"
-                    placeholder=" "
-                  ></textarea>
-                  <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                    Description:
-                  </label>
-                </div>
-              </div>
-
-              <button
-                className="mt-2 block w-full select-none rounded-lg bg-green-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                type="submit"
-                data-ripple-light="true"
-              >
-                Submit
-              </button>
-            </form>
-          </div>
-        </div>
-      </dialog>
     </>
   );
 }
+
+import { FaClosedCaptioning, FaFileExcel, FaFileUpload } from "react-icons/fa";
+import { deleteData, getSessionData, postData } from "../utils/utils";
+import { FiShoppingBag, FiUploadCloud } from "react-icons/fi";
+function ProductForm({
+  handleAddProducts,
+  dataForEdit,
+  isOpen,
+  openModal,
+  closeModal,
+}) {
+  const modalRef = useRef(null);
+  const [image, setImage] = useState(null);
+
+  // State to track all form values
+  const [formData, setFormData] = useState({
+    category: "",
+    title: "",
+    description: "",
+    image: "",
+    price_inr: "",
+    discount_percentage: "0",
+    how_much: "",
+    ETA: "",
+    health_benefits_rich_in_vitamins_and_antioxidants: false,
+    health_benefits_improves_immunity: false,
+    health_benefits_enhances_skin_health: false,
+    certified_organic: false,
+    organic_certification_body: "",
+    sustainability: "",
+    pesticide_free: false,
+    non_GMO: false,
+    fair_trade_certified: false,
+    gluten_free: false,
+    vegan: false,
+    raw: false,
+    local_source: false,
+    organic_ingredients: "",
+    harvested_by_hand: false,
+    cruelty_free: false,
+    expiration_date: "",
+    storage_instructions: "",
+  });
+
+  // Initialize form with edit data if available
+  useEffect(() => {
+    if (dataForEdit) {
+      setFormData((prevState) => ({
+        ...prevState, // Keep all default values
+        ...dataForEdit, // Override only provided values
+      }));
+
+      if (dataForEdit.image) {
+        setImage(dataForEdit.image);
+      }
+    }
+  }, [dataForEdit]);
+  console.log(dataForEdit);
+  console.log(image);
+
+  // Excel File Upload
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+  };
+
+  const [isOpenFileModel, setIsOpenFileModel] = useState(false);
+
+  const closeFileModel = () => {
+    setIsOpenFileModel(false);
+  };
+  const openFileModel = () => {
+    setIsOpenFileModel(true);
+  };
+
+  // Handle click outside to close modal
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        closeModal();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]); // Removed closeModal from dependencies
+
+  // Handle image upload
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+    }
+  };
+
+  // Handle input changes
+  const handleInputChange = (e) => {
+    const { id, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [id]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  const calculateDiscountPieces = (pr, des_p) => {
+    const d_p = (Number(pr) / 100) * des_p;
+    return Number(pr) - Number(d_p);
+  };
+  // calculateDiscountPieces(10, 4);
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const processedData = {
+      ...formData,
+      organic_ingredients:
+        typeof formData.organic_ingredients === "string"
+          ? formData.organic_ingredients.split(" ")
+          : [],
+      discount_price_inr: calculateDiscountPieces(
+        formData?.price_inr,
+        formData?.discount_percentage
+      ),
+      saler_name: getSessionData("name"),
+      saler_id: getSessionData("_id"),
+      saler_email: getSessionData("email"),
+    };
+    // TODO: Added
+    const formDataToSend = new FormData();
+    Object.entries(processedData).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          formDataToSend.append(`${key}[]`, item);
+        });
+      } else {
+        formDataToSend.append(key, value);
+      }
+    });
+
+    // Append image file if available
+    // if (image) {
+    //   formDataToSend.append("image", image);
+    // }
+    if (image instanceof File) {
+      formDataToSend.append("image", image);
+    }
+    let url;
+    let isEdit = false;
+
+    if (dataForEdit && dataForEdit._id) {
+      url = `${baseUrl2}/products/${dataForEdit._id}`;
+      isEdit = true; // Updating
+    } else {
+      url = `${baseUrl2}/products`;
+    }
+
+    try {
+      await handleAddProducts(url, formDataToSend, isEdit);
+
+      setFormData({
+        category: "",
+        title: "",
+        description: "",
+        image: "",
+        price_inr: "",
+        discount_percentage: "",
+        how_much: "",
+        ETA: "",
+        health_benefits_rich_in_vitamins_and_antioxidants: false,
+        health_benefits_improves_immunity: false,
+        health_benefits_enhances_skin_health: false,
+        certified_organic: false,
+        organic_certification_body: "",
+        sustainability: "",
+        pesticide_free: false,
+        non_GMO: false,
+        fair_trade_certified: false,
+        gluten_free: false,
+        vegan: false,
+        raw: false,
+        local_source: false,
+        organic_ingredients: "",
+        harvested_by_hand: false,
+        cruelty_free: false,
+        expiration_date: "",
+        storage_instructions: "",
+      });
+
+      closeModal();
+    } catch (error) {
+      console.error("Failed to submit form:", error);
+    }
+  };
+
+  const handleSubmitExcel = async () => {
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post(
+          `${baseUrl2}/products/upload`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        toast.success("File uploaded successfully!", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 1000,
+        });
+
+        closeFileModel(); // Close modal after submitting
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        toast.error("Failed to upload file!", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 1000,
+        });
+      }
+    }
+  };
+
+  return (
+    <div>
+      <div className="w-full flex flex-wrap justify-center md:justify-between items-center gap-4 p-4">
+        <button
+          className="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center"
+          type="button"
+          onClick={openFileModel}
+        >
+          <FaFileExcel className="mr-2" />
+          Upload Excel
+        </button>
+
+        <button
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center"
+          type="button"
+          onClick={openModal}
+        >
+          <AiOutlinePlus className="mr-2" />
+          Add Product
+        </button>
+
+        <button
+          className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center"
+          type="button"
+          onClick={openModal}
+        >
+          <AiOutlineDelete className="mr-2" />
+          Clear All Data
+        </button>
+      </div>
+
+      {/* Modal For Form */}
+      {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center p-4">
+          {/* Modal Content */}
+          <div
+            ref={modalRef}
+            className="bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+          >
+            <div className="sticky top-0 bg-white z-10 flex justify-between items-center p-4 border-b">
+              <h2 className="text-xl font-bold text-gray-800">
+                {dataForEdit ? "Edit Product" : "Add New Product"}
+              </h2>
+              <button
+                onClick={closeModal}
+                className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+              >
+                <IoClose className="h-6 w-6 text-gray-500" />
+              </button>
+            </div>
+
+            <form className="p-6" onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Left Column */}
+                <div className="space-y-6">
+                  {/* Basic Information */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
+                      Basic Information
+                    </h3>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="category"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Category *
+                      </label>
+                      <select
+                        id="category"
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        required
+                        value={formData.category}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">Select a category</option>
+                        <option value="fruits">Fruits</option>
+                        <option value="vegetables">Vegetables</option>
+                        <option value="grains">Grains</option>
+                        <option value="dairy">Dairy</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="title"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Title *
+                      </label>
+                      <input
+                        type="text"
+                        id="title"
+                        placeholder="e.g. Organic Mango"
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        required
+                        value={formData.title}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="description"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Description *
+                      </label>
+                      <textarea
+                        id="description"
+                        rows={3}
+                        placeholder="Describe your product..."
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        required
+                        value={formData.description}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="image"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Product Image *
+                      </label>
+                      <div className="flex items-center space-x-4">
+                        <div className="flex-1">
+                          <label
+                            htmlFor="image-upload"
+                            className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
+                          >
+                            {image ? (
+                              <img
+                                src={
+                                  typeof image === "string"
+                                    ? image
+                                    : URL.createObjectURL(image)
+                                }
+                                alt="Preview"
+                                className="h-full object-contain"
+                              />
+                            ) : (
+                              <div className="text-center">
+                                <FaFileUpload className="mx-auto h-8 w-8 text-gray-400" />
+                                <p className="mt-1 text-sm text-gray-500">
+                                  Click to upload image
+                                </p>
+                              </div>
+                            )}
+
+                            <input
+                              id="image-upload"
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={handleImageChange}
+                              // required
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Pricing Information */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
+                      Pricing Information
+                    </h3>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="price_inr"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Price (INR) *
+                        </label>
+                        <input
+                          type="number"
+                          id="price_inr"
+                          placeholder="e.g. 120"
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                          required
+                          value={formData.price_inr}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="discount_percentage"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Discount %
+                        </label>
+                        <input
+                          type="number"
+                          id="discount_percentage"
+                          placeholder="e.g. 100"
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                          value={formData.discount_percentage}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="how_much"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          How Much *
+                        </label>
+                        <input
+                          type="text"
+                          id="how_much"
+                          placeholder="e.g. 1KG"
+                          required
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                          value={formData.how_much}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="ETA"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          ETA *
+                        </label>
+                        <input
+                          type="text"
+                          id="ETA"
+                          required
+                          placeholder="e.g. 2-5 business days"
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                          value={formData.ETA}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Expiration & Storage */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
+                      Expiration & Storage
+                    </h3>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="expiration_date"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Expiration Date
+                        </label>
+                        <input
+                          type="date"
+                          id="expiration_date"
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                          value={formData.expiration_date}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="storage_instructions"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Storage Instructions
+                      </label>
+                      <input
+                        type="text"
+                        id="storage_instructions"
+                        placeholder="e.g. Keep refrigerated for freshness"
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        value={formData.storage_instructions}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column */}
+                <div className="space-y-6">
+                  {/* Health Benefits */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
+                      Health Benefits
+                    </h3>
+
+                    <div className="space-y-2">
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="health_benefits_rich_in_vitamins_and_antioxidants"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                          checked={
+                            formData.health_benefits_rich_in_vitamins_and_antioxidants
+                          }
+                          onChange={handleInputChange}
+                        />
+                        <label
+                          htmlFor="health_benefits_rich_in_vitamins_and_antioxidants"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Rich in vitamins and antioxidants
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="health_benefits_improves_immunity"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                          checked={formData.health_benefits_improves_immunity}
+                          onChange={handleInputChange}
+                        />
+                        <label
+                          htmlFor="health_benefits_improves_immunity"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Improves immunity
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="health_benefits_enhances_skin_health"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                          checked={
+                            formData.health_benefits_enhances_skin_health
+                          }
+                          onChange={handleInputChange}
+                        />
+                        <label
+                          htmlFor="health_benefits_enhances_skin_health"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Enhances skin health
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Certifications */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
+                      Certifications
+                    </h3>
+
+                    <div className="space-y-2">
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="certified_organic"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                          checked={formData.certified_organic}
+                          onChange={handleInputChange}
+                        />
+                        <label
+                          htmlFor="certified_organic"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Certified Organic
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="organic_certification_body"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Organic Certification Body
+                      </label>
+                      <select
+                        id="organic_certification_body"
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        value={formData.organic_certification_body}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">Select certification</option>
+                        <option value="USDA Organic">USDA Organic</option>
+                        <option value="India Organic">India Organic</option>
+                        <option value="EU Organic">EU Organic</option>
+                        <option value="JAS Organic">JAS Organic</option>
+                        <option value="EcoCert">EcoCert</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="sustainability"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Sustainability
+                      </label>
+                      <textarea
+                        id="sustainability"
+                        rows={2}
+                        placeholder="Describe sustainability practices..."
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        value={formData.sustainability}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Product Attributes */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
+                      Product Attributes
+                    </h3>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="pesticide_free"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                          checked={formData.pesticide_free}
+                          onChange={handleInputChange}
+                        />
+                        <label
+                          htmlFor="pesticide_free"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Pesticide Free
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="non_GMO"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                          checked={formData.non_GMO}
+                          onChange={handleInputChange}
+                        />
+                        <label
+                          htmlFor="non_GMO"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Non-GMO
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="fair_trade_certified"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                          checked={formData.fair_trade_certified}
+                          onChange={handleInputChange}
+                        />
+                        <label
+                          htmlFor="fair_trade_certified"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Fair Trade Certified
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="gluten_free"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                          checked={formData.gluten_free}
+                          onChange={handleInputChange}
+                        />
+                        <label
+                          htmlFor="gluten_free"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Gluten Free
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="vegan"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                          checked={formData.vegan}
+                          onChange={handleInputChange}
+                        />
+                        <label
+                          htmlFor="vegan"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Vegan
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="raw"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                          checked={formData.raw}
+                          onChange={handleInputChange}
+                        />
+                        <label
+                          htmlFor="raw"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Raw
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="local_source"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                          checked={formData.local_source}
+                          onChange={handleInputChange}
+                        />
+                        <label
+                          htmlFor="local_source"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Local Source
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="harvested_by_hand"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                          checked={formData.harvested_by_hand}
+                          onChange={handleInputChange}
+                        />
+                        <label
+                          htmlFor="harvested_by_hand"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Harvested by Hand
+                        </label>
+                      </div>
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="cruelty_free"
+                          className="h-4 w-4 text-red-500 focus:ring-red-400 border-gray-300 rounded"
+                          checked={formData.cruelty_free}
+                          onChange={handleInputChange}
+                        />
+                        <label
+                          htmlFor="cruelty_free"
+                          className="ml-2 block text-sm text-gray-700"
+                        >
+                          Cruelty Free
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Ingredients */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
+                      Ingredients
+                    </h3>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="organic_ingredients"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Organic Ingredients (separate with spaces)
+                      </label>
+                      <input
+                        type="text"
+                        id="organic_ingredients"
+                        placeholder="e.g. mango apple banana"
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        value={formData.organic_ingredients}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Form Actions */}
+              <div className="mt-8 flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg"
+                >
+                  Save Product
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Model For Excel */}
+      {isOpenFileModel && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center p-4">
+          <div className="w-96 p-6 bg-white rounded-lg shadow-lg relative">
+            {/* Close Button */}
+            <button
+              className="absolute top-1 right-3 mb-2 text-gray-500 hover:text-gray-700 transition text-2xl"
+              onClick={closeFileModel}
+            >
+              <IoClose />
+            </button>
+
+            {/* File Upload Box */}
+            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 transition">
+              <input
+                type="file"
+                className="hidden"
+                onChange={handleFileChange}
+                accept="image/*, application/pdf, .xlsx, .xls"
+              />
+              <FiUploadCloud className="text-blue-500 text-5xl mb-2" />
+              <p className="text-gray-500 text-sm">
+                {file ? file.name : "Click to upload or drag & drop"}
+              </p>
+            </label>
+
+            {/* File Name & Remove Option */}
+            {file && (
+              <div className="mt-4 flex items-center justify-between bg-gray-200 px-4 py-3 rounded-md">
+                <span className="text-gray-700 text-sm truncate">
+                  {file.name}
+                </span>
+                <button
+                  className="text-red-500 hover:text-red-700 transition"
+                  onClick={() => setFile(null)}
+                >
+                  ✖
+                </button>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <button
+              className="mt-5 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-lg font-semibold transition"
+              onClick={handleSubmitExcel}
+              disabled={!file}
+            >
+              Submit File
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+import {
+  FaLeaf,
+  FaCheck,
+  FaTimes,
+  FaShieldAlt,
+  FaGlobeAmericas,
+  FaHandHolding,
+  FaCalendarAlt,
+  FaSnowflake,
+} from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
+
+function ProductCard({ product }) {
+  return (
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-shadow duration-300 w-full">
+      {/* Product Header */}
+      <div className="relative">
+        <div className="h-48 bg-gray-100 flex items-center justify-center">
+          {product.image ? (
+            <img
+              src={product.image || "/placeholder.svg"}
+              alt={product.title}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <img
+              src={`/placeholder.svg?height=200&width=400&text=${encodeURIComponent(
+                product.title
+              )}`}
+              alt={product.title}
+              className="h-full w-full object-cover"
+            />
+          )}
+        </div>
+        {product.discount_percentage > 0 && (
+          <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+            {product.discount_percentage}% OFF
+          </div>
+        )}
+        <div className="absolute top-2 left-2 bg-gray-800 text-white px-2 py-1 rounded-full text-xs uppercase">
+          {product.category}
+        </div>
+      </div>
+
+      {/* Product Info */}
+      <div className="p-4">
+        <h2 className="text-xl font-bold text-gray-800 mb-2">
+          {product.title}
+        </h2>
+        <p className="text-gray-600 text-sm mb-4">{product.description}</p>
+
+        {/* Price Section */}
+        <div className="flex items-center mb-4">
+          <span className="text-2xl font-bold text-green-600">
+            ₹{product.discount_price_inr}
+          </span>
+          {product.discount_percentage > 0 && (
+            <span className="text-gray-500 line-through ml-2">
+              ₹{product.price_inr}
+            </span>
+          )}
+        </div>
+
+        {/* Delivery Info */}
+        <div className="flex items-center text-gray-600 text-sm mb-4">
+          <FaCalendarAlt className="mr-2 text-gray-500" />
+          <span>Delivery: {product.ETA}</span>
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-gray-200 my-4"></div>
+
+        {/* Health Benefits */}
+        <div className="mb-4">
+          <h3 className="font-semibold text-gray-800 mb-2">Health Benefits</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+            <div className="flex items-center">
+              {product.health_benefits_rich_in_vitamins_and_antioxidants ? (
+                <FaCheck className="text-green-500 mr-2" />
+              ) : (
+                <FaTimes className="text-red-500 mr-2" />
+              )}
+              <span>Rich in vitamins & antioxidants</span>
+            </div>
+            <div className="flex items-center">
+              {product.health_benefits_improves_immunity ? (
+                <FaCheck className="text-green-500 mr-2" />
+              ) : (
+                <FaTimes className="text-red-500 mr-2" />
+              )}
+              <span>Improves immunity</span>
+            </div>
+            <div className="flex items-center">
+              {product.health_benefits_enhances_skin_health ? (
+                <FaCheck className="text-green-500 mr-2" />
+              ) : (
+                <FaTimes className="text-red-500 mr-2" />
+              )}
+              <span>Enhances skin health</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Certifications */}
+        <div className="mb-4">
+          <h3 className="font-semibold text-gray-800 mb-2">
+            Certifications & Features
+          </h3>
+          <div className="flex flex-wrap gap-2 text-xs">
+            {product.certified_organic && (
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center">
+                <FaLeaf className="mr-1" /> {product.organic_certification_body}
+              </span>
+            )}
+            {product.pesticide_free && (
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center">
+                <FaShieldAlt className="mr-1" /> Pesticide Free
+              </span>
+            )}
+            {product.non_GMO && (
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center">
+                <FaShieldAlt className="mr-1" /> Non-GMO
+              </span>
+            )}
+            {product.fair_trade_certified && (
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center">
+                <FaGlobeAmericas className="mr-1" /> Fair Trade
+              </span>
+            )}
+            {product.gluten_free && (
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center">
+                <FaCheck className="mr-1" /> Gluten Free
+              </span>
+            )}
+            {product.vegan && (
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center">
+                <FaLeaf className="mr-1" /> Vegan
+              </span>
+            )}
+            {product.raw && (
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center">
+                <FaCheck className="mr-1" /> Raw
+              </span>
+            )}
+            {product.local_source && (
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center">
+                <FaGlobeAmericas className="mr-1" /> Local Source
+              </span>
+            )}
+            {product.harvested_by_hand && (
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center">
+                <FaHandHolding className="mr-1" /> Hand Harvested
+              </span>
+            )}
+            {product.cruelty_free && (
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center">
+                <FaCheck className="mr-1" /> Cruelty Free
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Sustainability */}
+        <div className="mb-4">
+          <h3 className="font-semibold text-gray-800 mb-2">Sustainability</h3>
+          <p className="text-sm text-gray-600">{product.sustainability}</p>
+        </div>
+
+        {/* Storage & Expiration */}
+        <div className="mb-4">
+          <h3 className="font-semibold text-gray-800 mb-2">
+            Storage & Expiration
+          </h3>
+          <div className="text-sm">
+            <div className="flex items-center mb-1">
+              <FaCalendarAlt className="text-gray-500 mr-2" />
+              <span>
+                Expires:{" "}
+                {new Date(product.expiration_date).toLocaleDateString()}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <FaSnowflake className="text-gray-500 mr-2" />
+              <span>{product.storage_instructions}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Ingredients */}
+        {product.organic_ingredients &&
+          product.organic_ingredients.length > 0 && (
+            <div className="mb-4">
+              <h3 className="font-semibold text-gray-800 mb-2">
+                Organic Ingredients
+              </h3>
+              <div className="flex flex-wrap gap-1">
+                {product.organic_ingredients.map((ingredient, index) => (
+                  <span
+                    key={index}
+                    className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs"
+                  >
+                    {ingredient}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+        {/* Seller Info */}
+        <div className="border-t border-gray-200 pt-4 mt-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-medium text-gray-800">{product.saler_name}</p>
+              <div className="flex items-center text-gray-500 text-sm">
+                <MdEmail className="mr-1" />
+                <span>{product.saler_email}</span>
+              </div>
+            </div>
+            <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors duration-300">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ProductForm.propTypes = {
+  handleAddProducts: PropTypes.func.isRequired, // Define the expected prop type
+  dataForEdit: PropTypes.object.isRequired, // Define the expected prop type
+  isOpen: PropTypes.object.isRequired,
+  openModal: PropTypes.func.isRequired,
+  closeModal: PropTypes.func.isRequired,
+};
+
+ProductCard.propTypes = {
+  product: PropTypes.shape({
+    category: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    image: PropTypes.string,
+    price_inr: PropTypes.number.isRequired,
+    discount_price_inr: PropTypes.number.isRequired,
+    discount_percentage: PropTypes.number.isRequired,
+    ETA: PropTypes.string.isRequired,
+    health_benefits_rich_in_vitamins_and_antioxidants:
+      PropTypes.bool.isRequired,
+    health_benefits_improves_immunity: PropTypes.bool.isRequired,
+    health_benefits_enhances_skin_health: PropTypes.bool.isRequired,
+    certified_organic: PropTypes.bool.isRequired,
+    organic_certification_body: PropTypes.string.isRequired,
+    sustainability: PropTypes.string.isRequired,
+    pesticide_free: PropTypes.bool.isRequired,
+    non_GMO: PropTypes.bool.isRequired,
+    fair_trade_certified: PropTypes.bool.isRequired,
+    gluten_free: PropTypes.bool.isRequired,
+    vegan: PropTypes.bool.isRequired,
+    raw: PropTypes.bool.isRequired,
+    local_source: PropTypes.bool.isRequired,
+    organic_ingredients: PropTypes.arrayOf(PropTypes.string).isRequired,
+    harvested_by_hand: PropTypes.bool.isRequired,
+    cruelty_free: PropTypes.bool.isRequired,
+    expiration_date: PropTypes.string.isRequired,
+    storage_instructions: PropTypes.string.isRequired,
+    saler_email: PropTypes.string.isRequired,
+    saler_id: PropTypes.string.isRequired,
+    saler_name: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+import { FaEdit, FaTrash, FaEye, FaCopy } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import Sidebar from "./Component/Sidebar";
+import Footer from "../Components/Footer";
+import { AiOutlinePlus, AiOutlineDelete } from "react-icons/ai";
+import { IoClose } from "react-icons/io5";
+import axios from "axios";
+import AdminProductsTable from "./Component/AdminProductsTable";
+
+function ProductTable({
+  products,
+  handleEditProduts,
+  handleDaleteData,
+  handleAddProducts,
+  openModal,
+}) {
+  return (
+    <div className="overflow-x-auto mt-4">
+      <table className="w-full border-collapse rounded-lg overflow-hidden shadow-sm">
+        <thead>
+          <tr className="text-sm text-left bg-green-500 text-white">
+            <th className="px-6 py-3 font-medium">ID & Name</th>
+            <th className="px-6 py-3 font-medium">Category</th>
+            <th className="px-6 py-3 font-medium">How Much</th>
+            <th className="px-6 py-3 font-medium">Price</th>
+            <th className="px-6 py-3 font-medium">Saler Name & ID</th>
+            <th className="px-6 py-3 font-medium text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products?.map((product, index) => (
+            <ProductRow
+              key={product.saler_id || index}
+              product={product}
+              index={index}
+              openModal={openModal}
+              handleEditProduts={handleEditProduts}
+              handleDaleteData={handleDaleteData}
+              handleAddProducts={handleAddProducts}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function ProductRow({
+  product,
+  index,
+  openModal,
+  handleEditProduts,
+  handleDaleteData,
+  handleAddProducts,
+}) {
+  const [showPopup, setShowPopup] = useState(false);
+  const navigate = useNavigate();
+  const handleEdit = (product) => {
+    handleEditProduts(product);
+    openModal();
+  };
+
+  const handleShowPopcorn = () => {
+    setShowPopup(true);
+  };
+
+  const handleView = (product) => {
+    navigate(`/admin-products-view/${product._id}`);
+  };
+
+  const handleCopy = (prod) => {
+    const newProduct = { ...prod, _id: undefined }; // Remove _id to let MongoDB generate a new one
+    handleAddProducts(`${baseUrl2}/products`, newProduct, false);
+  };
+
+  return (
+    <tr className={`text-sm ${index % 2 === 0 ? "bg-gray-50" : "bg-gray-100"}`}>
+      <td className="px-6 py-4 flex items-center space-x-2">
+        <span className="font-semibold">{product._id.substring(0, 5)}</span>
+
+        <p className="text-gray-700">{product.title}</p>
+        <img
+          src={`http://localhost:5000/uploads${product.image}`}
+          alt={product.image}
+          className="w-[40px]"
+        />
+      </td>
+      <td className="px-6 py-4">{product.category}</td>
+      <td className="px-6 py-4">{product?.how_much}</td>
+      <td className="px-6 py-4 font-medium text-gray-800">
+        ₹ {product.price_inr}
+      </td>
+      <td className="px-6 py-4">
+        <span className="font-semibold">
+          {product.saler_name} - {product.saler_id.substring(0, 5)}
+        </span>
+        {/* <p className="text-gray-700">{product.saler_name}</p> */}
+      </td>
+      <td className="px-6 py-4 flex justify-center space-x-4">
+        <button
+          onClick={() => handleCopy(product)}
+          className="px-3 py-2 text-gray-600 border border-gray-600 rounded-lg hover:bg-gray-600 hover:text-white transition-all"
+        >
+          <FaCopy />
+        </button>{" "}
+        <button
+          onClick={() => handleView(product)}
+          className="px-3 py-2 text-green-600 border border-green-600 rounded-lg hover:bg-green-600 hover:text-white transition-all"
+        >
+          <FaEye />
+        </button>
+        <button
+          onClick={() => handleEdit(product)}
+          className="px-3 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all"
+        >
+          <FaEdit />
+        </button>
+        <PopcornUI
+          product={product}
+          showPopup={showPopup}
+          setShowPopup={setShowPopup}
+          handleShowPopcorn={handleShowPopcorn}
+          handleDaleteData={handleDaleteData}
+        />
+      </td>
+    </tr>
+  );
+}
+
+// Prop Validation
+ProductTable.propTypes = {
+  products: PropTypes.arrayOf(
+    PropTypes.shape({
+      saler_id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      category: PropTypes.string.isRequired,
+      price_inr: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  handleEditProduts: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
+  handleDaleteData: PropTypes.func.isRequired,
+  handleAddProducts: PropTypes.func.isRequired,
+};
+
+ProductRow.propTypes = {
+  product: PropTypes.shape({
+    saler_id: PropTypes.string.isRequired,
+    saler_name: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    price_inr: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
+  }).isRequired,
+  handleEditProduts: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
+  openModal: PropTypes.func.isRequired,
+  handleDaleteData: PropTypes.func.isRequired,
+  handleAddProducts: PropTypes.func.isRequired,
+};
+
+export const PopcornUI = ({
+  showPopup,
+  setShowPopup,
+  handleShowPopcorn,
+  product,
+  handleDaleteData,
+}) => {
+  const handleDelete = () => {
+    setShowPopup(false);
+    handleDaleteData(product);
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center bg-gray-100">
+      <button
+        onClick={handleShowPopcorn}
+        className="px-3 py-2 text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all"
+      >
+        <FaTrash />
+      </button>
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center w-80">
+            <h2 className="text-lg font-semibold text-gray-800">
+              Do you really want to delete the data?
+            </h2>
+            <div className="mt-4">
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 mr-1"
+              >
+                Yes
+              </button>
+
+              <button
+                onClick={() => setShowPopup(false)}
+                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400"
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+PopcornUI.propTypes = {
+  showPopup: PropTypes.bool.isRequired, // Ensures showPopup is a boolean and required
+  setShowPopup: PropTypes.func.isRequired, // Ensures setShowPopup is a function and required
+  handleShowPopcorn: PropTypes.func.isRequired, // Ensures handleShowPopcorn is a function and required
+  product: PropTypes.shape({
+    _id: PropTypes.string.isRequired, // Ensures product has an _id (adjust based on actual structure)
+    name: PropTypes.string,
+    price: PropTypes.number,
+    description: PropTypes.string,
+    image: PropTypes.string,
+  }).isRequired, // Ensures product object is required
+  handleDaleteData: PropTypes.func.isRequired, // Ensures handleDeleteData is a function and required
+};

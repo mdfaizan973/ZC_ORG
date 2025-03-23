@@ -2,16 +2,18 @@
 import { useEffect, useState } from "react";
 import {
   AiFillAndroid,
+  AiFillBug,
   AiOutlineShoppingCart,
   AiOutlineUser,
 } from "react-icons/ai";
 import { Link as RouterLink } from "react-router-dom";
+import { getSessionData } from "../utils/utils";
 
 export default function Sidebar() {
   const [isOrgAdmin, setisOrgAdmin] = useState(false);
 
   useEffect(() => {
-    const isAdmin = sessionStorage.getItem("isOrganicAdmin");
+    const isAdmin = getSessionData("role_id");
 
     setisOrgAdmin(isAdmin === "true");
   }, []);
@@ -50,7 +52,17 @@ export default function Sidebar() {
               <AiOutlineUser />
             </button>
           </RouterLink>
-          {isOrgAdmin && (
+          <RouterLink to={"/bug-report"}>
+            {" "}
+            <button
+              className="middle none center  rounded-lg bg-gradient-to-tr from-red-600 to-red-400 py-2 px-4 ml-1 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
+              type="button"
+              data-ripple-light="true"
+            >
+              <AiFillBug />
+            </button>
+          </RouterLink>
+          {[1, 2].includes(getSessionData("role_id")) && (
             <RouterLink to="/admin-portal">
               <button
                 className="middle none center  rounded-lg bg-gradient-to-tr from-blue-600 to-blue-400 py-2 px-4 ml-1 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"

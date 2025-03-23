@@ -1,6 +1,7 @@
 // import { useState } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import { Link as RouterLink } from "react-router-dom";
+import { FiHome } from "react-icons/fi";
 export default function AdminNav() {
   // const [ispopup, setIspopup] = useState(false);
   // const showpopup = () => {
@@ -18,11 +19,9 @@ export default function AdminNav() {
                 href="#"
                 className="mr-4 block cursor-pointer py-1.5 font-sans text-xl font-bold leading-normal text-inherit antialiased font-semibold"
               >
-                <span className="text-green-600">Organic Store</span>
-                {/* <img
-                className=""
-                src="https://user-images.githubusercontent.com/106812942/275217471-417cd4b2-e456-4413-b8d0-4036e7537692.png"
-              /> */}
+                <span className="text-green-600 flex items-center gap-4">
+                  <FiHome className="text-xl" />
+                </span>
               </a>
             </RouterLink>
 

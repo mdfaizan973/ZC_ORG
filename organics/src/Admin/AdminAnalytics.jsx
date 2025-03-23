@@ -6,6 +6,7 @@ import { baseUrl } from "../../config/confg";
 import axios from "axios";
 import { FaChartBar, FaChartPie } from "react-icons/fa";
 import PropTypes from "prop-types";
+import Sidebar from "./Component/Sidebar";
 
 export default function AdminAnalytics() {
   const [productsData, setProductsData] = useState([]);
@@ -171,7 +172,8 @@ export default function AdminAnalytics() {
       <AdminNav />
       <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900">
         <aside className="w-full md:w-1/4 lg:w-1/5  bg-white shadow-lg dark:bg-gray-800">
-          <SuperDashBoard show_descrition={false} />
+          {/* <SuperDashBoard show_descrition={false} /> */}
+          <Sidebar />
         </aside>
 
         <main className="w-full md:w-3/4 lg:w-4/5 p-6">
