@@ -44,11 +44,19 @@ export const fetchData = async (url, token = null) => {
 //   }
 // };
 
-export const postData = async (url, data, method = "POST", token = null) => {
-  const toastId = toast.loading("We are processing... 🚀", {
-    position: toast.POSITION.TOP_RIGHT,
-  });
-
+export const postData = async (
+  url,
+  data,
+  method = "POST",
+  showNotification = true,
+  token = null
+) => {
+  let toastId = null;
+  if (showNotification) {
+    toastId = toast.loading("We are processing... 🚀", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  }
   try {
     const isForm = data instanceof FormData; // for image file
 
@@ -63,20 +71,27 @@ export const postData = async (url, data, method = "POST", token = null) => {
       data,
       headers,
     });
-    toast.success(response?.data?.message, {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 1000,
-    });
-    toast.dismiss(toastId); // Remove loading toast on success
+
+    if (showNotification) {
+      toast.dismiss(toastId);
+      toast.success(response?.data?.message, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1000,
+      });
+    }
+
     return response.data;
   } catch (error) {
     console.error("Error sending data:", error);
 
     let errorMessage = "Oops! Sorry for the turbulence.🚀";
-    toast.error(errorMessage, {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 1000,
-    });
+    if (showNotification) {
+      toast.dismiss(toastId);
+      toast.error(errorMessage, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1000,
+      });
+    }
 
     throw error;
   } finally {

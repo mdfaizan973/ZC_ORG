@@ -26,6 +26,8 @@ import {
   MdCancel,
 } from "react-icons/md";
 import { BiPackage } from "react-icons/bi";
+import { FiRefreshCcw } from "react-icons/fi";
+
 import {
   deleteData,
   fetchData,
@@ -500,6 +502,7 @@ export default function UserProfile() {
 function OrdersTab({ orders, viewMode, setViewMode }) {
   const [orderList, setOrderList] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
+  const [orderDataWithMultiple, setOrderDataWithMultiple] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -511,6 +514,7 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
     const ordersData = await fetchData(
       `${baseUrl2}/orders/${getSessionData("_id")}`
     );
+    setOrderDataWithMultiple(ordersData);
     setLoadingOrders(false);
     const newOrderData = ordersData
       .map((ele) =>
@@ -546,6 +550,10 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
     return `₹ ${fixedNumber(total)}` || 0;
   };
 
+  const handleRefresh = () => {
+    load_allorders();
+  };
+
   // const sortingData = (val) => {
   //   const dataToSort = [...orderList];
   //   if (val === "hightolow") {
@@ -561,6 +569,7 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
   //     setOrderList(dataToSort);
   //   }
   // };
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -599,6 +608,16 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
             icon={<div className="text-green-600 text-xl font-bold">₹</div>}
           />
         </div>
+      </div>
+
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={handleRefresh}
+          className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-200"
+        >
+          <FiRefreshCcw className="text-lg" />
+          Refresh
+        </button>
       </div>
 
       {loadingOrders ? (
