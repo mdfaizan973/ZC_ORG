@@ -502,7 +502,6 @@ export default function UserProfile() {
 function OrdersTab({ orders, viewMode, setViewMode }) {
   const [orderList, setOrderList] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
-  const [orderDataWithMultiple, setOrderDataWithMultiple] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -514,7 +513,7 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
     const ordersData = await fetchData(
       `${baseUrl2}/orders/${getSessionData("_id")}`
     );
-    setOrderDataWithMultiple(ordersData);
+
     setLoadingOrders(false);
     const newOrderData = ordersData
       .map((ele) =>
