@@ -40,6 +40,7 @@ import { baseUrl2, imageUrl } from "../../config/confg";
 import Loader from "./LoadingUI/Loader";
 import { useNavigate } from "react-router-dom";
 import { placeHolderImage } from "../utils/uiUtils";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function UserProfile() {
   const [activeTab, setActiveTab] = useState("profile");
@@ -584,7 +585,7 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
       </div>
 
       <div className="bg-green-50 rounded-xl p-6 mb-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
           <OrderStat
             label="Total Orders"
             value={orderList?.length || 0}
@@ -596,9 +597,19 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
             icon={<MdOutlineVerified className="text-green-600" size={24} />}
           />
           <OrderStat
+            label="Shipped"
+            value={getOrderStatus("Shipped")}
+            icon={<MdLocalShipping className="text-blue-600" size={24} />}
+          />
+          <OrderStat
             label="In Progress"
             value={getOrderStatus("Processing")}
-            icon={<MdLocalShipping className="text-blue-600" size={24} />}
+            icon={
+              <AiOutlineLoading3Quarters
+                className="animate-spin text-yellow-500"
+                size={24}
+              />
+            }
           />
 
           <OrderStat
