@@ -110,7 +110,7 @@ UserRouter.get("/", async (req, res) => {
 
     const userList = {
       total_users: userData.length,
-      ...userData,
+      usersList: userData,
     };
     res.status(200).json(userList);
   } catch (error) {

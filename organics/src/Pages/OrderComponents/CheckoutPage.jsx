@@ -86,26 +86,9 @@ export default function CheckoutPage() {
     }
   };
 
-  //   const handleDownloadInvoice = async () => {
-  //     try {
-  //       const response = await fetch(`http://localhost:5000/api/invoices/1234`);
-  //       const blob = await response.blob();
-  //       const url = window.URL.createObjectURL(blob);
-  //       const a = document.createElement("a");
-  //       a.href = url;
-  //       a.download = `invoice-1234.pdf`;
-  //       document.body.appendChild(a);
-  //       a.click();
-  //       document.body.removeChild(a);
-  //     } catch (error) {
-  //       console.error("Error downloading invoice:", error);
-  //     }
-  //   };
   return (
     <>
       <Navbar />
-
-      {/* <button onClick={handleDownloadInvoice}>Click to download</button> */}
 
       <div className="border-b p-2">
         <BackButton header="Complete Your Order" />

@@ -27,6 +27,7 @@ import CheckoutPage from "../Pages/OrderComponents/CheckoutPage";
 import ThankyouPage from "../Pages/OrderComponents/ThankyouPage";
 import BugReport from "../Pages/BugReport";
 import BugReportListing from "../Admin/BugReportListing";
+import SalersLst from "../Admin/SalersLst";
 export default function AllRoutes() {
   // const [isOrgAdmin, setisOrgAdmin] = useState(false);
 
@@ -45,7 +46,6 @@ export default function AllRoutes() {
         <Route path="/register" element={<SignupPage />}></Route>
         <Route path="/upcoming" element={<UpCaoming />}></Route>
         <Route path="/bug-report" element={<BugReport />}></Route>
-
         <Route
           path="/delivery"
           element={<ProtectedRoute component={ShpoingDone} />}
@@ -67,7 +67,18 @@ export default function AllRoutes() {
           path="/productdiscription/:id"
           element={<ProductDetailsPage />} // <SingleProducts />
         ></Route>
-
+        <Route
+          path="/user-profile"
+          element={<ProtectedRoute component={UserProfile} />}
+        />
+        <Route
+          path="/order-review"
+          element={<ProtectedRoute component={OrderReview} />}
+        />
+        <Route
+          path="/thank-you"
+          element={<ProtectedRoute component={ThankyouPage} />}
+        />
         {/* {isOrgAdmin && (
           <> */}
         <Route
@@ -95,20 +106,12 @@ export default function AllRoutes() {
           element={<AdminProtectedRoute component={AdminProductView} />}
         />
         <Route
-          path="/user-profile"
-          element={<ProtectedRoute component={UserProfile} />}
-        />
-        <Route
-          path="/order-review"
-          element={<ProtectedRoute component={OrderReview} />}
-        />
-        <Route
-          path="/thank-you"
-          element={<ProtectedRoute component={ThankyouPage} />}
-        />
-        <Route
           path="/bug-report-list"
-          element={<ProtectedRoute component={BugReportListing} />}
+          element={<AdminProtectedRoute component={BugReportListing} />}
+        />
+        <Route
+          path="/salers"
+          element={<AdminProtectedRoute component={SalersLst} />}
         />
 
         {/* </>
