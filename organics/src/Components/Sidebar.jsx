@@ -7,7 +7,7 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 import { Link as RouterLink } from "react-router-dom";
-import { getSessionData } from "../utils/utils";
+import { getSessionData, hasToken } from "../utils/utils";
 
 export default function Sidebar() {
   const [isOrgAdmin, setisOrgAdmin] = useState(false);
@@ -43,7 +43,7 @@ export default function Sidebar() {
               <AiOutlineShoppingCart />
             </button>
           </RouterLink>
-          <RouterLink to="/login">
+          <RouterLink to={hasToken() ? "/user-profile" : "/login"}>
             <button
               className="middle none center  rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-2 px-4 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
               type="button"
