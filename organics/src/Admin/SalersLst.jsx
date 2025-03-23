@@ -45,7 +45,8 @@ export default function SalersLst() {
       ]);
       setSalerLoading(false);
       setSalerRequestData(requests);
-      setSalerListData(salers);
+      // setSalerListData(salers);
+
       prepareUserListata(requests, salers);
     } catch (error) {
       console.error("Error loading data:", error);
@@ -53,33 +54,28 @@ export default function SalersLst() {
   };
 
   const prepareUserListata = (requests, salers) => {
-    let ar = [];
+    let salerRes = [];
     for (let i = 0; i < requests.length; i++) {
       for (let j = 0; j < salers.length; j++) {
-        if (requests[i].saler_email == salers[j].email) {
-          ar.push({
-            ...requests[i],
-            gender: salers[j].gender,
-            role_id: 2,
-            address: "",
-            profile_image: "",
+        if (
+          requests[i].saler_email == salers[j].email &&
+          salers[j].role_id == 1
+        ) {
+          salerRes.push({
+            ...salers[j],
+            decr: requests[i]["sell_description"],
+            businessName: requests[i]["saler_business_name"],
+            applied_date: requests[i]["applied_date"],
+            name: requests[i]["saler_name"],
           });
         }
       }
     }
-    // console.log(ar);
+    console.log(salerRes);
+    setSalerListData(salerRes);
   };
   // salerName, saler Email,, saler id=_id,
-  // address
-  // applied_date
-  // businessName
 
-  // gender
-  // :
-  // "Male"
-  // name
-  // :
-  // "Md Faizan"
   const handleUpdateRole = (roleId) => {
     console.log(roleId); // -> id is 2 make put if 3 make delete
   };
@@ -165,7 +161,7 @@ export default function SalersLst() {
                   )}
                   {activeTab === "ourSaler" && (
                     <>
-                      <SalerTable />
+                      <SalerTable salerListData={salerListData} />
                     </>
                   )}
                 </div>
@@ -179,10 +175,30 @@ export default function SalersLst() {
   );
 }
 
-const SalerTable = () => {
+import { FaEye } from "react-icons/fa";
+
+const SalerTable = ({ salerListData }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedSaler, setSelectedSaler] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const openModal = (saler) => {
+    setSelectedSaler(saler);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setSelectedSaler(null);
+    setShowModal(false);
+  };
+
+  const filteredSalers = salerListData.filter((saler) =>
+    saler.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
-      {/* search code */}
+      {/* Search Bar */}
       <div className="p-4 bg-white rounded-lg shadow-sm mb-6">
         <div className="relative flex-1">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -192,15 +208,174 @@ const SalerTable = () => {
             type="text"
             placeholder="Search Salers..."
             className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
-            // value={searchTerm}
-            // onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
 
+      {/* Table */}
       <div className="p-4 border rounded-lg shadow bg-white">
-        <h2 className="text-lg font-semibold">Work in Progress</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse rounded-lg">
+            <thead>
+              <tr className="text-sm text-left bg-green-500 text-white">
+                <th className="py-2 px-4 text-left">Saler Name</th>
+                <th className="py-2 px-4 text-left">Email</th>
+                <th className="py-2 px-4 text-left">Applied Date</th>
+                <th className="py-2 px-4 text-left">Business Name</th>
+                <th className="py-2 px-4 text-left">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredSalers.map((saler, index) => (
+                <tr key={index} className="border-t hover:bg-green-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">
+                      {saler.name}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">
+                      {saler.email}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">
+                      {new Date(saler.applied_date).toLocaleDateString()}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">
+                      {saler.businessName}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">
+                      <button
+                        className="text-green-600 hover:text-green-800"
+                        onClick={() => openModal(saler)}
+                      >
+                        <FaEye />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {filteredSalers.length === 0 && (
+                <tr>
+                  <td colSpan="5" className="text-center py-4 text-gray-500">
+                    No salers found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      {/* Popup Modal */}
+      {showModal && selectedSaler && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-4 w-full max-w-md shadow-xl relative">
+            <button
+              className="absolute top-2 right-3 text-gray-500"
+              onClick={closeModal}
+            >
+              ✕
+            </button>
+            <h3 className="text-xl font-semibold mb-4 text-green-600">
+              Saler Details
+            </h3>
+
+            <div className="space-y-4">
+              {/* Row 1: Name + Email */}
+              <div className="flex  flex-wrap">
+                <div className="bg-gray-50 p-2 rounded-lg border border-gray-200 w-full sm:w-1/2">
+                  <h4 className="text-xs uppercase text-gray-500 font-semibold mb-2">
+                    Name
+                  </h4>
+                  <p className="text-sm text-gray-700">{selectedSaler.name}</p>
+                </div>
+
+                <div className="bg-gray-50 p-2 rounded-lg border border-gray-200 w-full sm:w-1/2">
+                  <h4 className="text-xs uppercase text-gray-500 font-semibold mb-2">
+                    Email
+                  </h4>
+                  <p className="text-sm text-gray-700">{selectedSaler.email}</p>
+                </div>
+              </div>
+
+              {/* Row 2: Gender + Address */}
+              <div className="flex  flex-wrap">
+                <div className="bg-gray-50 p-2 rounded-lg border border-gray-200 w-full sm:w-1/2">
+                  <h4 className="text-xs uppercase text-gray-500 font-semibold mb-2">
+                    Gender
+                  </h4>
+                  <p className="text-sm text-gray-700">
+                    {selectedSaler.gender}
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-2 rounded-lg border border-gray-200 w-full sm:w-1/2">
+                  <h4 className="text-xs uppercase text-gray-500 font-semibold mb-2">
+                    Address
+                  </h4>
+                  <p className="text-sm text-gray-700">
+                    {selectedSaler.address}
+                  </p>
+                </div>
+              </div>
+
+              {/* Business */}
+              <div className="bg-gray-50 p-2 rounded-lg border border-gray-200">
+                <h4 className="text-xs uppercase text-gray-500 font-semibold mb-2">
+                  Business
+                </h4>
+                <p className="text-sm text-gray-700">
+                  {selectedSaler.businessName}
+                </p>
+              </div>
+
+              {/* Applied Date */}
+              <div className="bg-gray-50 p-2 rounded-lg border border-gray-200">
+                <h4 className="text-xs uppercase text-gray-500 font-semibold mb-2">
+                  Applied Date
+                </h4>
+                <p className="text-sm text-gray-700">
+                  {new Date(selectedSaler.applied_date).toLocaleString()}
+                </p>
+              </div>
+
+              {/* Description */}
+              <div className="bg-gray-50 p-2 rounded-lg border border-gray-200">
+                <h4 className="text-xs uppercase text-gray-500 font-semibold mb-2">
+                  Description
+                </h4>
+                <p className="text-sm text-gray-700">{selectedSaler.decr}</p>
+              </div>
+
+              {/* Profile Image */}
+              {selectedSaler.profile_image && (
+                <div className="bg-gray-50 p-2 rounded-lg border border-gray-200">
+                  <h4 className="text-xs uppercase text-gray-500 font-semibold mb-2">
+                    Profile Image
+                  </h4>
+                  <img
+                    src={selectedSaler.profile_image}
+                    alt="Profile"
+                    className="w-20 h-20 rounded-full"
+                  />
+                </div>
+              )}
+            </div>
+
+            <button className="mt-6 w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">
+              Update Role
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };
