@@ -182,8 +182,10 @@ export default function ProductDetailsPage() {
 
                   <button
                     onClick={() => handleCart(product)}
-                    disabled={hasToken}
-                    className="flex items-center justify-center px-8 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
+                    disabled={!hasToken()}
+                    className={`mr-2 flex cursor-pointer items-center justify-center rounded-md bg-emerald-600 hover:bg-emerald-800 py-2 px-8 text-center text-white transition duration-150 ease-in-out hover:translate-y-1 ${
+                      !hasToken() ? "line-through" : ""
+                    }`}
                   >
                     <FaShoppingCart className="mr-2" /> Add to Cart
                   </button>
@@ -195,7 +197,7 @@ export default function ProductDetailsPage() {
                     onClick={() => {
                       handleWishlist(product);
                     }}
-                    disabled={hasToken}
+                    disabled={!hasToken()}
                   >
                     <FaHeart
                       className={

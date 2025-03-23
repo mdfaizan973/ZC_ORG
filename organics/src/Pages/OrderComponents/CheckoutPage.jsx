@@ -46,7 +46,7 @@ export default function CheckoutPage() {
       prod_image: ele.image,
       prod_price: ele.discount_price_inr,
       prod_category: ele.category,
-      prod_id: ele._id,
+      prod_id: ele.prodId,
       prod_qty: ele.quantity,
       saler_name: ele.saler_name,
       saler_id: ele.saler_id,
@@ -80,9 +80,9 @@ export default function CheckoutPage() {
       deleteData(`${baseUrl2}/cart/delete-multiple`, false, null, {
         prod_id: ids,
       });
-      // setTimeout(() => {
-      //   navigate("/thank-you");
-      // }, 1000);
+      setTimeout(() => {
+        navigate("/thank-you");
+      }, 1000);
     }
   };
 

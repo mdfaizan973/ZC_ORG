@@ -62,7 +62,7 @@ export default function OrgPro(props) {
               <button
                 className="text-red-500 hover:text-red-600 text-xl"
                 onClick={() => handleWishlist(dataItem)}
-                disabled={hasToken}
+                disabled={!hasToken()}
               >
                 <AiOutlineHeart />
               </button>
@@ -115,8 +115,10 @@ export default function OrgPro(props) {
                   onClick={() => {
                     addtocart(dataItem);
                   }}
-                  disabled={hasToken}
-                  className="mr-2 mb-4 flex cursor-pointer items-center justify-center rounded-md bg-emerald-600 hover:bg-emerald-800 py-2 px-8 text-center text-white transition duration-150 ease-in-out hover:translate-y-1 "
+                  disabled={!hasToken()}
+                  className={`mr-2 mb-4 flex cursor-pointer items-center justify-center rounded-md bg-emerald-600 hover:bg-emerald-800 py-2 px-8 text-center text-white transition duration-150 ease-in-out hover:translate-y-1 ${
+                    !hasToken() ? "line-through" : ""
+                  }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

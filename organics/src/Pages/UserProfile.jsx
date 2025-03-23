@@ -536,6 +536,7 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
   };
 
   const goToDetailsPage = (id) => {
+    console.log(id);
     navigate(`/productdiscription/${id}`);
   };
   const getTotalPrice = () => {
