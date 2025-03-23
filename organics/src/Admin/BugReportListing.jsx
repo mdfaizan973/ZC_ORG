@@ -18,8 +18,7 @@ import {
   FiX,
   FiEye,
 } from "react-icons/fi";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-
+import { FiCheckCircle } from "react-icons/fi";
 import Sidebar from "./Component/Sidebar";
 import AdminNav from "./AdminNav";
 import { fetchData, postData } from "../utils/utils";
@@ -376,7 +375,7 @@ const BugReportListing = () => {
                                     className="text-gray-600 hover:text-gray-900"
                                     onClick={() => changeStatus(bug)}
                                   >
-                                    <FiChevronRight />
+                                    <FiCheckCircle />
                                   </button>
                                 </td>
                               </tr>

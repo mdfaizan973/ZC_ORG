@@ -536,11 +536,13 @@ function OrdersTab({ orders, viewMode, setViewMode }) {
   };
 
   const goToDetailsPage = (id) => {
-    console.log(id);
     navigate(`/productdiscription/${id}`);
   };
   const getTotalPrice = () => {
-    const total = orderList.reduce((acc, item) => item.prod_price + acc, 0);
+    const total = orderList.reduce(
+      (acc, item) => item.prod_price * item.prod_qty + acc,
+      0
+    );
     return `₹ ${fixedNumber(total)}` || 0;
   };
 

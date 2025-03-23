@@ -43,9 +43,7 @@ bugReportRouter.post("/:id", async (req, res) => {
         runValidators: true, // Apply validation rules
       }
     );
-    res
-      .status(201)
-      .json({ message: "Bug Reported Successfully!", newBugReport });
+    res.status(201).json({ message: "Bug Fixed!", newBugReport });
   } catch (error) {
     console.error("Internal Server Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
