@@ -1,16 +1,16 @@
 const express = require("express");
 const cors = require("cors");
-const connectDB = require("./config/db");
-const UserRouter = require("./routes/UserRouter");
-const ProductsRouter = require("./routes/ProductRouter");
-const cartRouter = require("./routes/CartRouter");
-const feedbackRouter = require("./routes/FeedBackRouter");
-const questionRouter = require("./routes/questionRouter");
-const wishListRouter = require("./routes/WishListRouter");
-const salerRouter = require("./routes/SalerRouter");
-const invoiceDownloadRouter = require("./routes/InvoiceDownloadRouter");
-const orderRouter = require("./routes/OrderRouter");
-const bugReportRouter = require("./routes/BugReportRouter");
+const connectDB = require("./src/config/db");
+const UserRouter = require("./src/routes/UserRouter");
+const ProductsRouter = require("./src/routes/ProductRouter");
+const cartRouter = require("./src/routes/CartRouter");
+const feedbackRouter = require("./src/routes/FeedBackRouter");
+const questionRouter = require("./src/routes/questionRouter");
+const wishListRouter = require("./src/routes/WishListRouter");
+const salerRouter = require("./src/routes/SalerRouter");
+const invoiceDownloadRouter = require("./src/routes/InvoiceDownloadRouter");
+const orderRouter = require("./src/routes/OrderRouter");
+const bugReportRouter = require("./src/routes/BugReportRouter");
 const app = express();
 
 app.use(express.json());
