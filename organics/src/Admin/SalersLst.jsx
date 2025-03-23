@@ -15,11 +15,13 @@ import {
   FiCalendar,
 } from "react-icons/fi";
 import { HiOutlineIdentification } from "react-icons/hi";
+import Loader from "../Pages/LoadingUI/Loader";
 
 export default function SalersLst() {
   const [salersReqList, setSalerRequestData] = useState([]);
   const [salerListData, setSalerListData] = useState([]);
   const [activeTab, setActiveTab] = useState("salerRequest");
+  const [salerLoading, setSalerLoading] = useState(false);
 
   const load_saler_request_list = async () => {
     const list_req = await fetchData(`${baseUrl2}/saler`);
@@ -31,34 +33,41 @@ export default function SalersLst() {
   };
 
   useEffect(() => {
-    (async () => {
-      try {
-        const [requests, salers] = await Promise.all([
-          load_saler_request_list(),
-          load_saler_list(),
-        ]);
-        setSalerRequestData(requests);
-        setSalerListData(salers);
-        prepareUserListata(requests, salers);
-      } catch (error) {
-        console.error("Error loading data:", error);
-      }
-    })();
+    fetchAllSalerData();
   }, []);
 
+  const fetchAllSalerData = async () => {
+    try {
+      setSalerLoading(true);
+      const [requests, salers] = await Promise.all([
+        load_saler_request_list(),
+        load_saler_list(),
+      ]);
+      setSalerLoading(false);
+      setSalerRequestData(requests);
+      setSalerListData(salers);
+      prepareUserListata(requests, salers);
+    } catch (error) {
+      console.error("Error loading data:", error);
+    }
+  };
+
   const prepareUserListata = (requests, salers) => {
-    console.log(requests);
-    console.log(salers);
-    // const res = requests?.forEach((ele) => )
     let ar = [];
     for (let i = 0; i < requests.length; i++) {
       for (let j = 0; j < salers.length; j++) {
         if (requests[i].saler_email == salers[j].email) {
-          ar.push({ ...requests[i], ...salers[j] });
+          ar.push({
+            ...requests[i],
+            gender: salers[j].gender,
+            role_id: 2,
+            address: "",
+            profile_image: "",
+          });
         }
       }
     }
-    console.log(ar);
+    // console.log(ar);
   };
   // salerName, saler Email,, saler id=_id,
   // address
@@ -73,6 +82,10 @@ export default function SalersLst() {
   // "Md Faizan"
   const handleUpdateRole = (roleId) => {
     console.log(roleId); // -> id is 2 make put if 3 make delete
+  };
+
+  const handleRefresh = () => {
+    fetchAllSalerData();
   };
   return (
     <>
@@ -97,9 +110,12 @@ export default function SalersLst() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="bg-green-100 text-green-800 px-3 py-1 rounded-md text-sm font-medium">
-                    Total: {salersReqList?.length}
+                    Total Requests: {salersReqList?.length}
                   </div>
-                  <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center">
+                  <button
+                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center"
+                    onClick={handleRefresh}
+                  >
                     <FiRefreshCw className="mr-2" /> Refresh
                   </button>
                 </div>
@@ -113,43 +129,48 @@ export default function SalersLst() {
                 <button
                   onClick={() => setActiveTab("salerRequest")}
                   className={`flex-1 py-2 px-4 text-center font-medium flex items-center justify-center gap-2 
-            ${
-              activeTab === "salerRequest"
-                ? "border-b-2 border-green-500 text-green-600"
-                : "text-gray-500 hover:text-green-500"
-            }`}
+  ${
+    activeTab === "salerRequest"
+      ? "border-b-2 border-green-500 text-green-600"
+      : "text-gray-500 hover:text-green-500"
+  }`}
                 >
                   <FaUserPlus /> Saler Request
                 </button>
                 <button
                   onClick={() => setActiveTab("ourSaler")}
                   className={`flex-1 py-2 px-4 text-center font-medium flex items-center justify-center gap-2 
-            ${
-              activeTab === "ourSaler"
-                ? "border-b-2 border-green-500 text-green-600"
-                : "text-gray-500 hover:text-green-500"
-            }`}
+  ${
+    activeTab === "ourSaler"
+      ? "border-b-2 border-green-500 text-green-600"
+      : "text-gray-500 hover:text-green-500"
+  }`}
                 >
                   <FaUsers /> Our Saler
                 </button>
               </div>
-
+              {salerLoading ? (
+                <div className="flex items-center justify-center h-[400px] w-full">
+                  <Loader />
+                </div>
+              ) : (
+                <div className="mt-6">
+                  {activeTab === "salerRequest" && (
+                    <div className="p-4 border rounded-lg shadow bg-white">
+                      <SalerRequestTable
+                        salersReqList={salersReqList}
+                        handleUpdateRole={handleUpdateRole}
+                      />
+                    </div>
+                  )}
+                  {activeTab === "ourSaler" && (
+                    <>
+                      <SalerTable />
+                    </>
+                  )}
+                </div>
+              )}
               {/* Tab Content */}
-              <div className="mt-6">
-                {activeTab === "salerRequest" && (
-                  <div className="p-4 border rounded-lg shadow bg-white">
-                    <SalerRequestTable
-                      salersReqList={salersReqList}
-                      handleUpdateRole={handleUpdateRole}
-                    />
-                  </div>
-                )}
-                {activeTab === "ourSaler" && (
-                  <>
-                    <SalerTable />
-                  </>
-                )}
-              </div>
             </div>
           </section>
         </main>
@@ -280,42 +301,65 @@ const SalerRequestTable = ({ salersReqList, handleUpdateRole }) => {
               </p>
             </div>
 
-            {/* Info Section */}
-            <div className="space-y-4 text-[15px] text-gray-700">
-              <div className="flex items-center gap-2">
-                <FiMail className="text-gray-600" />
-                <span className="font-medium w-24">Email:</span>
-                <span className="text-gray-700">
-                  {showSalserInfo.saler_email}
-                </span>
+            {/* Box-Style Info Section */}
+            <div className="grid gap-4">
+              {/* Email Box */}
+              <div className="bg-gray-100 rounded-lg p-3 flex items-center gap-3 shadow-sm">
+                <FiMail className="text-blue-600 text-xl" />
+                <div>
+                  <p className="text-xs font-semibold text-gray-500">Email</p>
+                  <p className="text-sm text-gray-800">
+                    {showSalserInfo.saler_email}
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <FiBriefcase className="text-gray-600" />
-                <span className="font-medium w-24">Business:</span>
-                <span className="text-gray-700">
-                  {showSalserInfo.saler_business_name}
-                </span>
+
+              {/* Business Box */}
+              <div className="bg-gray-100 rounded-lg p-3 flex items-center gap-3 shadow-sm">
+                <FiBriefcase className="text-blue-600 text-xl" />
+                <div>
+                  <p className="text-xs font-semibold text-gray-500">
+                    Business
+                  </p>
+                  <p className="text-sm text-gray-800">
+                    {showSalserInfo.saler_business_name}
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <FiFileText className="text-gray-600" />
-                <span className="font-medium w-24">Description:</span>
-                <span className="text-gray-700">
-                  {showSalserInfo.sell_description || "N/A"}
-                </span>
+
+              {/* Description Box */}
+              <div className="bg-gray-100 rounded-lg p-3 flex items-center gap-3 shadow-sm">
+                <FiFileText className="text-blue-600 text-xl" />
+                <div>
+                  <p className="text-xs font-semibold text-gray-500">
+                    Description
+                  </p>
+                  <p className="text-sm text-gray-800">
+                    {showSalserInfo.sell_description || "N/A"}
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <FiCalendar className="text-gray-600" />
-                <span className="font-medium w-24">Applied On:</span>
-                <span className="text-gray-700">
-                  {new Date(showSalserInfo.applied_date).toLocaleDateString()}
-                </span>
+
+              {/* Date Box */}
+              <div className="bg-gray-100 rounded-lg p-3 flex items-center gap-3 shadow-sm">
+                <FiCalendar className="text-blue-600 text-xl" />
+                <div>
+                  <p className="text-xs font-semibold text-gray-500">
+                    Applied On
+                  </p>
+                  <p className="text-sm text-gray-800">
+                    {new Date(showSalserInfo.applied_date).toLocaleDateString()}
+                  </p>
+                </div>
               </div>
             </div>
 
             {/* Update Button */}
             <button
               className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg shadow-md transition duration-200"
-              onClick={() => handleUpdateRole(2)}
+              onClick={() => {
+                alert("Status updated!");
+              }}
             >
               ✅ Update Status
             </button>
