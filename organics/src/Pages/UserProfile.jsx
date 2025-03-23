@@ -122,7 +122,7 @@ export default function UserProfile() {
     sessionStorage.removeItem("OranicSessionStorge");
     // setIslogin(false);
     toast.error("Logout Successful", {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_RIGHT,
     });
     window.location.reload();
   };

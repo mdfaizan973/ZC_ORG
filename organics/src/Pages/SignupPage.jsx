@@ -45,7 +45,7 @@ export default function SignupPage() {
       updatedUserData.gender === ""
     ) {
       toast.error("Please Fill The Required Fields", {
-        position: toast.POSITION.TOP_CENTER,
+        position: toast.POSITION.TOP_RIGHT,
       });
       return;
     } else {
@@ -56,11 +56,11 @@ export default function SignupPage() {
 
       if (user_data?.user && Object.keys(user_data.user).length > 0) {
         toast.success(`${user_data?.message}`, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_RIGHT,
         });
       } else {
         toast.warn(`${user_data?.message}`, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_RIGHT,
         });
       }
 

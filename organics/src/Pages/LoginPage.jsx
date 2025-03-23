@@ -15,12 +15,12 @@ export default function LoginPage() {
   // const handleLoginn = () => {
   //   if (email === "" || pass === "") {
   //     toast.error("Please enter both email and password", {
-  //       position: toast.POSITION.TOP_CENTER,
+  //       position: toast.POSITION.TOP_RIGHT,
   //     });
   //     return;
   //   } else if (email === "admin123@admin.com" && pass === "1234pass") {
   //     toast.success("Admin LogIn SuccessFul!", {
-  //       position: toast.POSITION.TOP_CENTER,
+  //       position: toast.POSITION.TOP_RIGHT,
   //     });
   //     sessionStorage.setItem("user_loged_in", "true");
   //     sessionStorage.setItem("isOrganicAdmin", "true");
@@ -34,7 +34,7 @@ export default function LoginPage() {
   //       .then((res) => {
   //         if (res.data.length > 0) {
   //           toast.success("LogIn SuccessFul!", {
-  //             position: toast.POSITION.TOP_CENTER,
+  //             position: toast.POSITION.TOP_RIGHT,
   //           });
   //           sessionStorage.setItem("user_loged_in", "true");
   //           sessionStorage.setItem("isOrganicAdmin", "false");
@@ -44,14 +44,14 @@ export default function LoginPage() {
   //           }, 1200);
   //         } else {
   //           toast.error("Login failed. Please check your email and password.", {
-  //             position: toast.POSITION.TOP_CENTER,
+  //             position: toast.POSITION.TOP_RIGHT,
   //           });
   //         }
   //       })
   //       .catch((err) => {
   //         console.log(err);
   //         toast.error("An error occurred while logging in. Please try again.", {
-  //           position: toast.POSITION.TOP_CENTER,
+  //           position: toast.POSITION.TOP_RIGHT,
   //         });
   //       });
   //   }
@@ -68,7 +68,7 @@ export default function LoginPage() {
     sessionStorage.removeItem("OranicSessionStorge");
     setIslogin(false);
     toast.error("Logout Successful", {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_RIGHT,
     });
     window.location.reload();
   };
@@ -81,7 +81,7 @@ export default function LoginPage() {
 
     if (email === "" || pass === "") {
       toast.error("Please enter both email and password", {
-        position: toast.POSITION.TOP_CENTER,
+        position: toast.POSITION.TOP_RIGHT,
       });
       return;
     } else {
@@ -103,11 +103,11 @@ export default function LoginPage() {
         }, 1200);
 
         toast.success(`${user_data?.msg}`, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_RIGHT,
         });
       } else {
         toast.info(`${user_data?.msg}`, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_RIGHT,
         });
       }
     }
