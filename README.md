@@ -75,9 +75,13 @@ The project is built using the following technologies:
 **📦 Order Review**: Review your complete order before placing it.
 
 **🧑‍💼 Admin Panel**:
+
   • ➕ Add new products manually or via Excel uploads (📁 xlsx support).
+  
   • 🗑️ Delete or 🛠️ update existing products.
+  
   • 📈 View detailed analytics for sales and product performance.
+  
   
 **🛍️ Become a Seller**: Users can register as sellers and list their own organic products on the platform.
 
