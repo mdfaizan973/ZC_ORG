@@ -4,12 +4,14 @@ Welcome to Organic Store – your one-stop destination for 100% organic and fres
 
 # 🌱 About the Project
 
-Organic Store is an e-commerce platform that allows users to browse and purchase a variety of organic food products. Our mission is to provide a seamless online shopping experience with a user-friendly interface and a clean design. 🛒✨
+Organic Store is an e-commerce platform that allows users to browse and purchase a variety of organic food products. 🌿🛒 Our mission is to provide a seamless online shopping experience with a user-friendly interface and a clean, modern design. ✨
+
+Not only can customers shop with ease, but we also offer a seller facility, where individuals or businesses can list and sell their own organic products directly through the platform. 🌱💼
 
 # 🚀 Live Demo
 
-🔗 Check out the live version here! <a href="https://organicstore.vercel.app/">Live</a>
-
+🔗 Check out the live version here! <a href="https://organicstore.vercel.app/" target="_blank" rel="noopener noreferrer">Live</a>  
+📄 Road Map and API Docs: <a href="https://classy-chess-c47.notion.site/Organic-Store-API-Documentation-1a15a2d4c68a80a8ad33dfcfcd6865f3" target="_blank" rel="noopener noreferrer">Documentation</a>
 
 # 📚 About the Project
 
@@ -40,9 +42,18 @@ The project is built using the following technologies:
 
 **Axios** 🌐: For efficient API calls and data fetching.
 
+**Node.js** ⚙️: For building the backend with JavaScript on the server side.
 
-# 🔎 Features
+**Express.js** 🚀: For handling server routing and APIs.
 
+**MongoDB 🍃**: For storing and managing the application data.
+
+**Multer 📁**: For handling file uploads in the backend.
+
+**xlsx 📊**: For reading and writing Excel files.
+
+
+## 🔎 Features
 **🍲 Browse Products**: Explore a wide selection of organic products.
 
 **🛏️ Responsive Design**: Fully optimized for desktop, tablet, and mobile devices.
@@ -53,10 +64,33 @@ The project is built using the following technologies:
 
 **📊 API Integration**: Fetch product data dynamically using Axios.
 
+**🔍 Search, Filter & Sort**: Easily find products with advanced searching, filtering, and sorting options.
+
+**📑 Pagination**: Efficiently browse through large lists of products.
+
+**📄 Product Description**: View detailed information about each product.
+
+**💳 Payment Options**: Supports both Cash on Delivery (COD) and Online Payment methods.
+
+**📦 Order Review**: Review your complete order before placing it.
+
+**🧑‍💼 Admin Panel**:
+
+  • ➕ Add new products manually or via Excel uploads (📁 xlsx support).
+  
+  • 🗑️ Delete or 🛠️ update existing products.
+  
+  • 📈 View detailed analytics for sales and product performance.
+  
+  
+**🛍️ Become a Seller**: Users can register as sellers and list their own organic products on the platform.
+
 # 📸 Screenshots
 
-![image](https://github.com/user-attachments/assets/661893cd-8824-4db6-a80b-5be0f0428dea)
+## Users Side & Admin Side
+<img width="450px" src="https://github.com/user-attachments/assets/fdde229f-1822-4c83-8aec-ecefe46e79d0" />
 
+<img width="550px" src="https://github.com/user-attachments/assets/90386103-5974-4f96-8cee-40a0eb9196a1"/>
 
 # 🔧 Installation & Setup
 Follow these steps to set up the project on your local machine:
