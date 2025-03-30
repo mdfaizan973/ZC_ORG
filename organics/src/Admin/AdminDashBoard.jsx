@@ -158,7 +158,13 @@ export default function AdminDashBoard() {
 
 import { FaClosedCaptioning, FaFileExcel, FaFileUpload } from "react-icons/fa";
 import { deleteData, getSessionData, postData } from "../utils/utils";
-import { FiShoppingBag, FiUploadCloud } from "react-icons/fi";
+import {
+  FiCheckCircle,
+  FiDownload,
+  FiFile,
+  FiShoppingBag,
+  FiUploadCloud,
+} from "react-icons/fi";
 function ProductForm({
   handleAddProducts,
   dataForEdit,
@@ -382,6 +388,33 @@ function ProductForm({
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 1000,
         });
+      }
+    }
+  };
+
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    if (e.dataTransfer.files.length > 0) {
+      const droppedFile = e.dataTransfer.files[0];
+      if (
+        droppedFile.name.endsWith(".xlsx") ||
+        droppedFile.name.endsWith(".xls")
+      ) {
+        setFile(droppedFile);
       }
     }
   };
@@ -1007,53 +1040,196 @@ function ProductForm({
 
       {/* Model For Excel */}
       {isOpenFileModel && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center p-4">
-          <div className="w-96 p-6 bg-white rounded-lg shadow-lg relative">
-            {/* Close Button */}
-            <button
-              className="absolute top-1 right-3 mb-2 text-gray-500 hover:text-gray-700 transition text-2xl"
-              onClick={closeFileModel}
-            >
-              <IoClose />
-            </button>
-
-            {/* File Upload Box */}
-            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 transition">
-              <input
-                type="file"
-                className="hidden"
-                onChange={handleFileChange}
-                accept="image/*, application/pdf, .xlsx, .xls"
-              />
-              <FiUploadCloud className="text-blue-500 text-5xl mb-2" />
-              <p className="text-gray-500 text-sm">
-                {file ? file.name : "Click to upload or drag & drop"}
-              </p>
-            </label>
-
-            {/* File Name & Remove Option */}
-            {file && (
-              <div className="mt-4 flex items-center justify-between bg-gray-200 px-4 py-3 rounded-md">
-                <span className="text-gray-700 text-sm truncate">
-                  {file.name}
-                </span>
-                <button
-                  className="text-red-500 hover:text-red-700 transition"
-                  onClick={() => setFile(null)}
-                >
-                  ✖
-                </button>
+        <div
+          className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 flex justify-end transition-all duration-500"
+          onClick={closeFileModel}
+        >
+          {/* Drawer Panel */}
+          <div
+            className="bg-white w-full max-w-md h-full overflow-y-auto shadow-2xl transform transition-transform duration-500 ease-out animate-slide-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-8">
+              {/* Header with Gradient */}
+              <div className="relative mb-8">
+                <div className="absolute -top-8 -left-8 -right-8 h-20 bg-gradient-to-r from-emerald-500 to-green-400  shadow-lg"></div>
+                <div className="relative flex items-center justify-between">
+                  <h2 className="text-2xl font-bold text-white drop-shadow-sm">
+                    Upload Excel File
+                  </h2>
+                  <button
+                    className="text-white hover:text-emerald-100 transition text-2xl bg-white/20 rounded-full p-1"
+                    onClick={closeFileModel}
+                  >
+                    <IoClose />
+                  </button>
+                </div>
               </div>
-            )}
 
-            {/* Submit Button */}
-            <button
-              className="mt-5 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-lg font-semibold transition"
-              onClick={handleSubmitExcel}
-              disabled={!file}
-            >
-              Submit File
-            </button>
+              {/* Required Fields Card */}
+              <div className="mb-4 bg-emerald-50 p-5 rounded-xl border border-emerald-100 shadow-sm">
+                <div className="flex items-start">
+                  <div className="bg-emerald-500/10 p-2 rounded-lg mr-3">
+                    <AiOutlineInfoCircle className="text-emerald-600 text-xl" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-emerald-800 mb-2">
+                      Required Fields
+                    </h3>
+                    <p className="text-sm text-emerald-700 mb-3">
+                      Your Excel file must include these columns:
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        "category",
+                        "title",
+                        "description",
+                        "price_inr",
+                        "saler_email",
+                        "saler_id",
+                        "saler_name",
+                      ].map((field) => (
+                        <div key={field} className="flex items-center">
+                          <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
+                          <span className="text-sm text-emerald-700">
+                            {field}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Download Template Link */}
+              <div className="mb-4">
+                <a
+                  href="#"
+                  className="flex items-center justify-center text-emerald-600 hover:text-emerald-800 transition group bg-emerald-50 hover:bg-emerald-100 p-4 rounded-xl border border-emerald-100"
+                >
+                  <div className="bg-white p-2 rounded-lg shadow-sm mr-3">
+                    <FiDownload className="text-emerald-600 text-xl group-hover:scale-110 transition-transform" />
+                  </div>
+                  <div>
+                    <span className="font-medium">Download Template</span>
+                    <p className="text-xs text-emerald-600/70">
+                      Get a pre-formatted Excel file
+                    </p>
+                  </div>
+                </a>
+              </div>
+
+              {/* File Upload Box */}
+              <div className="mb-4">
+                <label
+                  className={`flex flex-col items-center justify-center w-full h-48 border-2 ${
+                    isDragging
+                      ? "border-emerald-500 bg-emerald-50"
+                      : "border-dashed border-emerald-200 bg-white"
+                  } rounded-xl cursor-pointer hover:border-emerald-400 transition-all duration-300 group relative overflow-hidden`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                >
+                  {/* Background Pattern */}
+                  <div className="absolute inset-0 opacity-5 pointer-events-none">
+                    <div className="absolute top-0 left-0 right-0 h-20 bg-emerald-500 transform -skew-y-6 translate-y-10"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-20 bg-emerald-500 transform skew-y-6 translate-y-10"></div>
+                  </div>
+
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileChange}
+                    accept=".xlsx, .xls"
+                  />
+
+                  <div
+                    className={`transition-all duration-300 ${
+                      isDragging ? "scale-110" : "scale-100"
+                    }`}
+                  >
+                    <div className="bg-emerald-100 p-4 rounded-full mb-4 group-hover:bg-emerald-200 transition-colors">
+                      <FiUploadCloud className="text-emerald-600 text-3xl group-hover:scale-110 transition-transform" />
+                    </div>
+                  </div>
+
+                  <div className="text-center">
+                    <p className="text-emerald-700 font-medium mb-1">
+                      {file ? file.name : "Upload your Excel file"}
+                    </p>
+                    <p className="text-emerald-500/70 text-sm px-4">
+                      {file
+                        ? "Click to change file"
+                        : "Click to upload or drag & drop"}
+                    </p>
+                  </div>
+
+                  {isDragging && (
+                    <div className="absolute inset-0 bg-emerald-500/10 flex items-center justify-center">
+                      <p className="text-emerald-700 font-medium">
+                        Drop your file here
+                      </p>
+                    </div>
+                  )}
+                </label>
+              </div>
+
+              {/* File Name & Remove Option */}
+              {file && (
+                <div className="mb-8 bg-white p-4 rounded-xl border border-emerald-100 shadow-sm transition-all duration-300 animate-fade-in">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center overflow-hidden">
+                      <div className="bg-emerald-100 p-3 rounded-lg mr-3">
+                        <FiFile className="text-emerald-600" />
+                      </div>
+                      <div>
+                        <div className="flex items-center">
+                          <span className="text-emerald-800 font-medium truncate max-w-[180px]">
+                            {file.name}
+                          </span>
+                          <span className="ml-2 bg-emerald-100 text-emerald-700 text-xs px-2 py-0.5 rounded-full">
+                            Excel
+                          </span>
+                        </div>
+                        <p className="text-xs text-emerald-500/70">
+                          {(file.size / 1024).toFixed(1)} KB
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      className="ml-2 text-red-400 hover:text-red-600 transition bg-red-50 hover:bg-red-100 p-1.5 rounded-lg"
+                      onClick={() => setFile(null)}
+                    >
+                      <IoClose />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <button
+                className={`w-full py-4 rounded-xl text-lg font-semibold transition-all duration-300 ${
+                  file
+                    ? "bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-lg hover:shadow-emerald-200/50 hover:shadow-xl hover:translate-y-[-2px]"
+                    : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                }`}
+                onClick={handleSubmitExcel}
+                disabled={!file}
+              >
+                <div className="flex items-center justify-center">
+                  {file && <FiCheckCircle className="mr-2" />}
+                  {file ? "Submit File" : "Select a File to Continue"}
+                </div>
+              </button>
+
+              {!file && (
+                <div className="mt-3 flex items-center justify-center text-xs text-emerald-500/70">
+                  <AiFillExclamationCircle className="mr-1" />
+                  <span>Please upload an Excel file to proceed</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -1336,7 +1512,12 @@ import { FaEdit, FaTrash, FaEye, FaCopy } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Component/Sidebar";
 import Footer from "../Components/Footer";
-import { AiOutlinePlus, AiOutlineDelete } from "react-icons/ai";
+import {
+  AiOutlinePlus,
+  AiOutlineDelete,
+  AiOutlineInfoCircle,
+  AiFillExclamationCircle,
+} from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
 import axios from "axios";
 import AdminProductsTable from "./Component/AdminProductsTable";
