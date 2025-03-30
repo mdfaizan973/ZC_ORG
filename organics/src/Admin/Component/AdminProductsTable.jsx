@@ -247,12 +247,12 @@ export default function AdminProductsTable({
                   </th>
                   <th
                     className="px-6 py-4 font-semibold text-green-800 cursor-pointer hover:bg-green-100 transition-colors"
-                    onClick={() => handleSort("price")}
+                    // onClick={() => handleSort("price")}
                   >
                     <div className="flex items-center">
-                      <FiDollarSign className="mr-2 text-green-600" />
-                      Price
-                      {getSortIcon("price")}
+                      {/* <FiDollarSign className="mr-2 text-green-600" /> */}₹
+                      Price / D-Price
+                      {/* {getSortIcon("price")} */}
                     </div>
                   </th>
                   <th
@@ -321,7 +321,8 @@ export default function AdminProductsTable({
                         </td>
                         <td className="px-6 py-4">
                           <div className="font-medium text-green-700">
-                            ${product.price_inr.toFixed(2)}
+                            ₹{product?.price_inr.toFixed(2)} / ₹
+                            {product?.discount_price_inr?.toFixed(2)}
                           </div>
                         </td>
                         <td className="px-6 py-4 hidden md:table-cell">
