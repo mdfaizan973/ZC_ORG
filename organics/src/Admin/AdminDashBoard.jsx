@@ -467,6 +467,7 @@ function ProductForm({
                         <option value="vegetables">Vegetables</option>
                         <option value="grains">Grains</option>
                         <option value="dairy">Dairy</option>
+                        <option value="juice">Juice</option>
                       </select>
                     </div>
 
