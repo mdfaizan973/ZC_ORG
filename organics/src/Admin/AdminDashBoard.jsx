@@ -1108,22 +1108,21 @@ function ProductForm({
               </div>
 
               {/* Download Template Link */}
-              <div className="mb-4">
-                <a
-                  href="#"
-                  className="flex items-center justify-center text-emerald-600 hover:text-emerald-800 transition group bg-emerald-50 hover:bg-emerald-100 p-4 rounded-xl border border-emerald-100"
-                >
-                  <div className="bg-white p-2 rounded-lg shadow-sm mr-3">
-                    <FiDownload className="text-emerald-600 text-xl group-hover:scale-110 transition-transform" />
-                  </div>
-                  <div>
-                    <span className="font-medium">Download Template</span>
-                    <p className="text-xs text-emerald-600/70">
-                      Get a pre-formatted Excel file
-                    </p>
-                  </div>
-                </a>
-              </div>
+              <a
+                href="/product_template.xlsx"
+                download
+                className="flex items-center mb-4 justify-center text-emerald-600 hover:text-emerald-800 transition group bg-emerald-50 hover:bg-emerald-100 p-4 rounded-xl border border-emerald-100"
+              >
+                <div className="bg-white p-2 rounded-lg shadow-sm mr-3">
+                  <FiDownload className="text-emerald-600 text-xl group-hover:scale-110 transition-transform" />
+                </div>
+                <div>
+                  <span className="font-medium">Download Template</span>
+                  <p className="text-xs text-emerald-600/70">
+                    Get a pre-formatted Excel file
+                  </p>
+                </div>
+              </a>
 
               {/* File Upload Box */}
               <div className="mb-4">
