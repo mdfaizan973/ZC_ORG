@@ -15,6 +15,15 @@ function App() {
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
+        const shouldUpdate = latestOrders.some(
+          (order) => order.order_status !== "Delivered"
+        );
+
+        if (!shouldUpdate) {
+          console.log("All orders are already delivered. Skipping update.");
+          return; // Don't run update logic
+        }
+
         const latestOrders = await fetchData(`${baseUrl2}/orders`);
 
         await Promise.all(
@@ -47,7 +56,7 @@ function App() {
       } catch (error) {
         console.error("Update failed:", error);
       }
-    }, 20 * 1000); // 1 hour
+    }, 20 * 1000); // 20 sec
 
     return () => clearInterval(interval);
   }, []);

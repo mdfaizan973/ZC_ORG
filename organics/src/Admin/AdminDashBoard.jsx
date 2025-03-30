@@ -43,6 +43,9 @@ export default function AdminDashBoard() {
     }
   };
 
+  const handleRefresh = () => {
+    loadProducts();
+  };
   return (
     <>
       <ToastContainer />
@@ -73,6 +76,7 @@ export default function AdminDashBoard() {
                   <div className="flex flex-wrap justify-end items-center gap-4 p-2 font-bold text-gray-500 shadow-md bg-white rounded-lg mb-4">
                     <ProductForm
                       handleAddProducts={handleAddProducts}
+                      handleRefresh={handleRefresh}
                       isOpen={isOpen}
                       openModal={openModal}
                       closeModal={closeModal}
@@ -162,11 +166,13 @@ import {
   FiCheckCircle,
   FiDownload,
   FiFile,
+  FiRefreshCcw,
   FiShoppingBag,
   FiUploadCloud,
 } from "react-icons/fi";
 function ProductForm({
   handleAddProducts,
+  handleRefresh,
   dataForEdit,
   isOpen,
   openModal,
@@ -441,13 +447,12 @@ function ProductForm({
         </button>
 
         <button
-          className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center"
+          className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center"
           type="button"
-          onClick={openModal}
-          disabled
+          onClick={handleRefresh}
         >
-          <AiOutlineDelete className="mr-2" />
-          Clear All Data
+          <FiRefreshCcw className="mr-2" />
+          Refresh
         </button>
       </div>
 
