@@ -149,6 +149,7 @@ export default function OrganicPro() {
                   <option value="grains">Grains</option>
                   <option value="nuts & seeds">Nuts & Seeds</option>
                   <option value="herbs & spices">Herbs & Spices</option>
+                  <option value="juice">Juice</option>
                   <option value="oils & fats">Oils & Fats</option>
                   <option value="sweeteners">Sweeteners</option>
                 </select>
