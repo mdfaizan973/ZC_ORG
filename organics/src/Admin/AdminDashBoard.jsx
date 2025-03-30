@@ -387,6 +387,7 @@ function ProductForm({
           autoClose: 1000,
         });
 
+        handleRefresh();
         closeFileModel(); // Close modal after submitting
       } catch (error) {
         console.error("Error uploading file:", error);
