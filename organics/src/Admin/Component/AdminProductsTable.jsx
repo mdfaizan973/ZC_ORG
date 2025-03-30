@@ -17,9 +17,10 @@ import {
   FiTag,
   FiUser,
 } from "react-icons/fi";
-import { baseUrl2 } from "../../../config/confg";
+import { baseUrl2, imageUrl } from "../../../config/confg";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../Pages/LoadingUI/Loader";
+import { placeHolderImage } from "../../utils/uiUtils";
 export default function AdminProductsTable({
   products,
   handleEditProduts,
@@ -66,7 +67,8 @@ export default function AdminProductsTable({
       setSortDirection("asc");
     }
   };
-
+  console.log(products);
+  console.log(selectedCategory);
   // Filter and sort products
   const filteredProducts = products
     .filter(
@@ -303,8 +305,18 @@ export default function AdminProductsTable({
                         onMouseLeave={() => setHoveredRow(null)}
                       >
                         <td className="px-6 py-4">
-                          <div className="font-medium text-gray-800">
-                            {product.title}
+                          <div className="font-medium text-gray-800 flex">
+                            <img
+                              src={
+                                `${imageUrl}${product.image}` ||
+                                placeHolderImage
+                              }
+                              alt={product.title}
+                              width={50}
+                              height={50}
+                              className="object-contain max-h-[25px] rounded-xl"
+                            />
+                            {product.title}{" "}
                           </div>
                         </td>
                         <td className="px-6 py-4">
