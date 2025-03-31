@@ -11,7 +11,7 @@ import { baseUrl, baseUrl2 } from "../../config/confg";
 import { fetchData } from "./AdminAnalytics";
 import Sidebar from "./Component/Sidebar";
 import { getSessionData } from "../utils/utils";
-import { FiEye, FiRefreshCw } from "react-icons/fi";
+import { FiEye, FiRefreshCw, FiShoppingCart } from "react-icons/fi";
 
 import Loader from "../Pages/LoadingUI/Loader";
 export default function Orders() {
@@ -98,9 +98,7 @@ export default function Orders() {
               <div className="container mx-auto px-4 py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                    <div className="bg-green-500 p-2 rounded-lg">
-                      {/* <FaBug className="text-white text-xl" /> */}
-                    </div>
+                    <FiShoppingCart size={18} className="text-green-600" />
                     <h1 className="text-xl font-bold text-gray-800">
                       Orders ({orderDisplayData.length})
                     </h1>

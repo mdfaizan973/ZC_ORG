@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import AdminNav from "./AdminNav";
 import Sidebar from "./Component/Sidebar";
-import { FaUser } from "react-icons/fa";
+import { FaTimesCircle, FaUser } from "react-icons/fa";
 import { FiEye, FiRefreshCw, FiSearch } from "react-icons/fi";
 import { FaUserPlus, FaUsers } from "react-icons/fa";
-import { deleteData, fetchData, postData } from "../utils/utils";
+import {
+  deleteData,
+  fetchData,
+  getSessionData,
+  postData,
+} from "../utils/utils";
 import { baseUrl2 } from "../../config/confg";
 import { AiFillCloseCircle } from "react-icons/ai";
 import {
@@ -20,7 +25,7 @@ import Loader from "../Pages/LoadingUI/Loader";
 export default function SalersLst() {
   const [salersReqList, setSalerRequestData] = useState([]);
   const [salerListData, setSalerListData] = useState([]);
-  const [activeTab, setActiveTab] = useState("salerRequest");
+  const [activeTab, setActiveTab] = useState("ourSaler");
   const [salerLoading, setSalerLoading] = useState(false);
 
   const load_saler_request_list = async () => {
@@ -47,13 +52,13 @@ export default function SalersLst() {
       setSalerRequestData(requests);
       // setSalerListData(salers);
 
-      prepareUserListata(requests, salers);
+      prepareUserListata(salers);
     } catch (error) {
       console.error("Error loading data:", error);
     }
   };
 
-  const prepareUserListata = (requests, salers) => {
+  const prepareUserListata = (salers) => {
     const salerDataList = salers.filter(
       (ele) => ele.role_id == 2 || ele.role_id == 1
     );
@@ -140,17 +145,6 @@ export default function SalersLst() {
 
               <div className="flex border-b border-gray-200">
                 <button
-                  onClick={() => setActiveTab("salerRequest")}
-                  className={`flex-1 py-2 px-4 text-center font-medium flex items-center justify-center gap-2 
-  ${
-    activeTab === "salerRequest"
-      ? "border-b-2 border-green-500 text-green-600"
-      : "text-gray-500 hover:text-green-500"
-  }`}
-                >
-                  <FaUserPlus /> Saler Request
-                </button>
-                <button
                   onClick={() => setActiveTab("ourSaler")}
                   className={`flex-1 py-2 px-4 text-center font-medium flex items-center justify-center gap-2 
   ${
@@ -160,6 +154,21 @@ export default function SalersLst() {
   }`}
                 >
                   <FaUsers /> Our Saler
+                </button>
+
+                <button
+                  onClick={() => setActiveTab("salerRequest")}
+                  className={`flex-1 py-2 px-4 text-center font-medium flex items-center justify-center gap-2 
+  ${
+    activeTab === "salerRequest"
+      ? "border-b-2 border-green-500 text-green-600"
+      : "text-gray-500 hover:text-green-500"
+  }`}
+                >
+                  <FaUserPlus /> Saler Request{" "}
+                  {salersReqList.length > 0 ? (
+                    <div className="bg-blue-500 p-2 rounded-lg"></div>
+                  ) : null}
                 </button>
               </div>
               {salerLoading ? (
@@ -197,11 +206,13 @@ export default function SalersLst() {
 }
 
 import { FaEye } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const SalerTable = ({ salerListData, handleRemoveSaler }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSaler, setSelectedSaler] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const openModal = (saler) => {
     setSelectedSaler(saler);
@@ -250,7 +261,10 @@ const SalerTable = ({ salerListData, handleRemoveSaler }) => {
             <tbody>
               {filteredSalers.map((saler, index) => (
                 <tr key={index} className="border-t hover:bg-green-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td
+                    className="px-6 py-4 whitespace-nowrap"
+                    onClick={() => navigate(`/adminproducts/${saler._id}}`)}
+                  >
                     <div className="text-sm font-medium text-gray-900">
                       {saler.name} ({saler.role_id})
                     </div>

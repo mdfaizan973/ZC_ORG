@@ -15,7 +15,7 @@ export default function AdminDashBoard() {
   const [prodLoading, setProdLoading] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
-
+  const { id } = useParams();
   useEffect(() => {
     loadProducts();
   }, []);
@@ -37,7 +37,7 @@ export default function AdminDashBoard() {
   const loadProducts = async () => {
     setProdLoading(true);
     const data = await fetchData(
-      `${baseUrl2}/products/saler/${getSessionData("_id")}`
+      `${baseUrl2}/products/saler/${id}` //${getSessionData("_id")}
     );
     setProdLoading(false);
     if (data) {
@@ -1516,7 +1516,7 @@ ProductCard.propTypes = {
 };
 
 import { FaEdit, FaTrash, FaEye, FaCopy } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "./Component/Sidebar";
 import Footer from "../Components/Footer";
 import {

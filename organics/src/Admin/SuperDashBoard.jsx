@@ -13,7 +13,7 @@ export default function SuperDashBoard({ show_descrition = true }) {
         "Manage all listed products, add new items, update details, and remove listings as needed.",
       image:
         "https://i.pinimg.com/736x/bf/5f/ae/bf5fae190185579182ecf210327e2df3.jpg",
-      route: "/adminproducts",
+      route: `/adminproducts/${getSessionData("_id")}`,
     },
     {
       title: "Orders",

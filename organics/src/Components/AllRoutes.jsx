@@ -86,7 +86,7 @@ export default function AllRoutes() {
           element={<AdminProtectedRoute component={SuperDashBoard} />}
         />
         <Route
-          path="/adminproducts"
+          path="/adminproducts/:id"
           element={<AdminProtectedRoute component={AdminDashBoard} />}
         />
         <Route
