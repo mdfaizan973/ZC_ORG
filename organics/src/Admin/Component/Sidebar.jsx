@@ -31,7 +31,11 @@ const Sidebar = () => {
 
   const allMenuItems = [
     { title: "Dashboard", icon: <AiFillDashboard />, route: "/admin-portal" },
-    { title: "Products", icon: <FiShoppingBag />, route: "/adminproducts" },
+    {
+      title: "Products",
+      icon: <FiShoppingBag />,
+      route: `/adminproducts/${getSessionData("_id")}`,
+    },
     { title: "Orders", icon: <FiShoppingCart />, route: "/orders" },
     { title: "Analytics", icon: <FiBarChart2 />, route: "/admin-analytics" },
     // {
