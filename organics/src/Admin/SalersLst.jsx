@@ -230,7 +230,6 @@ const SalerTable = ({ salerListData, handleRemoveSaler }) => {
   // console.log(selectedSaler);
 
   const handleRouteProduct = (salerId) => {
-    console.log(salerId);
     navigate(`/adminproducts/${salerId}`);
   };
   return (

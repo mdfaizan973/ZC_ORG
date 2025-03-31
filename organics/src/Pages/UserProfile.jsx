@@ -193,12 +193,14 @@ export default function UserProfile() {
             icon={<FiHeart />}
             label="Wishlist"
           />
-          <TabButton
-            active={activeTab === "sell"}
-            onClick={() => setActiveTab("sell")}
-            icon={<FiDollarSign />}
-            label="Become a Saller"
-          />
+          {getSessionData("role_id") !== 2 && (
+            <TabButton
+              active={activeTab === "sell"}
+              onClick={() => setActiveTab("sell")}
+              icon={<FiDollarSign />}
+              label="Become a Saller"
+            />
+          )}
         </div>
 
         {/* Tab Content */}
