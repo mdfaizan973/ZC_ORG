@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,6 +10,7 @@ import { FaUser } from "react-icons/fa";
 import { postData } from "../utils/utils";
 
 export default function SignupPage() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -58,6 +59,7 @@ export default function SignupPage() {
         toast.success(`${user_data?.message}`, {
           position: toast.POSITION.TOP_RIGHT,
         });
+        navigate("/login");
       } else {
         toast.warn(`${user_data?.message}`, {
           position: toast.POSITION.TOP_RIGHT,

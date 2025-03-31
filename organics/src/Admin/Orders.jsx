@@ -12,6 +12,8 @@ import { fetchData } from "./AdminAnalytics";
 import Sidebar from "./Component/Sidebar";
 import { getSessionData } from "../utils/utils";
 import { FiRefreshCw } from "react-icons/fi";
+
+import Loader from "../Pages/LoadingUI/Loader";
 export default function Orders() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -79,7 +81,9 @@ export default function Orders() {
     load_order_data();
   }, []);
   const load_order_data = async () => {
-    const data = await fetchData(`${baseUrl2}/orders`);
+    const data = await fetchData(
+      `${baseUrl2}/orders//${getSessionData("_id")}`
+    );
     setOrderDisplayData(data);
 
     const listOrderProd = data
@@ -112,7 +116,9 @@ export default function Orders() {
         </aside>
 
         {load ? (
-          <TableIndid />
+          <div className="flex items-center justify-center h-[400px] w-full">
+            <Loader />
+          </div>
         ) : (
           <main className="w-4/5  rounded ">
             <header className="bg-white border-b border-gray-200 mt-2 mr-2 mb-2">
@@ -122,9 +128,7 @@ export default function Orders() {
                     <div className="bg-green-500 p-2 rounded-lg">
                       {/* <FaBug className="text-white text-xl" /> */}
                     </div>
-                    <h1 className="text-xl font-bold text-gray-800">
-                      Bug Report Dashboard
-                    </h1>
+                    <h1 className="text-xl font-bold text-gray-800">Orders</h1>
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="bg-green-100 text-green-800 px-3 py-1 rounded-md text-sm font-medium">
