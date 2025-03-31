@@ -209,13 +209,14 @@ export default function OrganicPro() {
       ) : orgData?.length <= 0 ? (
         <EmptyData />
       ) : (
-        <div className="w-fit mx-auto grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
+        <div className="w-fit mx-auto p-1 grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
           {currentProducts?.map((ele, i) => (
             <OrgPro
               key={i}
               title={ele.title}
               image={ele.image}
               category={ele.category}
+              description={ele.description}
               price={ele.price_inr}
               howmuch={ele.how_much}
               id={ele._id}
