@@ -216,7 +216,7 @@ const SalerTable = ({ salerListData, handleRemoveSaler }) => {
   const filteredSalers = salerListData.filter((saler) =>
     saler.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
+  console.log(selectedSaler);
   return (
     <>
       {/* Search Bar */}
@@ -359,7 +359,7 @@ const SalerTable = ({ salerListData, handleRemoveSaler }) => {
                   Applied Date
                 </h4>
                 <p className="text-sm text-gray-700">
-                  {new Date(selectedSaler.applied_date).toLocaleString()}
+                  {new Date(selectedSaler.updatedAt).toLocaleString()}
                 </p>
               </div>
 
@@ -368,7 +368,9 @@ const SalerTable = ({ salerListData, handleRemoveSaler }) => {
                 <h4 className="text-xs uppercase text-gray-500 font-semibold mb-2">
                   Description
                 </h4>
-                <p className="text-sm text-gray-700">{selectedSaler.decr}</p>
+                <p className="text-sm text-gray-700">
+                  {selectedSaler.description}
+                </p>
               </div>
 
               {/* Profile Image */}
