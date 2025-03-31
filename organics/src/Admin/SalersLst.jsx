@@ -216,7 +216,7 @@ const SalerTable = ({ salerListData, handleRemoveSaler }) => {
   const filteredSalers = salerListData.filter((saler) =>
     saler.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  console.log(selectedSaler);
+  // console.log(selectedSaler);
   return (
     <>
       {/* Search Bar */}
