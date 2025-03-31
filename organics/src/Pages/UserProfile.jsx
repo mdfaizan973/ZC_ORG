@@ -124,6 +124,7 @@ export default function UserProfile() {
     toast.error("Logout Successful", {
       position: toast.POSITION.TOP_RIGHT,
     });
+    navigate("/");
     window.location.reload();
   };
 
@@ -207,7 +208,7 @@ export default function UserProfile() {
               <div className="flex flex-col md:flex-row gap-8 items-start">
                 <div className="w-full md:w-1/3 bg-green-50 rounded-xl p-6 flex flex-col items-center">
                   <div className="relative mb-4">
-                    <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
+                    {/* <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
                       <img
                         src={
                           getSessionData("profile_image") || placeHolderImage
@@ -217,7 +218,11 @@ export default function UserProfile() {
                         height={100}
                         className="object-cover w-full h-full"
                       />
+                    </div> */}
+                    <div className="w-24 h-24 flex items-center justify-center rounded-full bg-blue-600 text-white font-bold text-3xl border-4 border-white shadow-md">
+                      {getSessionData("name").charAt(0).toUpperCase()}
                     </div>
+
                     {/* <button className="absolute bottom-0 right-0 bg-green-500 text-white p-2 rounded-full shadow-lg hover:bg-green-600 transition-colors">
                       <FiEdit2 size={14} />
                     </button> */}
