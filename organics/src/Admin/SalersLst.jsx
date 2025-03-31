@@ -228,6 +228,11 @@ const SalerTable = ({ salerListData, handleRemoveSaler }) => {
     saler.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
   // console.log(selectedSaler);
+
+  const handleRouteProduct = (salerId) => {
+    console.log(salerId);
+    navigate(`/adminproducts/${salerId}`);
+  };
   return (
     <>
       {/* Search Bar */}
@@ -263,7 +268,7 @@ const SalerTable = ({ salerListData, handleRemoveSaler }) => {
                 <tr key={index} className="border-t hover:bg-green-50">
                   <td
                     className="px-6 py-4 whitespace-nowrap"
-                    onClick={() => navigate(`/adminproducts/${saler._id}}`)}
+                    onClick={() => handleRouteProduct(saler._id)}
                   >
                     <div className="text-sm font-medium text-gray-900">
                       {saler.name} ({saler.role_id})
