@@ -40,25 +40,30 @@ export default function Blog() {
   return (
     <div>
       <Navbar />
-      <div></div>
-      <div className="w-[80%] md:w-[60%] lg:w-[50%] xl:w-[40%] mx-auto">
-        {blogsdata.map((ele, i) => (
-          <div
-            key={i}
-            className="rounded-lg overflow-hidden mt-5 mb-5 shadow-md bg-white"
-          >
-            <img src={ele.img} alt="Image" className="w-full rounded-[20px]" />
-            <div className="p-4">
-              <h1 className="text-2xl text-green-500 font-semibold">
-                {ele.heading}
-              </h1>
-              <p className="text-gray-600 mt-2">{ele.paragraph}</p>
-              <button className="mt-4 text-green-500 border border-green-500 hover:bg-green-500 hover:text-white rounded-full px-4 py-2">
-                Read more..
-              </button>
+      <div className="mt-28">
+        <div className="w-[80%] md:w-[60%] lg:w-[50%] xl:w-[40%] mx-auto">
+          {blogsdata.map((ele, i) => (
+            <div
+              key={i}
+              className="rounded-lg overflow-hidden mt-5 mb-5 shadow-md bg-white"
+            >
+              <img
+                src={ele.img}
+                alt="Image"
+                className="w-full rounded-[20px]"
+              />
+              <div className="p-4">
+                <h1 className="text-2xl text-green-500 font-semibold">
+                  {ele.heading}
+                </h1>
+                <p className="text-gray-600 mt-2">{ele.paragraph}</p>
+                <button className="mt-4 text-green-500 border border-green-500 hover:bg-green-500 hover:text-white rounded-full px-4 py-2">
+                  Read more..
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -4,9 +4,9 @@ import Sidebar from "./Component/Sidebar";
 import { FaUser } from "react-icons/fa";
 import { FiEye, FiRefreshCw, FiSearch } from "react-icons/fi";
 import { FaUserPlus, FaUsers } from "react-icons/fa";
-import { fetchData } from "../utils/utils";
+import { deleteData, fetchData, postData } from "../utils/utils";
 import { baseUrl2 } from "../../config/confg";
-import { AiFillCloseCircle, AiFillCloseSquare } from "react-icons/ai";
+import { AiFillCloseCircle } from "react-icons/ai";
 import {
   FiUser,
   FiMail,
@@ -54,33 +54,47 @@ export default function SalersLst() {
   };
 
   const prepareUserListata = (requests, salers) => {
-    let salerRes = [];
-    for (let i = 0; i < requests.length; i++) {
-      for (let j = 0; j < salers.length; j++) {
-        if (
-          requests[i].saler_email == salers[j].email &&
-          salers[j].role_id == 1
-        ) {
-          salerRes.push({
-            ...salers[j],
-            decr: requests[i]["sell_description"],
-            businessName: requests[i]["saler_business_name"],
-            applied_date: requests[i]["applied_date"],
-            name: requests[i]["saler_name"],
-          });
-        }
-      }
-    }
-    console.log(salerRes);
-    setSalerListData(salerRes);
-  };
-  // salerName, saler Email,, saler id=_id,
+    const salerDataList = salers.filter(
+      (ele) => ele.role_id == 2 || ele.role_id == 1
+    );
 
-  const handleUpdateRole = (roleId) => {
-    console.log(roleId); // -> id is 2 make put if 3 make delete
+    setSalerListData(salerDataList);
   };
 
   const handleRefresh = () => {
+    fetchAllSalerData();
+  };
+
+  const handleUpdateSaler = async (salerInfo) => {
+    const userData = await load_saler_list();
+    const getUser = userData.find((ele) => ele.email == salerInfo.saler_email);
+    const url = `${baseUrl2}/users/${getUser._id}`;
+    const newData = {
+      ...getUser,
+      description: salerInfo.sell_description,
+      businessName: salerInfo.saler_business_name,
+      role_id: 2,
+    };
+
+    await postData(url, newData, "PUT");
+    fetchAllSalerData();
+
+    deleteSalerData(salerInfo._id);
+  };
+
+  const deleteSalerData = async (salerId) => {
+    const url = `${baseUrl2}/saler/${salerId}`;
+
+    await deleteData(url, false);
+    fetchAllSalerData();
+  };
+
+  const handleRemoveSaler = async (id) => {
+    const url = `${baseUrl2}/users/${id}`;
+    const newData = {
+      role_id: 3,
+    };
+    await postData(url, newData, "PUT");
     fetchAllSalerData();
   };
   return (
@@ -107,6 +121,9 @@ export default function SalersLst() {
                 <div className="flex items-center space-x-3">
                   <div className="bg-green-100 text-green-800 px-3 py-1 rounded-md text-sm font-medium">
                     Total Requests: {salersReqList?.length}
+                  </div>
+                  <div className="bg-green-100 text-green-800 px-3 py-1 rounded-md text-sm font-medium">
+                    Active Salers: {salerListData?.length}
                   </div>
                   <button
                     className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center"
@@ -155,13 +172,17 @@ export default function SalersLst() {
                     <div className="p-4 border rounded-lg shadow bg-white">
                       <SalerRequestTable
                         salersReqList={salersReqList}
-                        handleUpdateRole={handleUpdateRole}
+                        handleUpdateSaler={handleUpdateSaler}
+                        deleteSalerData={deleteSalerData}
                       />
                     </div>
                   )}
                   {activeTab === "ourSaler" && (
                     <>
-                      <SalerTable salerListData={salerListData} />
+                      <SalerTable
+                        salerListData={salerListData}
+                        handleRemoveSaler={handleRemoveSaler}
+                      />
                     </>
                   )}
                 </div>
@@ -177,7 +198,7 @@ export default function SalersLst() {
 
 import { FaEye } from "react-icons/fa";
 
-const SalerTable = ({ salerListData }) => {
+const SalerTable = ({ salerListData, handleRemoveSaler }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSaler, setSelectedSaler] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -222,8 +243,7 @@ const SalerTable = ({ salerListData }) => {
               <tr className="text-sm text-left bg-green-500 text-white">
                 <th className="py-2 px-4 text-left">Saler Name</th>
                 <th className="py-2 px-4 text-left">Email</th>
-                <th className="py-2 px-4 text-left">Applied Date</th>
-                <th className="py-2 px-4 text-left">Business Name</th>
+                <th className="py-2 px-4 text-left">Access Date</th>
                 <th className="py-2 px-4 text-left">Action</th>
               </tr>
             </thead>
@@ -232,7 +252,7 @@ const SalerTable = ({ salerListData }) => {
                 <tr key={index} className="border-t hover:bg-green-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
-                      {saler.name}
+                      {saler.name} ({saler.role_id})
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -242,14 +262,10 @@ const SalerTable = ({ salerListData }) => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
-                      {new Date(saler.applied_date).toLocaleDateString()}
+                      {new Date(saler.updatedAt).toLocaleString()}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
-                      {saler.businessName}
-                    </div>
-                  </td>
+
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
                       <button
@@ -370,7 +386,10 @@ const SalerTable = ({ salerListData }) => {
               )}
             </div>
 
-            <button className="mt-6 w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">
+            <button
+              className="mt-6 w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+              onClick={() => handleRemoveSaler(selectedSaler._id)}
+            >
               Update Role
             </button>
           </div>
@@ -380,7 +399,11 @@ const SalerTable = ({ salerListData }) => {
   );
 };
 
-const SalerRequestTable = ({ salersReqList, handleUpdateRole }) => {
+const SalerRequestTable = ({
+  salersReqList,
+  handleUpdateSaler,
+  deleteSalerData,
+}) => {
   const [showSalserModel, setShowSalerModel] = useState(false);
   const [showSalserInfo, setShowSalerInfo] = useState({});
 
@@ -443,7 +466,7 @@ const SalerRequestTable = ({ salersReqList, handleUpdateRole }) => {
                   </button>
                   <button
                     className="text-red-600 hover:text-red-900"
-                    onClick={() => handleUpdateRole(3)}
+                    onClick={() => deleteSalerData(ele._id)}
                   >
                     <AiFillCloseCircle />
                   </button>
@@ -532,9 +555,7 @@ const SalerRequestTable = ({ salersReqList, handleUpdateRole }) => {
             {/* Update Button */}
             <button
               className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg shadow-md transition duration-200"
-              onClick={() => {
-                alert("Status updated!");
-              }}
+              onClick={() => handleUpdateSaler(showSalserInfo)}
             >
               ✅ Update Status
             </button>

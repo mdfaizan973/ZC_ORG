@@ -36,7 +36,9 @@ export default function AdminDashBoard() {
 
   const loadProducts = async () => {
     setProdLoading(true);
-    const data = await fetchData(`${baseUrl2}/products`);
+    const data = await fetchData(
+      `${baseUrl2}/products/saler/${getSessionData("_id")}`
+    );
     setProdLoading(false);
     if (data) {
       setProducts(data);
