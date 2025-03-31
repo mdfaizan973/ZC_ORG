@@ -19,22 +19,6 @@ export default function Orders() {
   const [page, setPage] = useState(1);
   const [load, setLoad] = useState(false);
   const [ppOrders, setPpOrdersData] = useState([]);
-  const admingetdata = (page) => {
-    setLoad(true);
-    axios
-      .get(`${baseUrl}/pporders?_limit=10&_page=${page}`)
-      .then((res) => {
-        // console.log(res.data);
-        setLoad(false);
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  useEffect(() => {
-    admingetdata(page);
-  }, [page]);
 
   const handlepre = () => {
     setPage(page - 1);
@@ -42,21 +26,6 @@ export default function Orders() {
   const handlenext = () => {
     setPage(page + 1);
   };
-
-  const users_url = `${baseUrl}/pporders`;
-
-  useEffect(() => {
-    const load_Data = async () => {
-      try {
-        const cod_Data = await fetchData(users_url);
-        setPpOrdersData(cod_Data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    load_Data();
-  }, []);
 
   //   Delete
   const handleDelete = (id) => {
@@ -81,9 +50,11 @@ export default function Orders() {
     load_order_data();
   }, []);
   const load_order_data = async () => {
+    setLoad(true);
     const data = await fetchData(
       `${baseUrl2}/orders//${getSessionData("_id")}`
     );
+    setLoad(false);
     setOrderDisplayData(data);
 
     const listOrderProd = data
