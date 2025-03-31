@@ -215,6 +215,7 @@ export default function OrganicPro() {
               key={i}
               title={ele.title}
               image={ele.image}
+              category={ele.category}
               price={ele.price_inr}
               howmuch={ele.how_much}
               id={ele._id}

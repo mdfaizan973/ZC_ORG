@@ -11,7 +11,8 @@ import { placeHolderImage, prepare_wishlist } from "../../utils/uiUtils";
 import { baseUrl2, imageUrl } from "../../../config/confg";
 
 export default function OrgPro(props) {
-  const { image, price, title, addtocart, id, howmuch, dataItem } = props;
+  const { image, category, price, title, addtocart, id, howmuch, dataItem } =
+    props;
   // image , price ,title
 
   const [showTooltip, setShowTooltip] = useState(false);
@@ -41,21 +42,16 @@ export default function OrgPro(props) {
         <RouterLink to={`/productdiscription/${id}`}>
           <img
             src={`${imageUrl}${image}` || placeHolderImage}
-            // src="https://i.pinimg.com/564x/6d/1c/fa/6d1cfa4e1a5e58d31cc935fad125e046.jpg"
             alt=""
             className="h-60 w-72 object-cover rounded-t-xl"
           />
         </RouterLink>
         <div className="px-4 py-3 w-72">
-          {/* <span className="text-red-400 font-bold mr-3 uppercase text-xs">
-              View
-            </span> */}
           <div className="flex justify-between items-center gap-3">
-            {/* Details Button */}
-            <div className="relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-1 px-3 font-sans text-xs font-bold uppercase text-white">
-              <RouterLink to={`/productdiscription/${id}`}>
-                <div>Details</div>
-              </RouterLink>
+            <div className="relative inline-block select-none whitespace-nowrap rounded-lg bg-gray-400 py-1 px-3 font-sans text-xs font-bold uppercase text-white">
+              {/* <RouterLink to={`/productdiscription/${id}`}> */}
+              <div>{category}</div>
+              {/* </RouterLink> */}
             </div>
 
             <div>

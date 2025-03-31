@@ -3,6 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 import Navbar from "../../Components/Navbar";
 import { useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
+import Carousel from "./Carousel";
 export default function Home() {
   const data = [
     {
@@ -47,11 +48,9 @@ export default function Home() {
   return (
     <div>
       <Navbar />
-
       <div className="banner mt-1 cursor-pointer">
         <img src="https://www.omfoods.com/cdn/shop/files/Banner_NEW.jpg?v=1681412890" />
       </div>
-
       {/* <div className="relative mt-1 w-full">
         <div className="w-full overflow-hidden">
           <img
@@ -84,7 +83,7 @@ export default function Home() {
           </div>
         </div>
       </div> */}
-
+      {/* small crusal */}
       <div className="main_home_card">
         <section className="py-20">
           <h1 className="mb-10 text-center font-sans text-5xl font-bold text-green-600">
@@ -121,6 +120,8 @@ export default function Home() {
         </section>
       </div>
 
+      <Carousel />
+
       <div>
         <div className="banner relative w-full h-[70vh] ">
           <video
@@ -138,9 +139,7 @@ export default function Home() {
           </video>
         </div>
       </div>
-
       <AboutOrganic />
-
       <div>
         <img src="https://res.cloudinary.com/farmersfreshzone/image/upload/v1690462847/banner/eyrk9ls3hidu00miboq6.jpg" />
       </div>
