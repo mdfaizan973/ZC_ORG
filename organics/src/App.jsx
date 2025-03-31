@@ -15,33 +15,40 @@ function App() {
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
-        const shouldUpdate = latestOrders.some(
-          (order) => order.order_status !== "Delivered"
-        );
-
-        if (!shouldUpdate) {
-          console.log("All orders are already delivered. Skipping update.");
-          return; // Don't run update logic
-        }
-
         const latestOrders = await fetchData(`${baseUrl2}/orders`);
 
+        // Filter orders that actually need an update
+        const ordersToUpdate = latestOrders.filter(
+          (order) =>
+            order.order_status === "Processing" ||
+            order.order_status === "Shipped" ||
+            (order.order_status === "Delivered" &&
+              order.payment_status !== "paid")
+        );
+
+        if (ordersToUpdate.length === 0) {
+          console.log("All orders are up to date. Skipping API calls.");
+          return; // Exit early to prevent unnecessary API calls
+        }
+
+        // Update only the necessary orders
         await Promise.all(
-          latestOrders.map(async (order) => {
-            let updatedData = null;
+          ordersToUpdate.map(async (order) => {
+            let updatedData = {};
 
             if (order.order_status === "Processing") {
-              updatedData = { order_status: "Shipped" };
+              updatedData.order_status = "Shipped";
             } else if (order.order_status === "Shipped") {
-              updatedData = { order_status: "Delivered" };
+              updatedData.order_status = "Delivered";
             } else if (
               order.order_status === "Delivered" &&
               order.payment_status !== "paid"
             ) {
-              updatedData = { payment_status: "paid" };
+              updatedData.payment_status = "paid";
             }
 
-            if (updatedData) {
+            // Send request only if there's an update needed
+            if (Object.keys(updatedData).length > 0) {
               await postData(
                 `${baseUrl2}/orders/${order._id}`,
                 updatedData,
@@ -52,11 +59,11 @@ function App() {
           })
         );
 
-        console.log("Orders checked and updated!");
+        console.log("Only required orders updated!");
       } catch (error) {
         console.error("Update failed:", error);
       }
-    }, 20 * 1000); // 20 sec
+    }, 20 * 1000); // Runs every 20 seconds
 
     return () => clearInterval(interval);
   }, []);
