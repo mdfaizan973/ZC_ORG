@@ -11,7 +11,7 @@ import { baseUrl, baseUrl2 } from "../../config/confg";
 import { fetchData } from "./AdminAnalytics";
 import Sidebar from "./Component/Sidebar";
 import { getSessionData } from "../utils/utils";
-import { FiRefreshCw } from "react-icons/fi";
+import { FiEye, FiRefreshCw } from "react-icons/fi";
 
 import Loader from "../Pages/LoadingUI/Loader";
 export default function Orders() {
@@ -74,7 +74,9 @@ export default function Orders() {
 
     setOrderProdutsList(listOrderProd);
   };
-  console.log(orderDisplayData);
+  const handleRefresh = () => {
+    load_order_data();
+  };
   return (
     <div>
       <ToastContainer />
@@ -99,13 +101,18 @@ export default function Orders() {
                     <div className="bg-green-500 p-2 rounded-lg">
                       {/* <FaBug className="text-white text-xl" /> */}
                     </div>
-                    <h1 className="text-xl font-bold text-gray-800">Orders</h1>
+                    <h1 className="text-xl font-bold text-gray-800">
+                      Orders ({orderDisplayData.length})
+                    </h1>
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="bg-green-100 text-green-800 px-3 py-1 rounded-md text-sm font-medium">
                       Total: {orderDisplayData.length}
                     </div>
-                    <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center">
+                    <button
+                      className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center"
+                      onClick={handleRefresh}
+                    >
                       <FiRefreshCw className="mr-2" /> Refresh
                     </button>
                   </div>
@@ -117,7 +124,7 @@ export default function Orders() {
                 <div className="overflow-x-auto mt-4">
                   <table className="w-full border-collapse rounded-lg">
                     <thead>
-                      <tr className="text-sm text-left bg-green-500 text-white">
+                      <tr className="text-sm text-left bg-green-500 rounded-lg text-white">
                         <th className="px-6 py-3 font-medium">Order Id</th>
                         <th className="px-6 py-3 font-medium">Name</th>
                         <th className="px-6 py-3 font-medium">Category</th>
@@ -183,18 +190,9 @@ export default function Orders() {
                           <td className="px-6 py-4 text-center">
                             <button
                               // onClick={() => handleDelete(ele.id)}
-                              className="px-3 py-2 text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all"
+                              className="px-3 py-2 text-green-600 border border-green-600 rounded-full hover:bg-green-600 hover:text-white transition-all"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                className="w-5 h-5"
-                                viewBox="0 0 16 16"
-                              >
-                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                              </svg>
+                              <FiEye />
                             </button>
                           </td>
                         </tr>
