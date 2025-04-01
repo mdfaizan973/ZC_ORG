@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 // import Image from "next/image";
 import {
   FaLeaf,
@@ -31,7 +31,7 @@ import ProductFeedbackAndQuestions, {
 import Loader from "../LoadingUI/Loader";
 import DiscriptionPageLoader from "../LoadingUI/DiscriptionLoad";
 import { placeHolderImage, prepare_wishlist } from "../../utils/uiUtils";
-
+import ProProductCategoryCarousel from "./ProProductCategoryCarousel";
 // const products = {
 //   _id: "67c41e3d08ab0e184e31e163",
 //   category: "dairy",
@@ -75,6 +75,9 @@ export default function ProductDetailsPage() {
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [filterCatData, setFilterCatData] = useState([]);
+  const categoryRef = useRef("");
+
   const incrementQuantity = () => setQuantity((prev) => prev + 1);
   const decrementQuantity = () =>
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
@@ -83,6 +86,7 @@ export default function ProductDetailsPage() {
 
   useEffect(() => {
     load_prod_details();
+    load_all_products();
   }, [id]);
 
   const load_prod_details = async () => {
@@ -90,6 +94,15 @@ export default function ProductDetailsPage() {
     const data = await fetchData(`${baseUrl2}/products/${id}`);
     setIsLoading(false);
     setProduct(data);
+    categoryRef.current = data?.category;
+  };
+
+  const load_all_products = async () => {
+    const data = await fetchData(`${baseUrl2}/products`);
+    const newCategoryData = data.filter(
+      (ele) => ele.category == categoryRef.current
+    );
+    setFilterCatData(newCategoryData);
   };
 
   const handleCart = async (cartData) => {
@@ -132,7 +145,7 @@ export default function ProductDetailsPage() {
                   height={400}
                   className="object-contain max-h-[400px] rounded-xl"
                 />
-              </div>
+              </div> 
 
               {/* Product Info */}
               <div className="space-y-6">
@@ -457,6 +470,9 @@ export default function ProductDetailsPage() {
 
       {/* FeedBack and Q&A Component */}
       <ProductFeedbackAndQuestions product={product} />
+
+      {/* category */}
+      <ProProductCategoryCarousel productsCategoryList={filterCatData} />
     </>
   );
 }
