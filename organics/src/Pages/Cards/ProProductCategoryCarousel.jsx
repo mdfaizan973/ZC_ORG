@@ -10,59 +10,7 @@ export default function ProProductCategoryCarousel({ productsCategoryList }) {
   const carouselRef = useRef(null);
   const [visibleItems, setVisibleItems] = useState(1);
 
-  // Sample data if no products are provided
-  const sampleProducts = [
-    {
-      id: 1,
-      category: "Toys",
-      title: "Colorful Building Blocks Set for Creative Play",
-      image:
-        "https://my-org-store.onrender.com/uploads/1742638026391-mango.jpg",
-      discount_price_inr: 599,
-    },
-    {
-      id: 2,
-      category: "Books",
-      title: "Adventure Stories Collection for Young Readers",
-      image:
-        "https://my-org-store.onrender.com/uploads/1742638026391-mango.jpg",
-      discount_price_inr: 399,
-    },
-    {
-      id: 3,
-      category: "Crafts",
-      title: "Creative Art Set with Paints and Brushes",
-      image:
-        "https://my-org-store.onrender.com/uploads/1742638026391-mango.jpg",
-      discount_price_inr: 799,
-    },
-    {
-      id: 4,
-      category: "Games",
-      title: "Fun Board Game for Family Game Night",
-      image:
-        "https://my-org-store.onrender.com/uploads/1742638026391-mango.jpg",
-      discount_price_inr: 899,
-    },
-    {
-      id: 5,
-      category: "Puzzles",
-      title: "Animal Kingdom Puzzle with 100 Pieces",
-      image:
-        "https://my-org-store.onrender.com/uploads/1742638026391-mango.jpg",
-      discount_price_inr: 499,
-    },
-    {
-      id: 6,
-      category: "Outdoor",
-      title: "Bubble Blower Machine with Extra Solution",
-      image:
-        "https://my-org-store.onrender.com/uploads/1742638026391-mango.jpg",
-      discount_price_inr: 699,
-    },
-  ];
-
-  const displayProducts = productsCategoryList || sampleProducts;
+  const displayProducts = productsCategoryList;
 
   // Calculate visible items based on container width
   useEffect(() => {
@@ -138,17 +86,19 @@ export default function ProProductCategoryCarousel({ productsCategoryList }) {
       >
         <div className="flex items-center justify-between px-4 py-3 border-b border-indigo-200">
           <h2 className="text-xl font-bold text-black-600">
-            <span className="px-3 py-1 rounded-full">Simmiler Category</span>
+            <span className="px-3 py-1 rounded-full">
+              Simmiler Category ({displayProducts?.length || 0}){" "}
+            </span>
           </h2>
           <div className="flex gap-2">
             <button
               onClick={handlePrev}
-              className="bg-white rounded-full p-2 shadow-md hover:bg-yellow-300 transition-all duration-300"
+              className="bg-white rounded-full p-2 shadow-md hover:bg-green-300 transition-all duration-300"
               aria-label="Previous item"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-indigo-600"
+                className="h-5 w-5 text-green-600"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -163,12 +113,12 @@ export default function ProProductCategoryCarousel({ productsCategoryList }) {
             </button>
             <button
               onClick={handleNext}
-              className="bg-white rounded-full p-2 shadow-md hover:bg-yellow-300 transition-all duration-300"
+              className="bg-white rounded-full p-2 shadow-md hover:bg-green-300 transition-all duration-300"
               aria-label="Next item"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-indigo-600"
+                className="h-5 w-5 text-green-600"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
