@@ -13,6 +13,7 @@ import {
   FiX,
   FiChevronRight,
   FiHome,
+  FiLogOut,
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { getSessionData } from "../../utils/utils";
@@ -194,13 +195,16 @@ const Sidebar = () => {
               className="w-10 h-10 rounded-full border-2 border-green-600"
             />
             {!isCollapsed && (
-              <div className="ml-3">
-                <p className="text-sm font-medium text-gray-800">
-                  {getSessionData("name")}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {getSessionData("email")}
-                </p>
+              <div className="flex justify-between items-end gap-2">
+                <div className="ml-2">
+                  <p className="text-sm font-medium text-gray-800 truncate max-w-[150px]">
+                    {getSessionData("name")}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate max-w-[150px]">
+                    {getSessionData("email")}
+                  </p>
+                </div>
+                <FiLogOut className="text-red-600" />
               </div>
             )}
           </div>
