@@ -26,31 +26,56 @@ The Organic Store is designed to offer:
 🛠️ A clean and intuitive user interface powered by modern web technologies.
 
 
-# 🔧 Tech Stack
-
+# 🛠 Tech Stack  
 The project is built using the following technologies:
+<div ">
 
-**React** 🖊: For building dynamic and interactive UI components.
+<img src="https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB" alt="React" title="React" height="25" />  
+<strong>React 🖊:</strong> For building dynamic and interactive UI components.  
+<br />
 
-**HTML5** 🕽: For structuring the web content.
+<img src="https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white" alt="HTML5" title="HTML5" height="25" />  
+<strong>HTML5 🕽:</strong> For structuring the web content.  
+<br />
 
-**CSS3** 🌈: For styling the application.
+<img src="https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white" alt="CSS3" title="CSS3" height="25" />  
+<strong>CSS3 🌈:</strong> For styling the application.  
+<br />
 
-**JavaScript** 🔬: For adding functionality and interactivity.
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black" alt="JavaScript" title="JavaScript" height="25" />  
+<strong>JavaScript 🔬:</strong> For adding functionality and interactivity.  
+<br />
 
-**Tailwind CSS** 🔥: For fast and responsive styling.
+<img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS" title="Tailwind CSS" height="25" />  
+<strong>Tailwind CSS 🔥:</strong> For fast and responsive styling.  
+<br />
 
-**Axios** 🌐: For efficient API calls and data fetching.
+<img src="https://img.shields.io/badge/Axios-5A29E4?logo=axios&logoColor=white" alt="Axios" title="Axios" height="25" />  
+<strong>Axios 🌐:</strong> For efficient API calls and data fetching.  
+<br />
 
-**Node.js** ⚙️: For building the backend with JavaScript on the server side.
+<img src="https://img.shields.io/badge/Node.js-43853D?logo=node.js&logoColor=white" alt="Node.js" title="Node.js" height="25" />  
+<strong>Node.js ⚙️:</strong> For building the backend with JavaScript on the server side.  
+<br />
 
-**Express.js** 🚀: For handling server routing and APIs.
+<img src="https://img.shields.io/badge/Express.js-000000?logo=express&logoColor=white" alt="Express.js" title="Express.js" height="25" />  
+<strong>Express.js 🚀:</strong> For handling server routing and APIs.  
+<br />
 
-**MongoDB 🍃**: For storing and managing the application data.
+<img src="https://img.shields.io/badge/MongoDB-4EA94B?logo=mongodb&logoColor=white" alt="MongoDB" title="MongoDB" height="25" />  
+<strong>MongoDB 🍃:</strong> For storing and managing the application data.  
+<br />
 
-**Multer 📁**: For handling file uploads in the backend.
+<img src="https://img.shields.io/badge/Multer-4D4D4D?logo=upload&logoColor=white" alt="Multer" title="Multer" height="25" />  
+<strong>Multer 📁:</strong> For handling file uploads in the backend.  
+<br />
 
-**xlsx 📊**: For reading and writing Excel files.
+<img src="https://img.shields.io/badge/xlsx-217346?logo=microsoft-excel&logoColor=white" alt="xlsx" title="xlsx" height="25" />  
+<strong>xlsx 📊:</strong> For reading and writing Excel files.  
+<br />
+
+</div>
+
 
 
 ## 🔎 Features
