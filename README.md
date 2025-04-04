@@ -1,6 +1,5 @@
 <div align="center">
   <img src="https://i.pinimg.com/736x/a6/19/71/a619716b7be42ceaf64215ec4b7ad1ed.jpg" alt="Tech Stack" width="250" />
-  
   # 🌿 Organic Store
 </div>
 
