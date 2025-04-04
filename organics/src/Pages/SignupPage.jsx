@@ -76,6 +76,10 @@ export default function SignupPage() {
       <ToastContainer />
 
       <div className="flex flex-col md:flex-row items-center justify-center min-h-screen p-4">
+        <div className="absolute inset-0 opacity-5 pointer-events-none">
+          <div className="absolute top-0 left-0 right-0 h-20 bg-emerald-500 transform -skew-y-6 translate-y-10"></div>
+          <div className="absolute bottom-0 left-0 right-0 h-20 bg-emerald-500 transform skew-y-6 translate-y-10"></div>
+        </div>
         {/* Left Side - Image */}
         <div className="w-full md:w-1/2 flex justify-center mb-6 md:mb-0">
           <img

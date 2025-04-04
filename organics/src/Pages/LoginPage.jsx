@@ -128,12 +128,12 @@ export default function LoginPage() {
         ""
       )}
       {/* BG Pattern */}
-     <div className="absolute inset-0 opacity-5 pointer-events-none">
-      <div className="absolute top-0 left-0 right-0 h-20 bg-emerald-500 transform -skew-y-6 translate-y-10"></div>
-      <div className="absolute bottom-0 left-0 right-0 h-20 bg-emerald-500 transform skew-y-6 translate-y-10"></div>
-     </div>
-      
-      <div className=" w-full h-screen flex items-center justify-center">
+      <div className="absolute inset-0 opacity-5 pointer-events-none">
+        <div className="absolute top-0 left-0 right-0 h-20 bg-emerald-500 transform -skew-y-6 translate-y-10"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-emerald-500 transform skew-y-6 translate-y-10"></div>
+      </div>
+
+      <div className=" w-full h-screen flex items-center  justify-center">
         <div className="relative flex w-96 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
           <div className="relative mx-4 -mt-6 mb-4 grid h-28 place-items-center overflow-hidden rounded-xl bg-gradient-to-tr from-green-600 to-green-400 bg-clip-border text-white shadow-lg shadow-green-500/40">
             <h3 className="block font-sans text-3xl font-semibold leading-snug tracking-normal text-white antialiased">
