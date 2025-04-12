@@ -8,7 +8,7 @@ import { AiFillLock, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import { postData } from "../utils/utils";
-// 20 ap
+// 20 ap-12 ap
 export default function SignupPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
