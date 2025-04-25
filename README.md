@@ -84,7 +84,10 @@ The project is built using the following technologies:
 
 
 
-## 🔎 Features
+## 🔎 User/Admin/Saller Features
+
+**👤 User Panel**
+
 **🍲 Browse Products**: Explore a wide selection of organic products.
 
 **🛏️ Responsive Design**: Fully optimized for desktop, tablet, and mobile devices.
@@ -131,7 +134,9 @@ The project is built using the following technologies:
 
 **📅 Upcoming Products**: Get a sneak peek of products that are about to launch soon.
 
-**🧑‍💼 Admin Panel**:
+<br/>
+
+**🧑‍💼 Admin/Sellers Panel**:
 
   • ➕ Add new products manually or via Excel uploads (📁 xlsx support).
   
