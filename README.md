@@ -138,8 +138,16 @@ The project is built using the following technologies:
   • 🗑️ Delete or 🛠️ update existing products.
   
   • 📈 View detailed analytics for sales and product performance.
-  
-  
+
+**🛠️ Bug Report Management**: Admin can browse and manage all reported bugs from users in one place.
+
+**📋 Seller Management**: Admin can view all registered sellers and control their selling access (approve or revoke permissions).
+
+**👥 User Management**: Admin can view all users, and manage access or restrictions as needed.
+
+**📈 Product Analytics**: Sellers can view performance insights of their added products in graphical format (e.g., views, sales, ratings).
+
+**🚚 Order Tracking**: Sellers can track user orders related to their products, including status updates and delivery progress.
 
 
 # 📸 Screenshots
