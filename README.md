@@ -105,6 +105,18 @@ The project is built using the following technologies:
 
 **📦 Order Review**: Review your complete order before placing it.
 
+**🔐 Authentication**: Secure login and registration for new users.
+
+**📥 User Dashboard**: A personalized space with quick access to orders, wishlist, and profile settings. 
+
+**👤 User Profile**: View and manage personal details, address, and account settings.
+
+**❤️ Wishlist**: Save your favorite products for future reference.
+
+**🧾 Order History**: Access your previous orders and their statuses.
+  
+**🛍️ Become a Seller**: Users can register as sellers and list their own organic products on the platform.
+
 **🧑‍💼 Admin Panel**:
 
   • ➕ Add new products manually or via Excel uploads (📁 xlsx support).
@@ -114,7 +126,7 @@ The project is built using the following technologies:
   • 📈 View detailed analytics for sales and product performance.
   
   
-**🛍️ Become a Seller**: Users can register as sellers and list their own organic products on the platform.
+
 
 # 📸 Screenshots
 
