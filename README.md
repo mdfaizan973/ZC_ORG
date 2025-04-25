@@ -113,9 +113,23 @@ The project is built using the following technologies:
 
 **❤️ Wishlist**: Save your favorite products for future reference.
 
+**🔗 Product Sharing**: Users can share a direct link to a particular product with others.
+
 **🧾 Order History**: Access your previous orders and their statuses.
   
 **🛍️ Become a Seller**: Users can register as sellers and list their own organic products on the platform.
+
+**🧾 Invoice Download**: Download detailed invoices for each ordered product.
+
+**🐞 Bug Report Section**: Allow users to report issues or bugs directly from the app.
+
+**📝 Product Review**: Users can leave reviews for a particular product based on their experience.
+
+**❓ Product Questions**: Users can ask questions directly to the seller regarding the product.
+
+**📝 Blog Section**: Users can explore insightful articles, updates, and product-related content.
+
+**📅 Upcoming Products**: Get a sneak peek of products that are about to launch soon.
 
 **🧑‍💼 Admin Panel**:
 
