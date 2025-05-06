@@ -181,11 +181,11 @@ export const ChatBot = () => {
   const fetchData = async (inputMessage) => {
     const newQuestionsMessage = `You are a helpful assistant. Your job is to answer only questions related to food, organic products, healthy living, or greetings.
 
-If the user's input has spelling mistakes, please **correct the spelling silently** before answering.
+If the user's input has spelling mistakes, please correct the spelling silently before answering.
 
 If the corrected input is still not related to the allowed topics, reply: "I can't answer that."
 
-Respond in **exactly 20 to 25 words**.
+Respond in exactly 20 to 25 words.
 
 User's question: "${inputMessage}"`;
 
@@ -273,7 +273,7 @@ User's question: "${inputMessage}"`;
               ))
             ) : (
               <div className="flex justify-start">
-                <div className="bg-green-100 p-3 rounded-xl w-fit">
+                <div className="bg-green-100 p-3 rounded-xl w-fit text-sm">
                   🌱 Ask me anything about organic or healthy living!
                 </div>
               </div>
@@ -286,7 +286,7 @@ User's question: "${inputMessage}"`;
             <textarea
               rows={1}
               placeholder="Type a message..."
-              className="flex-1 resize-none px-3 py-2 text-sm border border-green-300 rounded-lg outline-none"
+              className="flex-1 resize-none px-3 py-2 text-sm border border-green-300 rounded-lg outline-none focus:ring-2 focus:ring-green-300"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyDown={(e) => {
@@ -310,7 +310,7 @@ User's question: "${inputMessage}"`;
       <div className="fixed bottom-5 right-5 z-50">
         <button
           onClick={() => setShowChatBox(!showChatBox)}
-          className="w-[70px] h-[70px] rounded-full border-2 border-green-500 shadow-md bg-white overflow-hidden hover:scale-105 transition"
+          className="w-[70px] h-[70px] rounded-full border-2 border-green-500 shadow-lg bg-white overflow-hidden hover:scale-110 transition animate-bounce"
         >
           <img
             src="https://i.pinimg.com/originals/ca/bd/a6/cabda6db3c719d0ea30b1649fd00e891.gif"
