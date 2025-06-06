@@ -119,6 +119,7 @@ export default function Navbar() {
                   <AiOutlineUser />
                 </button>
               </RouterLink>
+              {/*  */}
 
               <RouterLink to={"/bug-report"}>
                 {" "}
