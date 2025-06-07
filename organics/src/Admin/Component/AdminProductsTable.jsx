@@ -303,6 +303,7 @@ export default function AdminProductsTable({
                         }`}
                         onMouseEnter={() => setHoveredRow(product._id)}
                         onMouseLeave={() => setHoveredRow(null)}
+                        onClick={() => handleView(product)}
                       >
                         <td className="px-6 py-4">
                           <div className="font-medium text-gray-800 flex">
@@ -347,7 +348,7 @@ export default function AdminProductsTable({
                                 className="h-5 w-5"
                               />
                             </button>
-                            <button
+                            {/* <button
                               className="p-2  border border-green-600 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-full transition-colors"
                               aria-label="Edit product"
                             >
@@ -355,7 +356,7 @@ export default function AdminProductsTable({
                                 onClick={() => handleView(product)}
                                 className="h-5 w-5"
                               />
-                            </button>
+                            </button> */}
                             <button
                               className="p-2  border border-blue-600 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-full transition-colors"
                               aria-label="Edit product"
