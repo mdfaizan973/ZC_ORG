@@ -7,7 +7,7 @@ import Footer from "./Components/Footer";
 // import Navbar from "./Components/Navbar";
 import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
-import { fetchData, postData } from "./utils/utils";
+import { fetchData, hasToken, postData } from "./utils/utils";
 import { baseUrl2 } from "../config/confg";
 
 function App() {
@@ -15,7 +15,11 @@ function App() {
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
-        const latestOrders = await fetchData(`${baseUrl2}/orders`);
+        let latestOrders;
+        if (hasToken()) {
+          latestOrders = await fetchData(`${baseUrl2}/orders`);
+        }
+        // make the api for current user above
 
         // Filter orders that actually need an update
         const ordersToUpdate = latestOrders.filter(

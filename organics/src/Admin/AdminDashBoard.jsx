@@ -48,6 +48,7 @@ export default function AdminDashBoard() {
   const handleRefresh = () => {
     loadProducts();
   };
+
   return (
     <>
       <ToastContainer />
@@ -370,8 +371,12 @@ function ProductForm({
 
   const handleSubmitExcel = async () => {
     if (file) {
-      const formData = new FormData();
+      console.log(file);
+      let formData = new FormData();
       formData.append("file", file);
+      // formData.append("saler_email", getSessionData("email"));
+      // formData.append("saler_id", getSessionData("_id"));
+      // formData.append("saler_name", getSessionData("name"));
 
       try {
         const response = await axios.post(
@@ -383,14 +388,12 @@ function ProductForm({
             },
           }
         );
-
         toast.success("File uploaded successfully!", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 1000,
         });
-
         handleRefresh();
-        closeFileModel(); // Close modal after submitting
+        // closeFileModel(); // Close modal after submitting
       } catch (error) {
         console.error("Error uploading file:", error);
         toast.error("Failed to upload file!", {
@@ -426,6 +429,13 @@ function ProductForm({
         setFile(droppedFile);
       }
     }
+  };
+
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const handleClick = () => {
+    setShowTooltip(true);
+    setTimeout(() => setShowTooltip(false), 3000); // Hide after 3 seconds
   };
 
   return (
@@ -1111,9 +1121,10 @@ function ProductForm({
 
               {/* Download Template Link */}
               <a
-                href="/product_template.xlsx"
-                download
-                className="flex items-center mb-4 justify-center text-emerald-600 hover:text-emerald-800 transition group bg-emerald-50 hover:bg-emerald-100 p-4 rounded-xl border border-emerald-100"
+                // href="/product_template.xlsx"
+                // download
+                onClick={handleClick}
+                className="flex items-center mb-4 justify-center text-emerald-600 hover:text-emerald-800 transition group bg-emerald-50 hover:bg-emerald-100 p-4 rounded-xl border border-emerald-100 cursor-pointer"
               >
                 <div className="bg-white p-2 rounded-lg shadow-sm mr-3">
                   <FiDownload className="text-emerald-600 text-xl group-hover:scale-110 transition-transform" />
@@ -1125,6 +1136,17 @@ function ProductForm({
                   </p>
                 </div>
               </a>
+
+              {showTooltip && (
+                <a href="/product_template.xlsx" download>
+                  <div className="absolute left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-3 py-2 shadow-md z-10 w-64 text-center">
+                    This is dummy data. Update it with your name, email, and ID
+                    in the Excel file.
+                    <br />
+                    Click to Download
+                  </div>
+                </a>
+              )}
 
               {/* File Upload Box */}
               <div className="mb-4">
