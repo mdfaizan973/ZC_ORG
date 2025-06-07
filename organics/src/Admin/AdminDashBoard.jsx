@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 // import SuperDashBoard from "./SuperDashBoard";
 import { baseUrl2 } from "../../config/confg";
 import { fetchData } from "./AdminAnalytics";
+import * as XLSX from "xlsx";
 export default function AdminDashBoard() {
   // ------------------New API's--------------------------
   const [products, setProducts] = useState([]);
@@ -369,38 +370,104 @@ function ProductForm({
     }
   };
 
-  const handleSubmitExcel = async () => {
-    if (file) {
-      console.log(file);
-      let formData = new FormData();
-      formData.append("file", file);
-      // formData.append("saler_email", getSessionData("email"));
-      // formData.append("saler_id", getSessionData("_id"));
-      // formData.append("saler_name", getSessionData("name"));
+  // const handleSubmitExcel = async () => {
+  //   if (file) {
+  //     console.log(file);
+  //     let formData = new FormData();
+  //     formData.append("file", file);
+  //     // formData.append("saler_email", getSessionData("email"));
+  //     // formData.append("saler_id", getSessionData("_id"));
+  //     // formData.append("saler_name", getSessionData("name"));
 
-      try {
-        const response = await axios.post(
-          `${baseUrl2}/products/upload`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        toast.success("File uploaded successfully!", {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 1000,
-        });
-        handleRefresh();
-        // closeFileModel(); // Close modal after submitting
-      } catch (error) {
-        console.error("Error uploading file:", error);
-        toast.error("Failed to upload file!", {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 1000,
-        });
-      }
+  //     try {
+  //       const response = await axios.post(
+  //         `${baseUrl2}/products/upload`,
+  //         formData,
+  //         {
+  //           headers: {
+  //             "Content-Type": "multipart/form-data",
+  //           },
+  //         }
+  //       );
+  //       toast.success("File uploaded successfully!", {
+  //         position: toast.POSITION.TOP_RIGHT,
+  //         autoClose: 1000,
+  //       });
+  //       handleRefresh();
+  //       // closeFileModel(); // Close modal after submitting
+  //     } catch (error) {
+  //       console.error("Error uploading file:", error);
+  //       toast.error("Failed to upload file!", {
+  //         position: toast.POSITION.TOP_RIGHT,
+  //         autoClose: 1000,
+  //       });
+  //     }
+  //   }
+  // };
+
+  const handleSubmitExcel = async () => {
+    if (!file) return;
+
+    try {
+      // Read file as binary string
+      const data = await file.arrayBuffer();
+      const workbook = XLSX.read(data, { type: "array" });
+
+      // Assume you are editing the first sheet
+      const firstSheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheetName];
+
+      // Convert sheet to JSON
+      const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+      // Inject saler data to each row or the first row
+      const updatedData = jsonData.map((row, index) => ({
+        ...row,
+        saler_name: getSessionData("name"),
+        saler_email: getSessionData("email"),
+        saler_id: getSessionData("_id"),
+      }));
+
+      // Convert back to worksheet and replace it
+      const updatedWorksheet = XLSX.utils.json_to_sheet(updatedData);
+      workbook.Sheets[firstSheetName] = updatedWorksheet;
+
+      // Write workbook to a blob
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      const updatedFile = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      const formData = new FormData();
+      formData.append("file", updatedFile, file.name); // preserve original filename
+
+      const response = await axios.post(
+        `${baseUrl2}/products/upload`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      toast.success("File uploaded successfully!", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1000,
+      });
+
+      handleRefresh();
+      // closeFileModel();
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      toast.error("Failed to upload file!", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1000,
+      });
     }
   };
 
@@ -1098,14 +1165,25 @@ function ProductForm({
                       Your Excel file must include these columns:
                     </p>
                     <div className="grid grid-cols-2 gap-2">
+                      {["category", "title", "description", "price_inr"].map(
+                        (field) => (
+                          <div key={field} className="flex items-center">
+                            <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
+                            <span className="text-sm text-emerald-700">
+                              {field}
+                            </span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                    <div className="mt-2 text-sm text-green-700 ">
+                      Add this to your Excel sheet.
+                    </div>
+                    <div className="grid gap-2">
                       {[
-                        "category",
-                        "title",
-                        "description",
-                        "price_inr",
-                        "saler_email",
-                        "saler_id",
-                        "saler_name",
+                        `saler_name: ${getSessionData("name")}`,
+                        `saler_email:- ${getSessionData("email")}`,
+                        `saler_id: ${getSessionData("_id")}`,
                       ].map((field) => (
                         <div key={field} className="flex items-center">
                           <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
