@@ -296,7 +296,7 @@ export default function AdminProductsTable({
                     <>
                       <tr
                         key={product.id}
-                        className={`border-b border-gray-100 transition-all duration-200 ${
+                        className={`border-b border-gray-100 transition-all duration-200 cursor-pointer ${
                           hoveredRow === product._id
                             ? "bg-green-50"
                             : "hover:bg-gray-50"
