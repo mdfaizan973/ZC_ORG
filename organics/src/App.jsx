@@ -157,7 +157,7 @@ const WebSiteInitialLoader = () => {
   );
 };
 
-// chatbot ai
+// chatbot Ai
 
 export const ChatBot = () => {
   const [showChatBox, setShowChatBox] = useState(false);
