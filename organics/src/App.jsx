@@ -157,7 +157,7 @@ const WebSiteInitialLoader = () => {
   );
 };
 
-// chat bot ai
+// chatbot ai
 
 export const ChatBot = () => {
   const [showChatBox, setShowChatBox] = useState(false);
@@ -326,7 +326,7 @@ User's question: "${inputMessage}"`;
 // !fruits, vegetables, grains, dairy products and meat
 // ?category=vegetables
 
-//
+//1
 // !fruits
 // Apples
 // Bananas
