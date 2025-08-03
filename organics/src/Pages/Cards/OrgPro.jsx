@@ -6,7 +6,7 @@ import { FiShare2 } from "react-icons/fi";
 import { Link as RouterLink } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { hasToken, postData } from "../../utils/utils";
+import { fixedNumber, hasToken, postData } from "../../utils/utils";
 import { placeHolderImage, prepare_wishlist } from "../../utils/uiUtils";
 import { baseUrl2, imageUrl } from "../../../config/confg";
 
@@ -112,9 +112,9 @@ export default function OrgPro(props) {
 
           <div className="flex items-center -mt-1">
             <p className="text-lg font-semibold text-black cursor-auto">
-              {discount_price_inr} ₹
+              {fixedNumber(discount_price_inr)} ₹
               <span className="text-gray-500 line-through text-sm ml-2">
-                {price} ₹
+                {fixedNumber(price)} ₹
               </span>
             </p>
 

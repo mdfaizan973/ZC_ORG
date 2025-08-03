@@ -21,6 +21,7 @@ import { useParams } from "react-router-dom";
 import { baseUrl2, imageUrl } from "../../../config/confg";
 import {
   fetchData,
+  fixedNumber,
   getSessionData,
   hasToken,
   postData,
@@ -145,7 +146,7 @@ export default function ProductDetailsPage() {
                   height={400}
                   className="object-contain max-h-[400px] rounded-xl"
                 />
-              </div> 
+              </div>
 
               {/* Product Info */}
               <div className="space-y-6">
@@ -161,10 +162,10 @@ export default function ProductDetailsPage() {
 
                 <div className="flex items-center space-x-4">
                   <span className="text-3xl font-bold text-green-600">
-                    ₹{product.discount_price_inr}
+                    ₹{fixedNumber(product.discount_price_inr)}
                   </span>
                   <span className="text-xl text-gray-500 line-through">
-                    ₹{product.price_inr}
+                    ₹{fixedNumber(product.price_inr)}
                   </span>
                   <span className="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-green-500 text-white">
                     {product.discount_percentage}% OFF

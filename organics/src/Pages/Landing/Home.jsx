@@ -9,42 +9,50 @@ export default function Home() {
     {
       img: "https://i.pinimg.com/736x/dc/cc/a2/dccca27d07678f10b1493b95d9bbeb99.jpg",
       name: "All Products",
+      urlSignature: "all",
     },
     {
       img: "https://i.pinimg.com/564x/9e/78/9f/9e789faa701819cfbb69a304dcf5b27f.jpg",
       name: "Fruites",
+      urlSignature: "fruits",
     },
     {
       img: "https://i.pinimg.com/564x/b5/44/f9/b544f96788c1f7466a9b11cad40a8ef0.jpg",
       name: "Vegetables",
+      urlSignature: "vegetables",
     },
     {
       img: "https://naturelandorganics.com/cdn/shop/articles/Benefits_of_Organic_Dry_Fruits.jpg?v=1667380354",
       name: "Organic Dry fruits",
+      urlSignature: "dry-fruits",
     },
     {
       img: "https://i.pinimg.com/564x/dd/03/b3/dd03b3ec7e42e9d145821b6721b29c17.jpg",
-      name: "grains",
+      name: "Grains",
+      urlSignature: "grains",
     },
     {
       img: "https://i.pinimg.com/564x/4a/b0/e7/4ab0e7ccc090864f5430da7ed563d51d.jpg",
       name: "Dairy",
+      urlSignature: "dairy",
     },
     {
       img: "https://i.pinimg.com/736x/0a/ba/88/0aba880fd6a26b8894b534604ef0aa06.jpg",
       name: "Pure Pressed Juices",
+      urlSignature: "juice",
     },
     {
       img: "https://i.pinimg.com/474x/2c/f2/b9/2cf2b9844ba007a2bd89e9a8e83fb3b3.jpg",
       name: "Herbal Spices",
+      urlSignature: "Spices",
     },
   ];
-  const [searchQuery, setSearchQuery] = useState("");
+  // const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log("Searching for:", searchQuery); // navigate
-  };
+  // const handleSearch = (e) => {
+  //   e.preventDefault();
+  //   console.log("Searching for:", searchQuery); // navigate
+  // };
   return (
     <div>
       <Navbar />
@@ -97,7 +105,9 @@ export default function Home() {
               >
                 <a href="#">
                   <div className="relative flex items-center overflow-hidden rounded-xl">
-                    <RouterLink to="/organicsproducts">
+                    <RouterLink
+                      to={`/organicsproducts?product=${ele.urlSignature}`}
+                    >
                       <img
                         src={ele.img}
                         // src="https://www.organictattva.com/wp-content/uploads/2019/08/Amaranth-cutlet.jpg"

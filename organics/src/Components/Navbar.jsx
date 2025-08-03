@@ -55,28 +55,28 @@ export default function Navbar() {
                 </RouterLink>
               </li>
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
-                <RouterLink to="/organicsproducts">
+                <RouterLink to={`/organicsproducts?product=all`}>
                   <a className="flex items-center" href="#">
                     ORG Products
                   </a>
                 </RouterLink>
               </li>
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
-                <RouterLink to="/organicsproducts">
+                <RouterLink to={`/organicsproducts?product=fruits`}>
                   <a className="flex items-center" href="#">
-                    Fruites
+                    Fruits
                   </a>
                 </RouterLink>
               </li>
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
-                <RouterLink to="/organicsproducts">
+                <RouterLink to={`/organicsproducts?product=vegetables`}>
                   <a className="flex items-center" href="#">
                     Vegetables
                   </a>
                 </RouterLink>
               </li>{" "}
               <li className="block p-1 font-sans text-bs font-normal leading-normal text-inherit antialiased font-semibold">
-                <RouterLink to="/organicsproducts">
+                <RouterLink to={`/organicsproducts?product=dairy`}>
                   <a className="flex items-center" href="#">
                     Dairy
                   </a>
@@ -123,7 +123,7 @@ export default function Navbar() {
               <RouterLink to={"/bug-report"}>
                 {" "}
                 <button
-                  className="middle none center hidden rounded-lg bg-gradient-to-tr from-red-600 to-red-400 py-2 px-4 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
+                  className="middle none center hidden rounded-lg bg-purple-600 py-2 px-4 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
                   type="button"
                   data-ripple-light="true"
                 >

@@ -13,6 +13,7 @@ import { BiSortAlt2 } from "react-icons/bi"; // BoxIcons Alternative
 import { MdCategory } from "react-icons/md";
 import { useRef } from "react";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import { useSearchParams } from "react-router-dom";
 export default function OrganicPro() {
   const [orgData, setOrgData] = useState([]);
   const [page, setPage] = useState(1);
@@ -21,6 +22,9 @@ export default function OrganicPro() {
   const [loadProd, setLoadProd] = useState(true);
   const organicProdRef = useRef([]);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const product = searchParams.get("product");
   // Adding to cart
 
   const addToCart = async (cartData) => {
@@ -52,15 +56,32 @@ export default function OrganicPro() {
 
   // console.log(fileter);
   useEffect(() => {
-    load_prod_data();
-  }, []);
+    load_prod_data(product);
+  }, [product]);
 
-  const load_prod_data = async () => {
+  // const load_prod_data = async () => {
+  //   setLoadProd(true);
+  //   const data = await fetchData(`${baseUrl2}/products`);
+
+  //   setLoadProd(false);
+
+  //   setOrgData(data);
+  //   organicProdRef.current = data;
+  // };
+
+  const load_prod_data = async (p_cat) => {
     setLoadProd(true);
+
     const data = await fetchData(`${baseUrl2}/products`);
-    setLoadProd(false);
-    setOrgData(data);
+    let filteredData = data;
+
+    if (p_cat !== "all") {
+      filteredData = data.filter((ele) => ele.category === p_cat);
+    }
+
+    setOrgData(filteredData);
     organicProdRef.current = data;
+    setLoadProd(false);
   };
 
   const handleCategoyChange = (cat) => {
@@ -71,6 +92,11 @@ export default function OrganicPro() {
     } else {
       setOrgData([]);
     }
+  };
+
+  const handleCategoryChange = (value) => {
+    setSearchParams({ product: value || "all" }); // updates the URL without navigation
+    handleCategoyChange(value); // your existing function to handle filtering
   };
 
   const handleSearch = (val) => {
@@ -140,9 +166,10 @@ export default function OrganicPro() {
               <div className="relative">
                 <select
                   className="w-full h-10 rounded-md border border-gray-300 pl-3 pr-10 appearance-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                  onChange={(e) => handleCategoyChange(e.target.value)}
+                  value={searchParams.get("product") || ""}
+                  onChange={(e) => handleCategoryChange(e.target.value)}
                 >
-                  <option value="">All Categories</option>
+                  <option value="all">All Categories</option>
                   <option value="fruits">Fruits</option>
                   <option value="vegetables">Vegetables</option>
                   <option value="dairy">Dairy</option>
@@ -152,6 +179,7 @@ export default function OrganicPro() {
                   <option value="juice">Juice</option>
                   <option value="oils & fats">Oils & Fats</option>
                   <option value="sweeteners">Sweeteners</option>
+                  <option value="dry-fruits">Dry Fruits</option>
                 </select>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                   <HiChevronDown className="h-4 w-4 text-gray-400" />
