@@ -181,9 +181,11 @@ export const ChatBot = () => {
   const fetchData = async (inputMessage) => {
     const newQuestionsMessage = `You are a helpful assistant. Your job is to answer only questions related to food, organic products, healthy living, or greetings.
 
-If the user's input has spelling mistakes, please correct the spelling silently before answering.
+If the user's input has spelling mistakes, please correct them silently before answering.
 
-If the corrected input is still not related to the allowed topics, reply: "I can't answer that."
+If the question can be answered as a list, respond with a **clearly structured** list using bullet points or numbers.
+
+If not related to the allowed topics, reply: "I can't answer that."
 
 Respond in exactly 20 to 25 words.
 
@@ -244,8 +246,14 @@ User's question: "${inputMessage}"`;
           } h-[450px] bg-white border border-green-300 rounded-xl shadow-lg flex flex-col z-50`}
         >
           {/* Header */}
-          <div className="bg-green-500 text-white text-center py-3 font-semibold rounded-t-xl">
-            💬 Chat with me
+          <div className="bg-green-500 text-white py-3 px-4 font-semibold rounded-t-xl flex justify-between items-center">
+            <span>💬 Chat with me</span>
+            <button
+              onClick={() => setShowChatBox(false)}
+              className="text-white text-xl font-bold hover:text-red-200 transition"
+            >
+              ×
+            </button>
           </div>
 
           {/* Body */}
@@ -259,15 +267,35 @@ User's question: "${inputMessage}"`;
                   }`}
                 >
                   <div
-                    className={`max-w-[75%] px-4 py-2 rounded-xl whitespace-pre-wrap ${
-                      msg.role === "bot"
-                        ? "bg-green-100 text-left"
-                        : "bg-teal-100 text-right"
+                    key={index}
+                    className={`flex items-start gap-2 ${
+                      msg.role === "bot" ? "justify-start" : "justify-end"
                     }`}
                   >
-                    {msg.role === "bot"
-                      ? `🌱 ${msg.content}`
-                      : `${msg.content} 👤`}
+                    {/* Bot icon (left) */}
+                    {msg.role === "bot" && (
+                      <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-green-400  text-white text-sm">
+                        🌱
+                      </div>
+                    )}
+
+                    {/* Message bubble */}
+                    <div
+                      className={`max-w-[75%] px-4 py-2 rounded-xl whitespace-pre-wrap text-sm ${
+                        msg.role === "bot"
+                          ? "bg-green-100 text-left font-medium"
+                          : "bg-teal-100 text-right"
+                      }`}
+                    >
+                      {msg.content}
+                    </div>
+
+                    {/* User icon (right) */}
+                    {msg.role === "user" && (
+                      <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-teal-400  text-white text-sm">
+                        👤
+                      </div>
+                    )}
                   </div>
                 </div>
               ))
@@ -310,7 +338,7 @@ User's question: "${inputMessage}"`;
       <div className="fixed bottom-5 right-5 z-50">
         <button
           onClick={() => setShowChatBox(!showChatBox)}
-          className="w-[70px] h-[70px] rounded-full border-2 border-green-500 shadow-lg bg-white overflow-hidden hover:scale-110 transition animate-bounce"
+          className="w-[60px] h-[60px] rounded-full border-2 border-green-500 shadow-lg bg-white overflow-hidden hover:scale-110 transition animate-bounce"
         >
           <img
             src="https://i.pinimg.com/originals/ca/bd/a6/cabda6db3c719d0ea30b1649fd00e891.gif"
