@@ -1,12 +1,12 @@
 // import { useState } from "react";
-
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import "./App.css";
 import AllRoutes from "./Components/AllRoutes";
 import ScrollToTop from "./Components/ScrollToTop";
 import Footer from "./Components/Footer";
 // import Navbar from "./Components/Navbar";
 import { ToastContainer } from "react-toastify";
-import { useEffect, useState } from "react";
 import { fetchData, hasToken, postData } from "./utils/utils";
 import { baseUrl2 } from "../config/confg";
 
@@ -88,6 +88,8 @@ function App() {
           <ScrollToTop />
           <AllRoutes />
           <Footer />
+
+          <ChatBot />
         </>
       )}
     </>
@@ -152,6 +154,172 @@ const WebSiteInitialLoader = () => {
         </p>
       </div>
     </div>
+  );
+};
+
+// chat bot ai
+
+export const ChatBot = () => {
+  const [showChatBox, setShowChatBox] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);
+  const [messages, setMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState("");
+  const messagesEndRef = useRef(null);
+
+  const apiKey = "AIzaSyCmZo3BPYdF1bVl7bvXC_Zbo9xQENxWxBs";
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 480);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const fetchData = async (inputMessage) => {
+    const newQuestionsMessage = `You are a helpful assistant. Your job is to answer only questions related to food, organic products, healthy living, or greetings.
+
+If the user's input has spelling mistakes, please **correct the spelling silently** before answering.
+
+If the corrected input is still not related to the allowed topics, reply: "I can't answer that."
+
+Respond in **exactly 20 to 25 words**.
+
+User's question: "${inputMessage}"`;
+
+    const contentData = {
+      contents: [
+        {
+          parts: [{ text: newQuestionsMessage }],
+        },
+      ],
+    };
+
+    try {
+      const res = await axios.post(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+        contentData,
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      const current = new Date();
+      const userMessage = {
+        id: Date.now(),
+        content: inputMessage.trim(),
+        role: "user",
+        timestamp: current,
+      };
+
+      const aiResponse = {
+        id: Date.now() + 1,
+        content: res.data.candidates[0].content.parts[0].text,
+        role: "bot",
+        timestamp: current,
+      };
+
+      setMessages((prev) => [...prev, userMessage, aiResponse]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    if (inputMessage.trim()) {
+      fetchData(inputMessage);
+      setInputMessage("");
+    }
+  };
+
+  return (
+    <>
+      {showChatBox && (
+        <div
+          className={`fixed ${
+            isMobile
+              ? "w-[90%] right-[5%] bottom-[100px]"
+              : "w-[350px] right-5 bottom-[100px]"
+          } h-[450px] bg-white border border-green-300 rounded-xl shadow-lg flex flex-col z-50`}
+        >
+          {/* Header */}
+          <div className="bg-green-500 text-white text-center py-3 font-semibold rounded-t-xl">
+            💬 Chat with me
+          </div>
+
+          {/* Body */}
+          <div className="flex-1 overflow-y-auto px-3 py-2 bg-green-50 space-y-2 text-sm flex flex-col">
+            {messages.length > 0 ? (
+              messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`flex ${
+                    msg.role === "bot" ? "justify-start" : "justify-end"
+                  }`}
+                >
+                  <div
+                    className={`max-w-[75%] px-4 py-2 rounded-xl whitespace-pre-wrap ${
+                      msg.role === "bot"
+                        ? "bg-green-100 text-left"
+                        : "bg-teal-100 text-right"
+                    }`}
+                  >
+                    {msg.role === "bot"
+                      ? `🌱 ${msg.content}`
+                      : `${msg.content} 👤`}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="flex justify-start">
+                <div className="bg-green-100 p-3 rounded-xl w-fit">
+                  🌱 Ask me anything about organic or healthy living!
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center border-t border-green-200 p-2 bg-green-100">
+            <textarea
+              rows={1}
+              placeholder="Type a message..."
+              className="flex-1 resize-none px-3 py-2 text-sm border border-green-300 rounded-lg outline-none"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleClick(e);
+                }
+              }}
+            />
+            <button
+              onClick={handleClick}
+              className="ml-2 px-4 py-2 bg-green-500 text-white rounded-lg font-bold hover:bg-green-600 transition"
+            >
+              ➤
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Toggle Button */}
+      <div className="fixed bottom-5 right-5 z-50">
+        <button
+          onClick={() => setShowChatBox(!showChatBox)}
+          className="w-[70px] h-[70px] rounded-full border-2 border-green-500 shadow-md bg-white overflow-hidden hover:scale-105 transition"
+        >
+          <img
+            src="https://i.pinimg.com/originals/ca/bd/a6/cabda6db3c719d0ea30b1649fd00e891.gif"
+            alt="bot"
+            className="w-full h-full object-cover"
+          />
+        </button>
+      </div>
+    </>
   );
 };
 
