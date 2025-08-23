@@ -166,7 +166,8 @@ export const ChatBot = () => {
   const [inputMessage, setInputMessage] = useState("");
   const messagesEndRef = useRef(null);
 
-  const apiKey = "AIzaSyCmZo3BPYdF1bVl7bvXC_Zbo9xQENxWxBs";
+  // const apiKey = "AIzaSyCmZo3BPYdF1bVl7bvXC_Zbo9xQENxWxBs";
+  const apiKey = "AIzaSyCZdygvFnWmiWsi8s15Q1YW_LMG6oADjnM";
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 480);
