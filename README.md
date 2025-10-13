@@ -17,7 +17,9 @@ Not only can customers shop with ease, but we also offer a seller facility, wher
 # 🚀 Live Demo
 
 🔗 Check out the live version here! <a href="https://organicstore.vercel.app/" target="_blank" rel="noopener noreferrer">Live</a>  
+🔗 Backend Repository! <a href="https://github.com/mdfaizan973/my_org_store" target="_blank" rel="noopener noreferrer">GitHub Repo</a>  
 📄 Road Map and API Docs: <a href="https://classy-chess-c47.notion.site/Organic-Store-API-Documentation-1a15a2d4c68a80a8ad33dfcfcd6865f3" target="_blank" rel="noopener noreferrer">Documentation</a>
+
 
 # 📚 About the Project
 
