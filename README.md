@@ -160,8 +160,27 @@ The project is built using the following technologies:
 # 📸 Screenshots
 
 ## Users Side & Admin Side
-<img width="1366" height="768" src="https://github.com/user-attachments/assets/fdde229f-1822-4c83-8aec-ecefe46e79d0" />
-<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/cdde3341-980f-4826-8feb-2ec59029f973" />
+
+<table>
+  <tr>
+    <td align="center">
+      <b>User Panel</b><br/><br/>
+      <img
+        src="https://github.com/user-attachments/assets/fdde229f-1822-4c83-8aec-ecefe46e79d0"
+        width="500"
+        style="border-radius: 10px;"
+      />
+    </td>
+    <td align="center">
+      <b>Admin Panel</b><br/><br/>
+      <img
+        src="https://github.com/user-attachments/assets/cdde3341-980f-4826-8feb-2ec59029f973"
+        width="500"
+        style="border-radius: 10px;"
+      />
+    </td>
+  </tr>
+</table>
 
 
 # 🔧 Installation & Setup
