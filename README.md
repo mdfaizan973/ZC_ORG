@@ -160,9 +160,9 @@ The project is built using the following technologies:
 # 📸 Screenshots
 
 ## Users Side & Admin Side
-<img width="450px" src="https://github.com/user-attachments/assets/fdde229f-1822-4c83-8aec-ecefe46e79d0" />
+<img width="1366" height="768" src="https://github.com/user-attachments/assets/fdde229f-1822-4c83-8aec-ecefe46e79d0" />
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/cdde3341-980f-4826-8feb-2ec59029f973" />
 
-<img width="550px" src="https://github.com/user-attachments/assets/90386103-5974-4f96-8cee-40a0eb9196a1"/>
 
 # 🔧 Installation & Setup
 Follow these steps to set up the project on your local machine:
