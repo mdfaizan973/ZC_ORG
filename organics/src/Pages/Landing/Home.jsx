@@ -22,7 +22,7 @@ export default function Home() {
       urlSignature: "vegetables",
     },
     {
-      img: "https://naturelandorganics.com/cdn/shop/articles/Benefits_of_Organic_Dry_Fruits.jpg?v=1667380354",
+      img: "https://i.pinimg.com/736x/7d/78/a1/7d78a1b6e5caa3cf2a131d8c57c56ab5.jpg",
       name: "Organic Dry fruits",
       urlSignature: "dry-fruits",
     },
