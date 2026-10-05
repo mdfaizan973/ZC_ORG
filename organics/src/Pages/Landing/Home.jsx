@@ -101,29 +101,29 @@ export default function Home() {
             {data.map((ele, i) => (
               <article
                 key={i}
-                className="rounded-xl bg-white p-3 shadow-lg hover:shadow-xl"
+                className="rounded-xl bg-white p-3 shadow-lg transition-shadow hover:shadow-xl"
               >
-                <a href="#">
-                  <div className="relative flex items-center overflow-hidden rounded-xl">
-                    <RouterLink
-                      to={`/organicsproducts?product=${ele.urlSignature}`}
-                    >
-                      <img
-                        src={ele.img}
-                        // src="https://www.organictattva.com/wp-content/uploads/2019/08/Amaranth-cutlet.jpg"
-                        alt=" Photo"
-                      />
-                    </RouterLink>
+                <RouterLink
+                  to={`/organicsproducts?product=${ele.urlSignature}`}
+                >
+                  {/* Fixed image area */}
+                  <div className="relative flex h-52 w-full items-center justify-center overflow-hidden rounded-xl bg-gray-50">
+                    <img
+                      src={ele.img}
+                      alt={ele.name}
+                      className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
                   </div>
 
-                  <div className="mt-3 flex items-end justify-center">
+                  {/* Product name */}
+                  <div className="mt-3 flex min-h-[48px] items-center justify-center text-center">
                     <p>
                       <span className="text-lg font-bold text-green-500">
                         {ele.name}
                       </span>
                     </p>
                   </div>
-                </a>
+                </RouterLink>
               </article>
             ))}
           </div>
