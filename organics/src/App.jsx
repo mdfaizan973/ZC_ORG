@@ -227,7 +227,6 @@ silently before answering.
 
 If the question can be answered as a list, use clear
 bullet points or numbered lists.
-
 If the question is unrelated to these topics, reply:
 "I can't answer that."
 
