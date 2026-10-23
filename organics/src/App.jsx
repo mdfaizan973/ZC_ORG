@@ -7,7 +7,7 @@ import Footer from "./Components/Footer";
 // import Navbar from "./Components/Navbar";
 import { ToastContainer } from "react-toastify";
 import { fetchData, hasToken, postData } from "./utils/utils";
-import { baseUrl2 } from "../config/confg";
+import { baseUrl2, VITE_GEMINI_API_KEY } from "../config/confg";
 import { GoogleGenAI } from "@google/genai";
 function App() {
   // App.js or Layout.jsx
@@ -168,8 +168,7 @@ export const ChatBot = () => {
 
   const messagesEndRef = useRef(null);
 
-  const apiKey = "AQ.Ab8RN6IbRbszrOS8kKWjB_4WzTbkVSD3rme3AOYSCDpF8i78Zg";
-  // const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  const apiKey = VITE_GEMINI_API_KEY;
 
   useEffect(() => {
     const handleResize = () => {
