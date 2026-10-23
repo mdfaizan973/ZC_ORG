@@ -11,6 +11,7 @@
     "start": "json-server --watch db.json --port 3030"
   },
   "dependencies": {
+    "@google/genai": "^2.31.0",
     "axios": "^1.5.1",
     "echarts": "^5.6.0",
     "echarts-for-react": "^3.0.2",
