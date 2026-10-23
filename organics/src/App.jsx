@@ -169,6 +169,7 @@ export const ChatBot = () => {
   const messagesEndRef = useRef(null);
 
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  const ai = new GoogleGenAI({ apiKey });
 
   useEffect(() => {
     const handleResize = () => {
@@ -215,7 +216,7 @@ export const ChatBot = () => {
         );
       }
 
-      const ai = new GoogleGenAI({ apiKey });
+      // const ai = new GoogleGenAI({ apiKey });
 
       const prompt = `
 You are a helpful assistant. Answer only questions related
