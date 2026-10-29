@@ -1,8 +1,7 @@
 // import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import Navbar from "../../Components/Navbar";
-import { useState } from "react";
-import { IoSearchOutline } from "react-icons/io5";
+
 import Carousel from "./Carousel";
 export default function Home() {
   const data = [
