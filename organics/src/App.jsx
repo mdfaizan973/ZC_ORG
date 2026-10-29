@@ -1,6 +1,5 @@
 // import { useState } from "react";
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
 import "./App.css";
 import AllRoutes from "./Components/AllRoutes";
 import ScrollToTop from "./Components/ScrollToTop";
@@ -9,9 +8,10 @@ import Footer from "./Components/Footer";
 import { ToastContainer } from "react-toastify";
 import { fetchData, hasToken, postData } from "./utils/utils";
 import { baseUrl2 } from "../config/confg";
-
+import { GoogleGenAI } from "@google/genai";
 function App() {
   // App.js or Layout.jsx
+
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
@@ -27,7 +27,7 @@ function App() {
             order.order_status === "Processing" ||
             order.order_status === "Shipped" ||
             (order.order_status === "Delivered" &&
-              order.payment_status !== "paid")
+              order.payment_status !== "paid"),
         );
 
         if (ordersToUpdate.length === 0) {
@@ -57,10 +57,10 @@ function App() {
                 `${baseUrl2}/orders/${order._id}`,
                 updatedData,
                 "PUT",
-                false
+                false,
               );
             }
-          })
+          }),
         );
 
         console.log("Only required orders updated!");
@@ -161,79 +161,122 @@ const WebSiteInitialLoader = () => {
 
 export const ChatBot = () => {
   const [showChatBox, setShowChatBox] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);
+  const [isMobile, setIsMobile] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const messagesEndRef = useRef(null);
 
-  // const apiKey = "AIzaSyCmZo3BPYdF1bVl7bvXC_Zbo9xQENxWxBs";
-  const apiKey = "AIzaSyCZdygvFnWmiWsi8s15Q1YW_LMG6oADjnM";
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  const ai = new GoogleGenAI({ apiKey });
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 480);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 480);
+    };
+
+    handleResize();
+
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
+  }, [messages, isLoading]);
 
-  const fetchData = async (inputMessage) => {
-    const newQuestionsMessage = `You are a helpful assistant. Your job is to answer only questions related to food, organic products, healthy living, or greetings.
+  const fetchData = async (messageText) => {
+    const trimmedMessage = messageText.trim();
 
-If the user's input has spelling mistakes, please correct them silently before answering.
+    if (!trimmedMessage || isLoading) {
+      return;
+    }
 
-If the question can be answered as a list, respond with a **clearly structured** list using bullet points or numbers.
-
-If not related to the allowed topics, reply: "I can't answer that."
-
-Respond in exactly 20 to 25 words.
-
-User's question: "${inputMessage}"`;
-
-    const contentData = {
-      contents: [
-        {
-          parts: [{ text: newQuestionsMessage }],
-        },
-      ],
+    const userMessage = {
+      id: `${Date.now()}-user`,
+      content: trimmedMessage,
+      role: "user",
+      timestamp: new Date(),
     };
 
-    try {
-      const res = await axios.post(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-        contentData,
-        { headers: { "Content-Type": "application/json" } }
-      );
+    setMessages((prev) => [...prev, userMessage]);
+    setIsLoading(true);
 
-      const current = new Date();
-      const userMessage = {
-        id: Date.now(),
-        content: inputMessage.trim(),
-        role: "user",
-        timestamp: current,
-      };
+    try {
+      if (!apiKey) {
+        throw new Error(
+          "Gemini API key is missing. Add VITE_GEMINI_API_KEY to .env.local.",
+        );
+      }
+
+      // const ai = new GoogleGenAI({ apiKey });
+
+      const prompt = `
+            You are a helpful assistant. Answer only questions related
+            to food, organic products, healthy living, or greetings.
+
+            If the user's input has spelling mistakes, correct them
+            silently before answering.
+
+            If the question can be answered as a list, use clear
+            bullet points or numbered lists.
+            If the question is unrelated to these topics, reply:
+            "I can't answer that."
+
+            Respond in exactly 20 to 25 words.
+
+            User's question: "${trimmedMessage}"
+            `;
+
+      const response = await ai.models.generateContent({
+        model: "gemini-3.8-flash",
+        contents: prompt,
+      });
 
       const aiResponse = {
-        id: Date.now() + 1,
-        content: res.data.candidates[0].content.parts[0].text,
+        id: `${Date.now()}-bot`,
+        content: response.text?.trim() || "Sorry, no response was generated.",
         role: "bot",
-        timestamp: current,
+        timestamp: new Date(),
       };
 
-      setMessages((prev) => [...prev, userMessage, aiResponse]);
-    } catch (err) {
-      console.log(err);
+      setMessages((prev) => [...prev, aiResponse]);
+    } catch (error) {
+      console.error("Gemini API error:", error);
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `${Date.now()}-error`,
+          content: "Sorry, something went wrong. Please try again.",
+          role: "bot",
+          timestamp: new Date(),
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    if (inputMessage.trim()) {
-      fetchData(inputMessage);
-      setInputMessage("");
+  const handleClick = async (e) => {
+    e?.preventDefault();
+
+    const trimmedMessage = inputMessage.trim();
+
+    if (!trimmedMessage || isLoading) {
+      return;
     }
+
+    setInputMessage("");
+
+    await fetchData(trimmedMessage);
   };
 
   return (
@@ -249,8 +292,11 @@ User's question: "${inputMessage}"`;
           {/* Header */}
           <div className="bg-green-500 text-white py-3 px-4 font-semibold rounded-t-xl flex justify-between items-center">
             <span>💬 Chat with me</span>
+
             <button
+              type="button"
               onClick={() => setShowChatBox(false)}
+              aria-label="Close chat"
               className="text-white text-xl font-bold hover:text-red-200 transition"
             >
               ×
@@ -260,29 +306,28 @@ User's question: "${inputMessage}"`;
           {/* Body */}
           <div className="flex-1 overflow-y-auto px-3 py-2 bg-green-50 space-y-2 text-sm flex flex-col">
             {messages.length > 0 ? (
-              messages.map((msg, index) => (
+              messages.map((msg) => (
                 <div
-                  key={index}
+                  key={msg.id}
                   className={`flex ${
                     msg.role === "bot" ? "justify-start" : "justify-end"
                   }`}
                 >
                   <div
-                    key={index}
-                    className={`flex items-start gap-2 ${
+                    className={`flex items-start gap-2 max-w-full ${
                       msg.role === "bot" ? "justify-start" : "justify-end"
                     }`}
                   >
                     {/* Bot icon (left) */}
                     {msg.role === "bot" && (
-                      <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-green-400  text-white text-sm">
+                      <div className="w-8 h-8 shrink-0 flex items-center justify-center rounded-full border-2 border-green-400 text-sm">
                         🌱
                       </div>
                     )}
 
                     {/* Message bubble */}
                     <div
-                      className={`max-w-[75%] px-4 py-2 rounded-xl whitespace-pre-wrap text-sm ${
+                      className={`max-w-[75%] px-4 py-2 rounded-xl whitespace-pre-wrap break-words text-sm ${
                         msg.role === "bot"
                           ? "bg-green-100 text-left font-medium"
                           : "bg-teal-100 text-right"
@@ -293,7 +338,7 @@ User's question: "${inputMessage}"`;
 
                     {/* User icon (right) */}
                     {msg.role === "user" && (
-                      <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-teal-400  text-white text-sm">
+                      <div className="w-8 h-8 shrink-0 flex items-center justify-center rounded-full border-2 border-teal-400 text-sm">
                         👤
                       </div>
                     )}
@@ -307,38 +352,85 @@ User's question: "${inputMessage}"`;
                 </div>
               </div>
             )}
+
+            {/* AI Loading Indicator */}
+            {isLoading && (
+              <div
+                className="flex justify-start"
+                role="status"
+                aria-live="polite"
+                aria-label="AI is generating a response"
+              >
+                {/* Bot icon */}
+                <div className="w-8 h-8 shrink-0 flex items-center justify-center rounded-full border-2 border-green-400 text-sm">
+                  🌱
+                </div>
+
+                {/* Typing bubble */}
+                <div className="bg-green-100 px-4 py-3 rounded-xl flex items-center gap-2">
+                  <span className="text-xs text-green-800">Thinking</span>
+
+                  <div className="flex items-center gap-1">
+                    <span className="w-2 h-2 bg-green-500 rounded-full animate-bounce [animation-delay:0ms]" />
+
+                    <span className="w-2 h-2 bg-green-500 rounded-full animate-bounce [animation-delay:150ms]" />
+
+                    <span className="w-2 h-2 bg-green-500 rounded-full animate-bounce [animation-delay:300ms]" />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Auto-scroll target */}
             <div ref={messagesEndRef} />
           </div>
 
           {/* Footer */}
-          <div className="flex items-center border-t border-green-200 p-2 bg-green-100">
+          <form
+            onSubmit={handleClick}
+            className="flex items-center border-t border-green-200 p-2 bg-green-100"
+          >
             <textarea
               rows={1}
               placeholder="Type a message..."
-              className="flex-1 resize-none px-3 py-2 text-sm border border-green-300 rounded-lg outline-none focus:ring-2 focus:ring-green-300"
+              aria-label="Type your message"
+              className="flex-1 min-w-0 resize-none px-3 py-2 text-sm border border-green-300 rounded-lg outline-none focus:ring-2 focus:ring-green-300 disabled:opacity-60"
               value={inputMessage}
+              disabled={isLoading}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
-                  handleClick(e);
+
+                  if (!isLoading && inputMessage.trim()) {
+                    handleClick(e);
+                  }
                 }
               }}
             />
+
             <button
-              onClick={handleClick}
-              className="ml-2 px-4 py-2 bg-green-500 text-white rounded-lg font-bold hover:bg-green-600 transition"
+              type="submit"
+              disabled={isLoading || !inputMessage.trim()}
+              aria-label="Send message"
+              className="ml-2 px-4 py-2 bg-green-500 text-white rounded-lg font-bold hover:bg-green-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              ➤
+              {isLoading ? (
+                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                "➤"
+              )}
             </button>
-          </div>
+          </form>
         </div>
       )}
 
       {/* Toggle Button */}
       <div className="fixed bottom-5 right-5 z-50">
         <button
-          onClick={() => setShowChatBox(!showChatBox)}
+          type="button"
+          onClick={() => setShowChatBox((prev) => !prev)}
+          aria-label={showChatBox ? "Close chat" : "Open chat"}
           className="w-[60px] h-[60px] rounded-full border-2 border-green-500 shadow-lg bg-white overflow-hidden hover:scale-110 transition animate-bounce"
         >
           <img
