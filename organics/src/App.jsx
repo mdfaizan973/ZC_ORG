@@ -219,21 +219,21 @@ export const ChatBot = () => {
       // const ai = new GoogleGenAI({ apiKey });
 
       const prompt = `
-You are a helpful assistant. Answer only questions related
-to food, organic products, healthy living, or greetings.
+            You are a helpful assistant. Answer only questions related
+            to food, organic products, healthy living, or greetings.
 
-If the user's input has spelling mistakes, correct them
-silently before answering.
+            If the user's input has spelling mistakes, correct them
+            silently before answering.
 
-If the question can be answered as a list, use clear
-bullet points or numbered lists.
-If the question is unrelated to these topics, reply:
-"I can't answer that."
+            If the question can be answered as a list, use clear
+            bullet points or numbered lists.
+            If the question is unrelated to these topics, reply:
+            "I can't answer that."
 
-Respond in exactly 20 to 25 words.
+            Respond in exactly 20 to 25 words.
 
-User's question: "${trimmedMessage}"
-`;
+            User's question: "${trimmedMessage}"
+            `;
 
       const response = await ai.models.generateContent({
         model: "gemini-3.8-flash",
