@@ -168,7 +168,8 @@ export const ChatBot = () => {
 
   const messagesEndRef = useRef(null);
 
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  // const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  const apiKey = "AQ.Ab8RN6IbRbszrOS8kKWjB_4WzTbkVSD3rme3AOYSCDpF8i78Zg"
   const ai = new GoogleGenAI({ apiKey });
 
   useEffect(() => {
